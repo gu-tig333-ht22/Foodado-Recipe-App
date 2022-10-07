@@ -15,7 +15,7 @@ class _FilterViewState extends State<FilterView> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Scramble View',
+          'Filter View',
         ),
       ),
       body: Center(

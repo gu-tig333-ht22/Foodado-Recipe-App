@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/constants/constants.dart';
 import '/constants/routes.dart';
 
 class RecipeView extends StatefulWidget {
@@ -12,6 +13,7 @@ class _RecipeViewState extends State<RecipeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: secondaryColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
