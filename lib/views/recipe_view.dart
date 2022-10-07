@@ -13,7 +13,6 @@ class _RecipeViewState extends State<RecipeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: secondaryColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(

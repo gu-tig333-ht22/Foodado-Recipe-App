@@ -19,14 +19,69 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
       ),
-      home: const SplashView(),
+      home: const MainView(),
       debugShowCheckedModeBanner: false,
       routes: {
-        splashViewRoute: (context) => const SplashView(),
+        infoViewRoute: (context) => const InfoView(),
         scrambleViewRoute: (context) => const ScrambleView(),
         filterViewRoute: (context) => const FilterView(),
         recipeViewRoute: (context) => const RecipeView(),
       },
+    );
+  }
+}
+
+//Navigation during development
+class MainView extends StatefulWidget {
+  const MainView({Key? key}) : super(key: key);
+
+  @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(
+          child: Text(
+            'Development View',
+          ),
+        ),
+      ),
+      body: Center(
+        //buttons to navigate to other views
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(infoViewRoute);
+              },
+              child: Text('Info View'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(scrambleViewRoute);
+              },
+              child: Text('Scramble View'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(recipeViewRoute);
+              },
+              child: Text('Recipe View'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(filterViewRoute);
+              },
+              child: Text('Filter View'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
