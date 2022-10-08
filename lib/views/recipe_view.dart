@@ -20,6 +20,7 @@ class _RecipeViewState extends State<RecipeView> {
         ),
       ),
       body: Center(
+        //buttons to navigate to other views
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
         ),

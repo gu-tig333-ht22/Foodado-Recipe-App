@@ -13,10 +13,9 @@ class _InfoViewState extends State<InfoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Info View',
-          ),
+        centerTitle: true,
+        title: Text(
+          'Info/landing View',
         ),
       ),
       body: Center(

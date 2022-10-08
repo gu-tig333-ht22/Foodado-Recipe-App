@@ -4,6 +4,8 @@ import 'views/filter_view.dart';
 import 'views/recipe_view.dart';
 import 'views/scramble_view.dart';
 import 'views/splash_view.dart';
+//google fonts
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,10 +20,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
+        textTheme: //googlefonts
+            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
       ),
       home: const MainView(),
       debugShowCheckedModeBanner: false,
       routes: {
+        mainViewRoute: (context) => const MainView(),
         infoViewRoute: (context) => const InfoView(),
         scrambleViewRoute: (context) => const ScrambleView(),
         filterViewRoute: (context) => const FilterView(),
