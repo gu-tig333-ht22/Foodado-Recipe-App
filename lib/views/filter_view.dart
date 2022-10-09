@@ -62,7 +62,6 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget recipeTypeFilter() {
-    //list lunch breakfast dinner dessert
     List<String> recipeType = [
       'Lunch',
       'Breakfast',
@@ -113,8 +112,6 @@ class _FilterViewState extends State<FilterView> {
     );
   }
 
-//list of dietary restrictions checkboxes (vegan, vegetarian, gluten free, dairy free, nut free, egg free, soy free, fish free, shellfish free)
-
   Widget dietaryRestrictionsFilter() {
     List<String> dietaryRestrictions = [
       'Vegan',
@@ -136,10 +133,12 @@ class _FilterViewState extends State<FilterView> {
               children: [
                 Text(dietaryRestrictions[i]),
                 Checkbox(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
                   value: false,
                   onChanged: (bool? value) {},
                 ),
-                //leading checkbox
               ],
             ),
           ),
@@ -147,7 +146,6 @@ class _FilterViewState extends State<FilterView> {
     );
   }
 
-//slider for calories
   Widget caloriesFilter() {
     return Column(
       children: [
