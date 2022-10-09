@@ -14,9 +14,10 @@ class _RecipeViewState extends State<RecipeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Recipe View',
+        title: Center(
+          child: Text(
+            'Recipe View',
+          ),
         ),
       ),
       body: Center(

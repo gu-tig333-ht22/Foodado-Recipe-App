@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blueGrey,
         textTheme: //googlefonts
-            GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+            GoogleFonts.montserratTextTheme(),
       ),
       home: const MainView(),
       debugShowCheckedModeBanner: false,
@@ -49,10 +49,9 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Development View',
-          ),
+        centerTitle: true,
+        title: Text(
+          'Development View',
         ),
       ),
       body: Center(
