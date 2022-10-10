@@ -24,15 +24,6 @@ class _SaveViewState extends State<SaveView> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.refresh_rounded,
-                color: Colors.black,
-              ),
-              onPressed: () {},
-            ),
-          ],
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
@@ -101,27 +92,72 @@ class _SaveViewState extends State<SaveView> {
       ),
     );
   }
-}
 
-Widget pictures() {
-  return Expanded(
-    child: GridView.count(
-      crossAxisCount: 2,
-      children: [
-        for (int i = 0; i < 4; i++)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
-                  image: AssetImage('assets/recipe_image.jpg'),
-                  fit: BoxFit.cover,
+  Widget pictures() {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
+        child: GridView.count(
+          crossAxisCount: 2,
+          children: [
+            for (int i = 0; i < 10; i++)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 300,
+                  height: 230,
+                  decoration: const BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 300,
+                        height: 150,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/recipe_image.jpg'),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                      //IMAGE
+                      Expanded(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Poke Bowl',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-      ],
-    ),
-  );
+          ],
+        ),
+      ),
+    );
+  }
 }
