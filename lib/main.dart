@@ -7,7 +7,6 @@ import 'views/scramble_view.dart';
 import 'views/splash_view.dart';
 //google fonts
 import 'package:google_fonts/google_fonts.dart';
-import 'save_view.dart';
 
 void main() {
   runApp(const MyApp());
