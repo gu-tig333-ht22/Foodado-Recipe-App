@@ -53,28 +53,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-  fonts:
-  - family: Coiny
-    fonts:
-      - asset: fonts/Coiny-Regular.ttf
-        style: normal
 
-  - family: Comfortaa
-    fonts:
-      - asset: fonts/Comfortaa-SemiBold.tff
-        style: normal
-
-  - family: Poppins
-    fonts: 
-      - asset: fonts/Poppins-Semibold
-        style: normal
-
-  - family: RedHatDisplay
-    fonts:
-      - asset: fonts/RedHatDisplay-Medium
-        style: normal       
-
-          
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/recipe_image.jpg
