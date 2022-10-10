@@ -14,7 +14,7 @@ class _InfoViewState extends State<InfoView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Info/landing View',
         ),
       ),

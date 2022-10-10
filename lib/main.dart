@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/views/save_view.dart';
 import '/constants/routes.dart';
 import 'views/filter_view.dart';
 import 'views/recipe_view.dart';
@@ -6,6 +7,7 @@ import 'views/scramble_view.dart';
 import 'views/splash_view.dart';
 //google fonts
 import 'package:google_fonts/google_fonts.dart';
+import 'save_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,6 +33,7 @@ class MyApp extends StatelessWidget {
         scrambleViewRoute: (context) => const ScrambleView(),
         filterViewRoute: (context) => const FilterView(),
         recipeViewRoute: (context) => const RecipeView(),
+        saveViewRoute: (context) => const SaveView(),
       },
     );
   }
@@ -50,7 +53,7 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Development View',
         ),
       ),
@@ -63,25 +66,31 @@ class _MainViewState extends State<MainView> {
               onPressed: () {
                 Navigator.of(context).pushNamed(infoViewRoute);
               },
-              child: Text('Info View'),
+              child: const Text('Info View'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(scrambleViewRoute);
               },
-              child: Text('Scramble View'),
+              child: const Text('Scramble View'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(recipeViewRoute);
               },
-              child: Text('Recipe View'),
+              child: const Text('Recipe View'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pushNamed(filterViewRoute);
               },
-              child: Text('Filter View'),
+              child: const Text('Filter View'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(saveViewRoute);
+              },
+              child: const Text('Save View'),
             ),
           ],
         ),
