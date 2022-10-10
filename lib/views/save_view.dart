@@ -30,7 +30,7 @@ class _SaveViewState extends State<SaveView> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.of(context).pushNamed(mainViewRoute);
+              Navigator.of(context).pushNamed(devViewRoute);
             },
           ),
         ),
@@ -55,7 +55,7 @@ class _SaveViewState extends State<SaveView> {
       'Dessert',
     ];
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         for (int i = 0; i < recipeType.length; i++)
           OutlinedButton(
@@ -117,7 +117,7 @@ class _SaveViewState extends State<SaveView> {
                     children: [
                       Container(
                         width: 300,
-                        height: 150,
+                        height: 140,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage('assets/recipe_image.jpg'),

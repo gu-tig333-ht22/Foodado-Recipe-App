@@ -63,8 +63,8 @@ class _FilterViewState extends State<FilterView> {
 
   Widget recipeTypeFilter() {
     List<String> recipeType = [
-      'Lunch',
       'Breakfast',
+      'Lunch',
       'Dinner',
       'Dessert',
     ];
