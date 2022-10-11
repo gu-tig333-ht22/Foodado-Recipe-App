@@ -40,7 +40,7 @@ class _FilterViewState extends State<FilterView> {
               color: Colors.black,
             ),
             onPressed: () {
-              Navigator.of(context).pushNamed(mainViewRoute);
+              Navigator.of(context).pushNamed(devViewRoute);
             },
           ),
         ),
