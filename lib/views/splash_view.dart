@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '/constants/routes.dart';
+
+import '../components/models/recipe_model.dart';
 
 class InfoView extends StatefulWidget {
   const InfoView({Key? key}) : super(key: key);
@@ -15,11 +16,10 @@ class _InfoViewState extends State<InfoView> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Info/landing View',
+          'Info View',
         ),
       ),
       body: Center(
-        //buttons to navigate to other views
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
         ),

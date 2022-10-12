@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
-import '../components/provider.dart';
-import '../components/model.dart';
+
+import '../components/models/recipe_model.dart';
 
 class RecipeView extends StatefulWidget {
   const RecipeView({Key? key}) : super(key: key);
@@ -13,6 +13,14 @@ class RecipeView extends StatefulWidget {
 }
 
 class _RecipeViewState extends State<RecipeView> {
+  late Future<Recipe> futureRecipe;
+
+  @override
+  void initState() {
+    super.initState();
+    futureRecipe = fetchRecipe();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,220 +55,146 @@ class _RecipeViewState extends State<RecipeView> {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            recipeImage(),
-            recipeInfo(),
-            recipeIngredients(),
-            recipeInstructions(),
-          ],
+      body: Center(
+        child: FutureBuilder<Recipe>(
+          future: futureRecipe,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  recipeImage(),
+                  recipeInfo(),
+                  recipeIngredients(),
+                  recipeInstructions(),
+                ],
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
     );
   }
 
   Widget recipeImage() {
-    return Consumer<RecipeState>(
-      builder: (context, recipes, child) {
-        return Container(
-          width: 350,
-          height: 230,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(recipes.recipes[0].image),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-        );
-      },
+    return FutureBuilder<Recipe>(
+        future: futureRecipe,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              width: 320,
+              height: 220,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(snapshot.data!.image),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          return const CircularProgressIndicator();
+        });
+  }
+
+  Widget recipeInfo() {
+//recipe info with futurebuilder
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FutureBuilder<Recipe>(
+        future: futureRecipe,
+        builder: (context, snapshot) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  Icon(
+                    Icons.access_time_rounded,
+                    color: secondaryColor.withOpacity(0.4),
+                  ),
+                  Text(
+                    '${snapshot.data!.readyInMinutes} min',
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Icon(
+                    Icons.people,
+                    color: secondaryColor.withOpacity(0.4),
+                  ),
+                  Text(
+                    snapshot.data!.servings.toString(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
-//recipeInfo() with consumer RecipeState
-  // Widget recipeInfo() {
-  //   return Consumer<RecipeState>(
-  //     builder: (context, recipes, child) {
-  //       return Container(
-  //         width: 350,
-  //         height: 100,
-  //         decoration: BoxDecoration(
-  //           color: Colors.white,
-  //           borderRadius: BorderRadius.circular(20),
-  //           boxShadow: [
-  //             BoxShadow(
-  //               color: Colors.grey.withOpacity(0.5),
-  //               spreadRadius: 5,
-  //               blurRadius: 7,
-  //               offset: const Offset(0, 3), // changes position of shadow
-  //             ),
-  //           ],
-  //         ),
-  //         child: Padding(
-  //           padding: const EdgeInsets.all(8.0),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Text(
-  //                 recipes.recipes[0].title,
-  //                 style: const TextStyle(
-  //                   fontSize: 20,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                 children: [
-  //                   Row(
-  //                     children: [
-  //                       const Icon(
-  //                         Icons.timer_rounded,
-  //                         color: Colors.black,
-  //                       ),
-  //                       const SizedBox(
-  //                         width: 5,
-  //                       ),
-  //                       Text(
-  //                         recipes.recipes[0].readyInMinutes.toString() + ' min',
-  //                         style: const TextStyle(
-  //                           fontSize: 15,
-  //                           fontWeight: FontWeight.bold,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                   Row(
-  //                     children: [
-  //                       const Icon(
-  //                         Icons.attach_money_rounded,
-  //                         color: Colors.black,
-  //                       ),
-  //                       const SizedBox(
-  //                         width: 5,
-  //                       ),
-  //                       Text(
-  //                         ' kr',
-  //                         style: const TextStyle(
-  //                           fontSize: 15,
-  //                           fontWeight: FontWeight.bold,
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  Widget recipeInfo() {
-    return Consumer<RecipeState>(builder: (context, recipes, child) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                Icon(
-                  Icons.access_time_rounded,
-                  color: secondaryColor.withOpacity(0.4),
-                ),
-                Text(
-                  recipes.recipes[0].readyInMinutes.toString() + ' min',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Icon(
-                  Icons.bolt_rounded,
-                  color: secondaryColor.withOpacity(0.4),
-                ),
-
-                ///
-                /// Kanske byta ut "svårighetsgrad" värdet nedan som passar någon parameter i API:et
-                ///
-
-                const Text(
-                  'Medium',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Icon(
-                  Icons.people,
-                  color: secondaryColor.withOpacity(0.4),
-                ),
-                Text(
-                  recipes.recipes[0].servings.toString() + ' servings',
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
   Widget recipeIngredients() {
-    return Consumer<RecipeState>(builder: (context, recipes, child) {
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Column(
-            children: [
-              const Text(
-                'Ingredients',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: recipes.recipes[0].extendedIngredients.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        title:
-                            Text(recipes.recipes[0].extendedIngredients[index]),
-                        leading: Checkbox(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+    //list of extendedIngredients name futurebuilder
+    return FutureBuilder<Recipe>(
+        future: futureRecipe,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Expanded(
+              child: Column(
+                children: [
+                  const Text(
+                    'Ingredients',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.extendedIngredients.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Checkbox(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            value: false,
+                            onChanged: (value) {},
                           ),
-                          value: false,
-                          onChanged: (value) {},
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                          title: Text(
+                            snapshot.data!.extendedIngredients[index],
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      );
-    });
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          return const CircularProgressIndicator();
+        });
   }
 
   Widget recipeInstructions() {
