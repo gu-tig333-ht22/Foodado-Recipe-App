@@ -84,22 +84,17 @@ class _RecipeViewState extends State<RecipeView> {
     return FutureBuilder<Recipe>(
         future: futureRecipe,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              width: 320,
-              height: 220,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(snapshot.data!.image),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(10),
+          return Container(
+            width: 320,
+            height: 220,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(snapshot.data!.image),
+                fit: BoxFit.cover,
               ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const CircularProgressIndicator();
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
         });
   }
 
@@ -154,46 +149,41 @@ class _RecipeViewState extends State<RecipeView> {
     return FutureBuilder<Recipe>(
         future: futureRecipe,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Expanded(
-              child: Column(
-                children: [
-                  const Text(
-                    'Ingredients',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+          return Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  'Ingredients',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.extendedIngredients.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Checkbox(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            value: false,
-                            onChanged: (value) {},
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: snapshot.data!.extendedIngredients.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: Checkbox(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          title: Text(
-                            snapshot.data!.extendedIngredients[index],
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
+                          value: false,
+                          onChanged: (value) {},
+                        ),
+                        title: Text(
+                          snapshot.data!.extendedIngredients[index],
+                          style: const TextStyle(
+                            fontSize: 14,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const CircularProgressIndicator();
+                ),
+              ],
+            ),
+          );
         });
   }
 
