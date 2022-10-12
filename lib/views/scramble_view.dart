@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 import '../constants/constants.dart';
 import '/constants/routes.dart';
 
@@ -10,6 +11,14 @@ class ScrambleView extends StatefulWidget {
 }
 
 class _ScrambleViewState extends State<ScrambleView> {
+  late Future<Recipe> futureRecipe;
+
+  @override
+  void initState() {
+    super.initState();
+    futureRecipe = fetchRecipe();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,143 +64,157 @@ class _ScrambleViewState extends State<ScrambleView> {
 
 //recipecard with assets/recipe_image.jpg
   Widget recipeCard() {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
-      child: Container(
-        width: 350,
-        height: 490,
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [shadow],
-        ),
-        child: Column(
-          children: [
-            Container(
+    return FutureBuilder<Recipe>(
+      future: futureRecipe,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
+            child: Container(
               width: 350,
-              height: 230,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/recipe_image.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
+              height: 490,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [shadow],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 300,
-                height: 230,
-                decoration: const BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Poke Bowl',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              child: Column(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 230,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(snapshot.data!.image),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Perk up under the heat with a refreshing poke bowl that reminds you of a summer breeze. Perk up under the heat with a refreshing poke bowl that reminds you of a summer breeze. refreshing poke bowl that reminds you of a summer breeze.',
-                        style: TextStyle(
-                          fontSize: 14,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 300,
+                      height: 230,
+                      decoration: const BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
                       ),
-                    ),
-                    //cooking time, difficulty, servings
-                    Padding(
-                      //padding top
-                      padding: const EdgeInsets.only(top: 25.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      child: Column(
                         children: [
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.access_time_rounded,
-                                color: secondaryColor.withOpacity(0.4),
-                              ),
-                              const Text(
-                                '30 min',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            snapshot.data!.title,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.bolt_rounded,
-                                color: secondaryColor.withOpacity(0.4),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              snapshot.data!.summary,
+                              maxLines: 5,
+                              style: const TextStyle(
+                                fontSize: 14,
                               ),
-                              const Text(
-                                'Medium',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              Icon(
-                                Icons.people,
-                                color: secondaryColor.withOpacity(0.4),
-                              ),
-                              const Text(
-                                '2 servings',
-                                style: TextStyle(
-                                  fontSize: 14,
+                          //cooking time, difficulty, servings
+                          Padding(
+                            //padding top
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.access_time_rounded,
+                                      color: secondaryColor.withOpacity(0.4),
+                                    ),
+                                    Text(
+                                      '${snapshot.data!.readyInMinutes} min',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.people,
+                                      color: secondaryColor.withOpacity(0.4),
+                                    ),
+                                    Text(
+                                      '${snapshot.data!.servings} servings',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 
+//
 //next recipe button
   Widget nextRecipeButton() {
-    return Container(
-      width: 350,
-      height: 50,
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextButton(
-        onPressed: () {},
-        child: const Text(
-          'Next Recipe',
-          style: TextStyle(
-            fontSize: 18,
-            color: backgroundColor,
-          ),
-        ),
-      ),
+    return FutureBuilder<Recipe>(
+      future: futureRecipe,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                apiId += 1;
+                futureRecipe = fetchRecipe();
+              });
+            },
+            child: Container(
+              width: 300,
+              height: 50,
+              decoration: BoxDecoration(
+                color: secondaryColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [shadow],
+              ),
+              child: Center(
+                child: Text(
+                  'Next recipe',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        return const CircularProgressIndicator();
+      },
     );
   }
 

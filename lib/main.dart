@@ -6,7 +6,6 @@ import 'views/filter_view.dart';
 import 'views/recipe_view.dart';
 import 'views/scramble_view.dart';
 import 'views/splash_view.dart';
-import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {

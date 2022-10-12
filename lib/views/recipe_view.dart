@@ -28,12 +28,17 @@ class _RecipeViewState extends State<RecipeView> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
-        title: const Text(
-          'Poke Bowl', //Name of recipe
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+        title: FutureBuilder<Recipe>(
+          future: futureRecipe,
+          builder: (context, snapshot) {
+            return Text(
+              snapshot.data!.title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
         ),
         actions: [
           //reset filter button

@@ -6,9 +6,11 @@ import 'package:http/http.dart' as http;
 String apiKey = "e65a6aed8a9a49f0a49400eebe646ec5";
 String apiUrl = "https://api.spoonacular.com";
 
+int apiId = 716430;
+
 Future<Recipe> fetchRecipe() async {
   final response = await http.get(Uri.parse(
-      '${apiUrl}/recipes/716429/information?apiKey=${apiKey}&includeNutrition=false'));
+      '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
   if (response.statusCode == 200) {
     return Recipe.fromJson(jsonDecode(response.body));
   } else {
