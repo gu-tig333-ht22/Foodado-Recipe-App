@@ -187,7 +187,7 @@ class _RecipeViewState extends State<RecipeView> {
                               data: snapshot.data!.extendedIngredients[index],
                               style: {
                                 '#': Style(
-                                  fontSize: FontSize(14),
+                                  fontSize: const FontSize(14),
                                 ),
                               },
                             ),

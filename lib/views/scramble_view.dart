@@ -110,33 +110,35 @@ class _ScrambleViewState extends State<ScrambleView> {
                         ),
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             snapshot.data!.title,
+                            textAlign: TextAlign.center,
                             maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Html(
-                              data: snapshot.data!.summary,
-                              style: {
-                                '#': Style(
-                                  fontSize: FontSize(16),
-                                  maxLines: 5,
-                                  textOverflow: TextOverflow.ellipsis,
-                                ),
-                              },
-                            ),
+
+                          Html(
+                            data: snapshot.data!.summary,
+                            style: {
+                              '#': Style(
+                                textAlign: TextAlign.center,
+                                fontSize: FontSize(16),
+                                maxLines: 6,
+                                textOverflow: TextOverflow.ellipsis,
+                              ),
+                            },
                           ),
 
                           //cooking time, difficulty, servings
                           Padding(
                             //padding top
-                            padding: const EdgeInsets.only(top: 25.0),
+                            padding: const EdgeInsets.only(top: 0.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
