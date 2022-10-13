@@ -4,6 +4,7 @@ import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
 import '../constants/constants.dart';
 import '/constants/routes.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ScrambleView extends StatefulWidget {
   const ScrambleView({Key? key}) : super(key: key);
@@ -120,14 +121,18 @@ class _ScrambleViewState extends State<ScrambleView> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              snapshot.data!.summary,
-                              maxLines: 5,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
+                            child: Html(
+                              data: snapshot.data!.summary,
+                              style: {
+                                '#': Style(
+                                  fontSize: FontSize(16),
+                                  maxLines: 5,
+                                  textOverflow: TextOverflow.ellipsis,
+                                ),
+                              },
                             ),
                           ),
+
                           //cooking time, difficulty, servings
                           Padding(
                             //padding top

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
@@ -182,11 +183,13 @@ class _RecipeViewState extends State<RecipeView> {
                               ),
                               onPressed: () {},
                             ),
-                            title: Text(
-                              snapshot.data!.extendedIngredients[index],
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
+                            title: Html(
+                              data: snapshot.data!.extendedIngredients[index],
+                              style: {
+                                '#': Style(
+                                  fontSize: FontSize(14),
+                                ),
+                              },
                             ),
                           ),
                         );
@@ -230,11 +233,13 @@ class _RecipeViewState extends State<RecipeView> {
                                 fontSize: 14,
                               ),
                             ),
-                            title: Text(
-                              snapshot.data!.steps[index].step,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
+                            title: Html(
+                              data: snapshot.data!.steps[index].step,
+                              style: {
+                                '#': Style(
+                                  fontSize: FontSize(14),
+                                ),
+                              },
                             ),
                           ),
                         );
