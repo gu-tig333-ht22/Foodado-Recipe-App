@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
+import 'package:grupp_5/components/models/steps_model.dart';
 import '../constants/constants.dart';
 import '/constants/routes.dart';
 
@@ -43,7 +45,7 @@ class _ScrambleViewState extends State<ScrambleView> {
           },
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      // bottomNavigationBar: bottomNavigationBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -172,6 +174,8 @@ class _ScrambleViewState extends State<ScrambleView> {
               ),
             ),
           );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
         }
         return const CircularProgressIndicator();
       },
@@ -213,7 +217,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             ),
           );
         }
-        return const CircularProgressIndicator();
+        return Container();
       },
     );
   }

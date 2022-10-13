@@ -1,12 +1,45 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:grupp_5/components/models/api_service.dart';
 import 'package:http/http.dart' as http;
 
-//apoonacular apikey
-String apiKey = "e65a6aed8a9a49f0a49400eebe646ec5";
-String apiUrl = "https://api.spoonacular.com";
+class Recipe {
+  final int id;
+  final String title;
+  final String image;
+  final int servings;
+  final int readyInMinutes;
+  final List<String> extendedIngredients;
+  final String summary;
+  bool isFavourite;
 
-int apiId = 716430;
+  Recipe({
+    required this.id,
+    required this.title,
+    required this.image,
+    required this.readyInMinutes,
+    required this.servings,
+    required this.summary,
+    required this.extendedIngredients,
+    this.isFavourite = false,
+  });
+
+  factory Recipe.fromJson(Map<String, dynamic> json) {
+    return Recipe(
+      id: json['id'],
+      title: json['title'],
+      image: json['image'],
+      readyInMinutes: json['readyInMinutes'],
+      servings: json['servings'],
+      //todo: add amount and unit to map
+      extendedIngredients: List<String>.from(
+          json['extendedIngredients'].map((x) => x['original'])),
+
+      summary: json['summary'],
+      isFavourite: false,
+    );
+  }
+}
 
 Future<Recipe> fetchRecipe() async {
   final response = await http.get(Uri.parse(
@@ -18,41 +51,6 @@ Future<Recipe> fetchRecipe() async {
   }
 }
 
-class Recipe {
-  final int id;
-  final String title;
-  final String image;
-  final int servings;
-  final int readyInMinutes;
-  final List<String> extendedIngredients;
-
-  final String summary;
-
-  const Recipe({
-    required this.id,
-    required this.title,
-    required this.image,
-    required this.readyInMinutes,
-    required this.servings,
-    required this.summary,
-    required this.extendedIngredients,
-  });
-
-  factory Recipe.fromJson(Map<String, dynamic> json) {
-    return Recipe(
-      id: json['id'],
-      title: json['title'],
-      image: json['image'],
-      readyInMinutes: json['readyInMinutes'],
-      servings: json['servings'],
-      //todo: add amount and unit to map
-      extendedIngredients:
-          List<String>.from(json['extendedIngredients'].map((x) => x['name'])),
-
-      summary: json['summary'],
-    );
-  }
-}
 
 
 

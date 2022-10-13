@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../components/models/recipe_model.dart';
-
 class InfoView extends StatefulWidget {
   const InfoView({Key? key}) : super(key: key);
 
@@ -22,6 +20,23 @@ class _InfoViewState extends State<InfoView> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Info View',
+              style: TextStyle(
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              'This is the info view',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
