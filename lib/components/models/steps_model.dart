@@ -28,8 +28,8 @@ class Steps {
 
   factory Steps.fromJson(Map<String, dynamic> json) {
     return Steps(
-      step: json['step'],
-      number: json['number'],
+      step: json['step'] ?? '',
+      number: json['number'] ?? 0,
     );
   }
 }

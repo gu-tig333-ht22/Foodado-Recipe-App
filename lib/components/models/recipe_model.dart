@@ -26,16 +26,16 @@ class Recipe {
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     return Recipe(
-      id: json['id'],
-      title: json['title'],
-      image: json['image'],
-      readyInMinutes: json['readyInMinutes'],
-      servings: json['servings'],
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
+      image: json['image'] ?? '',
+      readyInMinutes: json['readyInMinutes'] ?? 0,
+      servings: json['servings'] ?? 0,
       //todo: add amount and unit to map
       extendedIngredients: List<String>.from(
           json['extendedIngredients'].map((x) => x['original'])),
 
-      summary: json['summary'],
+      summary: json['summary'] ?? '',
       isFavourite: false,
     );
   }
@@ -46,26 +46,10 @@ Future<Recipe> fetchRecipe() async {
       '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
   if (response.statusCode == 200) {
     return Recipe.fromJson(jsonDecode(response.body));
+  } else if (response.statusCode == 404) {
+    apiId += 1;
+    return fetchRecipe();
   } else {
     throw Exception('Failed to load Recipe');
   }
 }
-
-
-
-
-  //List of interesting api calls:
-  // final int id;
-  // final String title;
-  // final String image;
-  // final int servings;
-  // final int readyInMinutes;
-  // final bool cheap;
-  // final bool vegetarian;
-  // final bool vegan;
-  // final bool glutenFree;
-  // final bool dairyFree;
-  // final bool veryHealthy;
-  // final List<String> dishTypes;
-  // final List<String> extendedIngredients;
-  // final String summary;
