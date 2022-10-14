@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
@@ -199,7 +201,8 @@ class _ScrambleViewState extends State<ScrambleView> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                apiId += 1;
+                //call fetchrecipe again
+                apiId = Random().nextInt(5000);
                 futureRecipe = fetchRecipe();
               });
             },

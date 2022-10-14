@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +48,7 @@ Future<Recipe> fetchRecipe() async {
   if (response.statusCode == 200) {
     return Recipe.fromJson(jsonDecode(response.body));
   } else if (response.statusCode == 404) {
-    apiId += 1;
+    apiId = Random().nextInt(5000);
     return fetchRecipe();
   } else {
     throw Exception('Failed to load Recipe');
