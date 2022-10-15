@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/constants/constants.dart';
 import '/constants/routes.dart';
 
