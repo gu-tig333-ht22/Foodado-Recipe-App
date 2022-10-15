@@ -3,9 +3,10 @@ import 'package:grupp_5/views/dev_view.dart';
 import 'package:grupp_5/views/save_view.dart';
 import '/constants/routes.dart';
 import 'views/filter_view.dart';
+
 import 'views/recipe_view.dart';
 import 'views/scramble_view.dart';
-import 'views/splash_view.dart';
+import 'views/info_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
