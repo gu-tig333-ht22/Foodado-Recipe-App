@@ -33,6 +33,8 @@ dependencies:
   google_fonts: 
   http:
   flutter_html:
+  provider:
+  
 
 dev_dependencies:
   flutter_test:

@@ -12,7 +12,6 @@ class Recipe {
   final int readyInMinutes;
   final List<String> extendedIngredients;
   final String summary;
-  bool isFavourite;
 
   Recipe({
     required this.id,
@@ -22,7 +21,6 @@ class Recipe {
     required this.servings,
     required this.summary,
     required this.extendedIngredients,
-    this.isFavourite = false,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
@@ -37,7 +35,6 @@ class Recipe {
           json['extendedIngredients'].map((x) => x['original'])),
 
       summary: json['summary'] ?? '',
-      isFavourite: false,
     );
   }
 }

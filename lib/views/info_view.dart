@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
+import 'package:grupp_5/components/models/filter_data.dart';
 
 class InfoView extends StatefulWidget {
   const InfoView({Key? key}) : super(key: key);
@@ -10,6 +11,8 @@ class InfoView extends StatefulWidget {
 
 class _InfoViewState extends State<InfoView> {
   late Future<FilterRecipe> futureFilterRecipe;
+  //text controller
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -42,6 +45,42 @@ class _InfoViewState extends State<InfoView> {
                         snapshot.data!.results[index].image,
                       ),
                       Text(snapshot.data!.results[index].id.toString()),
+
+                      //input to change query string and button to execute
+                      TextField(
+                        controller: _controller,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter a search term',
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          type = 'appetizer';
+                        },
+                        child: const Text('Appetizer'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          type = 'main course';
+                        },
+                        child: const Text('Main course'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          type = 'dessert';
+                        },
+                        child: const Text('Dessert'),
+                      ),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            query = _controller.text;
+                            futureFilterRecipe = fetchFilterRecipe();
+                          });
+                        },
+                        child: const Text('Execute'),
+                      ),
                     ],
                   );
                 },

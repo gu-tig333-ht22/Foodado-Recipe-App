@@ -1,0 +1,2 @@
+String query = '';
+String type = '';
