@@ -1,10 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:grupp_5/components/models/api_service.dart';
-import 'package:http/http.dart' as http;
-
 class Recipe {
   final int id;
   final String title;
@@ -31,35 +24,9 @@ class Recipe {
       image: json['image'] ?? '',
       readyInMinutes: json['readyInMinutes'] ?? 0,
       servings: json['servings'] ?? 0,
-      //todo: add amount and unit to map
       extendedIngredients: List<String>.from(
           json['extendedIngredients'].map((x) => x['original'])),
-
       summary: json['summary'] ?? '',
     );
-  }
-}
-
-class RecipeProvider extends ChangeNotifier {
-  Recipe? _recipe;
-  Recipe? get recipe => _recipe;
-
-  RecipeProvider() {
-    fetchRecipe();
-  }
-
-  Future<Recipe> fetchRecipe() async {
-    final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
-    if (response.statusCode == 200) {
-      _recipe = Recipe.fromJson(jsonDecode(response.body));
-      notifyListeners();
-      return _recipe!;
-    } else if (response.statusCode == 404) {
-      apiId = Random().nextInt(5000);
-      return fetchRecipe();
-    } else {
-      throw Exception('Failed to load Recipe');
-    }
   }
 }

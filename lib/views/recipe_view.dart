@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
+import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
@@ -198,7 +199,7 @@ class _RecipeViewState extends State<RecipeView> {
   }
 
   Widget recipeInstructions() {
-    return Consumer<AnalyzedInstructionProvider>(
+    return Consumer<RecipeProvider>(
       builder: (context, steps, child) {
         if (steps.analyzedInstruction != null) {
           return Expanded(

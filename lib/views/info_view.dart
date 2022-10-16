@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/components/models/filter_data.dart';
+import 'package:grupp_5/components/providers/provider.dart';
+import 'package:provider/provider.dart';
 
 class InfoView extends StatefulWidget {
   const InfoView({Key? key}) : super(key: key);
@@ -10,16 +12,9 @@ class InfoView extends StatefulWidget {
 }
 
 class _InfoViewState extends State<InfoView> {
-  late Future<FilterRecipe> futureFilterRecipe;
-  //text controller
   final TextEditingController _controller = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    futureFilterRecipe = fetchFilterRecipe();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,64 +26,57 @@ class _InfoViewState extends State<InfoView> {
       ),
       body: //listbuilder future
           Center(
-        child: FutureBuilder<FilterRecipe>(
-          future: futureFilterRecipe,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                //image and id
-                itemCount: snapshot.data!.results.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Image.network(
-                        snapshot.data!.results[index].image,
+        child: Consumer<RecipeProvider>(
+          builder: (context, recipe, child) {
+            return ListView.builder(
+              //image and id
+              itemCount: recipe.filterRecipe!.results.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Image.network(
+                      recipe.filterRecipe!.results[index].image,
+                    ),
+                    Text(
+                      recipe.filterRecipe!.results[index].id.toString(),
+                    ),
+                    TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter a search term',
                       ),
-                      Text(snapshot.data!.results[index].id.toString()),
-
-                      //input to change query string and button to execute
-                      TextField(
-                        controller: _controller,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter a search term',
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          type = 'appetizer';
-                        },
-                        child: const Text('Appetizer'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          type = 'main course';
-                        },
-                        child: const Text('Main course'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          type = 'dessert';
-                        },
-                        child: const Text('Dessert'),
-                      ),
-
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            query = _controller.text;
-                            futureFilterRecipe = fetchFilterRecipe();
-                          });
-                        },
-                        child: const Text('Execute'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
-            return const CircularProgressIndicator();
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        type = 'appetizer';
+                      },
+                      child: const Text('Appetizer'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        type = 'main course';
+                      },
+                      child: const Text('Main course'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        type = 'dessert';
+                      },
+                      child: const Text('Dessert'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          query = _controller.text;
+                          recipe.fetchFilterRecipe();
+                        });
+                      },
+                      child: const Text('Execute'),
+                    ),
+                  ],
+                );
+              },
+            );
           },
         ),
       ),
