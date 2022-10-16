@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
+import 'package:provider/provider.dart';
 import '../constants/constants.dart';
 import '/constants/routes.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -16,14 +17,6 @@ class ScrambleView extends StatefulWidget {
 }
 
 class _ScrambleViewState extends State<ScrambleView> {
-  late Future<Recipe> futureRecipe;
-
-  @override
-  void initState() {
-    super.initState();
-    futureRecipe = fetchRecipe();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,10 +62,9 @@ class _ScrambleViewState extends State<ScrambleView> {
 
 //recipecard with assets/recipe_image.jpg
   Widget recipeCard() {
-    return FutureBuilder<Recipe>(
-      future: futureRecipe,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.recipe != null) {
           return GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
             child: Container(
@@ -90,7 +82,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                     height: 230,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(snapshot.data!.image),
+                        image: NetworkImage(recipe.recipe!.image),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: const BorderRadius.only(
@@ -115,7 +107,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            snapshot.data!.title,
+                            recipe.recipe!.title,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -126,11 +118,11 @@ class _ScrambleViewState extends State<ScrambleView> {
                           ),
 
                           Html(
-                            data: snapshot.data!.summary,
+                            data: recipe.recipe!.summary,
                             style: {
                               '#': Style(
                                 textAlign: TextAlign.center,
-                                fontSize: FontSize(16),
+                                fontSize: const FontSize(16),
                                 maxLines: 6,
                                 textOverflow: TextOverflow.ellipsis,
                               ),
@@ -151,7 +143,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                       color: secondaryColor.withOpacity(0.4),
                                     ),
                                     Text(
-                                      '${snapshot.data!.readyInMinutes} min',
+                                      '${recipe.recipe!.readyInMinutes} min',
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),
@@ -165,7 +157,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                       color: secondaryColor.withOpacity(0.4),
                                     ),
                                     Text(
-                                      '${snapshot.data!.servings} servings',
+                                      '${recipe.recipe!.servings} servings',
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),
@@ -183,10 +175,9 @@ class _ScrambleViewState extends State<ScrambleView> {
               ),
             ),
           );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
+        } else {
+          return const CircularProgressIndicator();
         }
-        return const CircularProgressIndicator();
       },
     );
   }
@@ -194,16 +185,14 @@ class _ScrambleViewState extends State<ScrambleView> {
 //
 //next recipe button
   Widget nextRecipeButton() {
-    return FutureBuilder<Recipe>(
-      future: futureRecipe,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.recipe != null) {
           return GestureDetector(
             onTap: () {
               setState(() {
-                //call fetchrecipe again
                 apiId = Random().nextInt(5000);
-                futureRecipe = fetchRecipe();
+                recipe.fetchRecipe();
               });
             },
             child: Container(
@@ -214,10 +203,10 @@ class _ScrambleViewState extends State<ScrambleView> {
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [shadow],
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
                   'Next recipe',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -226,8 +215,9 @@ class _ScrambleViewState extends State<ScrambleView> {
               ),
             ),
           );
+        } else {
+          return Container();
         }
-        return Container();
       },
     );
   }

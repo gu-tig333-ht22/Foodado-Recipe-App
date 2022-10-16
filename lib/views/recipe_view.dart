@@ -15,16 +15,6 @@ class RecipeView extends StatefulWidget {
 }
 
 class _RecipeViewState extends State<RecipeView> {
-  late Future<Recipe> futureRecipe;
-  late Future<AnalyzedInstruction> futureAnalyzedInstruction;
-
-  @override
-  void initState() {
-    super.initState();
-    futureRecipe = fetchRecipe();
-    futureAnalyzedInstruction = fetchAnalyzedInstruction();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,21 +22,25 @@ class _RecipeViewState extends State<RecipeView> {
         backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
-        title: FutureBuilder<Recipe>(
-          future: futureRecipe,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
+        title: Consumer<RecipeProvider>(
+          builder: (context, recipe, child) {
+            if (recipe.recipe == null) {
+              return const Text(
+                'Recipe',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            } else {
               return Text(
-                snapshot.data!.title,
+                recipe.recipe!.title,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
             }
-            return Container();
           },
         ),
         actions: [
@@ -83,36 +77,35 @@ class _RecipeViewState extends State<RecipeView> {
   }
 
   Widget recipeImage() {
-    return FutureBuilder<Recipe>(
-        future: futureRecipe,
-        builder: (context, snapshot) {
-          //if data is not null
-          if (snapshot.hasData) {
-            return Container(
-              width: 320,
-              height: 220,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(snapshot.data!.image),
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(10),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.recipe?.image == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Container(
+            width: 320,
+            height: 220,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(recipe.recipe!.image),
+                fit: BoxFit.cover,
               ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return Container();
-        });
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget recipeInfo() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: FutureBuilder<Recipe>(
-        future: futureRecipe,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
+      child: Consumer<RecipeProvider>(
+        builder: (context, recipe, child) {
+          if (recipe.recipe != null) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -123,7 +116,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${snapshot.data!.readyInMinutes} min',
+                      '${recipe.recipe!.readyInMinutes} min',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -137,7 +130,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      snapshot.data!.servings.toString(),
+                      '${recipe.recipe!.servings} servings',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -146,113 +139,111 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
               ],
             );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
+          } else {
+            return Container();
           }
-          return const CircularProgressIndicator();
         },
       ),
     );
   }
 
   Widget recipeIngredients() {
-    return FutureBuilder<Recipe>(
-        future: futureRecipe,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Expanded(
-              child: Column(
-                children: [
-                  const Text(
-                    'Ingredients',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.recipe != null) {
+          return Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  'Ingredients',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.extendedIngredients.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            leading: IconButton(
-                              icon: const Icon(
-                                Icons.check_box_outline_blank_rounded,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {},
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: recipe.recipe!.extendedIngredients.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          leading: IconButton(
+                            icon: const Icon(
+                              Icons.check_box_outline_blank_rounded,
+                              color: Colors.black,
                             ),
-                            title: Html(
-                              data: snapshot.data!.extendedIngredients[index],
-                              style: {
-                                '#': Style(
-                                  fontSize: const FontSize(14),
-                                ),
-                              },
-                            ),
+                            onPressed: () {},
                           ),
-                        );
-                      },
-                    ),
+                          title: Html(
+                            data: recipe.recipe!.extendedIngredients[index],
+                            style: {
+                              '#': Style(
+                                fontSize: const FontSize(14),
+                              ),
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
+                ),
+              ],
+            ),
+          );
+        } else {
           return Container();
-        });
+        }
+      },
+    );
   }
 
   Widget recipeInstructions() {
-    return FutureBuilder<AnalyzedInstruction>(
-        future: futureAnalyzedInstruction,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Expanded(
-              child: Column(
-                children: [
-                  const Text(
-                    'Instructions',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return Consumer<AnalyzedInstructionProvider>(
+      builder: (context, steps, child) {
+        if (steps.analyzedInstruction != null) {
+          return Expanded(
+            child: Column(
+              children: [
+                const Text(
+                  'Instructions',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: snapshot.data!.steps.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            leading: Text(
-                              snapshot.data!.steps[index].number.toString(),
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                            title: Html(
-                              data: snapshot.data!.steps[index].step,
-                              style: {
-                                '#': Style(
-                                  fontSize: FontSize(14),
-                                ),
-                              },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: steps.analyzedInstruction!.steps.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: ListTile(
+                          leading: Text(
+                            steps.analyzedInstruction!.steps[index].number
+                                .toString(),
+                            style: const TextStyle(
+                              fontSize: 14,
                             ),
                           ),
-                        );
-                      },
-                    ),
+                          title: Html(
+                            data: steps.analyzedInstruction!.steps[index].step,
+                            style: {
+                              '#': Style(
+                                fontSize: const FontSize(14),
+                              ),
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
+                ),
+              ],
+            ),
+          );
+        } else {
           return Container();
-        });
+        }
+      },
+    );
   }
 }

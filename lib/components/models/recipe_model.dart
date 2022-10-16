@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,17 +40,26 @@ class Recipe {
   }
 }
 
-Future<Recipe> fetchRecipe() async {
-  final response = await http.get(Uri.parse(
-      '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
-  if (response.statusCode == 200) {
-    return Recipe.fromJson(jsonDecode(response.body));
-  } else if (response.statusCode == 404) {
-    apiId = Random().nextInt(5000);
-    return fetchRecipe();
-  } else {
-    throw Exception('Failed to load Recipe');
+class RecipeProvider extends ChangeNotifier {
+  Recipe? _recipe;
+  Recipe? get recipe => _recipe;
+
+  RecipeProvider() {
+    fetchRecipe();
+  }
+
+  Future<Recipe> fetchRecipe() async {
+    final response = await http.get(Uri.parse(
+        '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
+    if (response.statusCode == 200) {
+      _recipe = Recipe.fromJson(jsonDecode(response.body));
+      notifyListeners();
+      return _recipe!;
+    } else if (response.statusCode == 404) {
+      apiId = Random().nextInt(5000);
+      return fetchRecipe();
+    } else {
+      throw Exception('Failed to load Recipe');
+    }
   }
 }
-
-//return user filter to add to url
