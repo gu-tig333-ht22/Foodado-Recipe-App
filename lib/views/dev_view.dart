@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '/constants/routes.dart';
 
-//Navigation during development
-
 class DevView extends StatefulWidget {
   const DevView({Key? key}) : super(key: key);
 
