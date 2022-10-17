@@ -11,6 +11,10 @@ class FilterView extends StatefulWidget {
 }
 
 class _FilterViewState extends State<FilterView> {
+  double _value2 = 0;
+  double _startvalue = 0;
+  double _endvalue = 500;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,16 +156,30 @@ class _FilterViewState extends State<FilterView> {
       children: [
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('Calories per serving'),
+          child: Text(
+            'Calories per serving',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        Slider(
+        RangeSlider(
           activeColor: secondaryColor,
-          value: 0,
+          values: RangeValues(_startvalue, _endvalue),
           min: 0,
-          max: 1000,
-          divisions: 10,
-          label: 'Calories',
-          onChanged: (double value) {},
+          max: 500,
+          divisions: 5,
+          labels: RangeLabels(
+            _startvalue.round().toString(),
+            _endvalue.round().toString(),
+          ),
+          onChanged: (values) {
+            setState(() {
+              _startvalue = values.start;
+              _endvalue = values.end;
+            });
+          },
         ),
       ],
     );
@@ -177,12 +195,16 @@ class _FilterViewState extends State<FilterView> {
         ),
         Slider(
           activeColor: secondaryColor,
-          value: 0,
+          value: _value2,
           min: 0,
-          max: 60,
-          divisions: 6,
-          label: 'Prep Time',
-          onChanged: (double value) {},
+          max: 240,
+          divisions: 8,
+          label: _value2.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _value2 = value;
+            });
+          },
         ),
       ],
     );
