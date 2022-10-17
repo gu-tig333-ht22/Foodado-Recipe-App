@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grupp_5/components/models/filter_model.dart';
-import 'package:grupp_5/components/models/filter_data.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -24,8 +22,7 @@ class _InfoViewState extends State<InfoView> {
           'Info View',
         ),
       ),
-      body: //listbuilder future
-          Center(
+      body: Center(
         child: Consumer<RecipeProvider>(
           builder: (context, recipe, child) {
             return ListView.builder(
@@ -48,26 +45,26 @@ class _InfoViewState extends State<InfoView> {
                     ),
                     TextButton(
                       onPressed: () {
-                        type = 'appetizer';
+                        recipe.type = 'appetizer';
                       },
                       child: const Text('Appetizer'),
                     ),
                     TextButton(
                       onPressed: () {
-                        type = 'main course';
+                        recipe.type = 'main course';
                       },
                       child: const Text('Main course'),
                     ),
                     TextButton(
                       onPressed: () {
-                        type = 'dessert';
+                        recipe.type = 'dessert';
                       },
                       child: const Text('Dessert'),
                     ),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          query = _controller.text;
+                          recipe.query = _controller.text;
                           recipe.fetchFilterRecipe();
                         });
                       },

@@ -83,9 +83,7 @@ class _FilterViewState extends State<FilterView> {
                 ),
               ),
             ),
-            onPressed: () {
-              //change color when clicked
-            },
+            onPressed: () {},
             child: Text(
               recipeType[i],
               style: const TextStyle(color: secondaryColor),
