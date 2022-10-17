@@ -9,6 +9,7 @@ import 'views/recipe_view.dart';
 import 'views/scramble_view.dart';
 import 'views/info_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
   runApp(
