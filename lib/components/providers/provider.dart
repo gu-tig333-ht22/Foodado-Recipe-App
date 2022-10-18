@@ -30,4 +30,14 @@ class RecipeProvider extends ChangeNotifier {
       throw Exception('Failed to load Recipe');
     }
   }
+
+  void setRecipeType(String type) {
+    this.type = type;
+    notifyListeners();
+  }
+
+  void setRecipeQuery(String query) {
+    this.query = query;
+    notifyListeners();
+  }
 }

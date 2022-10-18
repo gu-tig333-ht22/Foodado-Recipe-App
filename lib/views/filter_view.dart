@@ -77,28 +77,47 @@ class _FilterViewState extends State<FilterView> {
       'Lunch',
       'Dinner',
       'Dessert',
+      'Snack',
+      'Drink'
     ];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (int i = 0; i < recipeType.length; i++)
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: const BorderSide(color: Colors.black),
-                ),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: recipeType.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        recipe.setRecipeType(recipeType[index]);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shadowColor: Colors.transparent,
+                        foregroundColor: recipe.type == recipeType[index]
+                            ? Colors.white
+                            : Colors.black,
+                        backgroundColor: recipe.type == recipeType[index]
+                            ? secondaryColor
+                            : Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: const BorderSide(color: secondaryColor),
+                        ),
+                      ),
+                      child: Text(recipeType[index]),
+                    ),
+                  );
+                },
               ),
             ),
-            onPressed: () {},
-            child: Text(
-              recipeType[i],
-              style: const TextStyle(color: secondaryColor),
-            ),
-          ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -289,7 +308,7 @@ class _FilterViewState extends State<FilterView> {
               ),
             ),
             onPressed: () {
-              recipe.query = _controller.text;
+              recipe.setRecipeQuery(_controller.text);
               recipe.fetchRecipe();
               Navigator.of(context).pushNamed(scrambleViewRoute);
             },
