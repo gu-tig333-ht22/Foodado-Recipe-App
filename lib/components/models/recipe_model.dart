@@ -8,7 +8,7 @@ class Recipe {
   final int readyInMinutes;
   final List<String> extendedIngredients;
   final String summary;
-  final List<AnalyzedInstruction> analyzedInstructions;
+  final List<AnalyzedInstructions> analyzedInstructions;
 
   Recipe({
     required this.id,
@@ -31,9 +31,10 @@ class Recipe {
       extendedIngredients: List<String>.from(
           json['extendedIngredients'].map((x) => x['original'])),
       summary: json['summary'] ?? '',
-      analyzedInstructions: List<AnalyzedInstruction>.from(
-          json['analyzedInstructions']
-              .map((x) => AnalyzedInstruction.fromJson(x))),
+      analyzedInstructions: json['analyzedInstructions'].isEmpty
+          ? []
+          : List<AnalyzedInstructions>.from(json['analyzedInstructions']
+              .map((x) => AnalyzedInstructions.fromJson(x))),
     );
   }
 }

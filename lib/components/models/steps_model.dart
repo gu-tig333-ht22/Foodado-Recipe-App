@@ -1,12 +1,12 @@
-class AnalyzedInstruction {
+class AnalyzedInstructions {
   final List<Steps> steps;
 
-  const AnalyzedInstruction({
+  const AnalyzedInstructions({
     required this.steps,
   });
 
-  factory AnalyzedInstruction.fromJson(Map<String, dynamic> json) {
-    return AnalyzedInstruction(
+  factory AnalyzedInstructions.fromJson(Map<String, dynamic> json) {
+    return AnalyzedInstructions(
       steps: List<Steps>.from(json['steps'].map((x) => Steps.fromJson(x))),
     );
   }

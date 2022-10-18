@@ -9,8 +9,6 @@ import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:http/http.dart' as http;
 
 class RecipeProvider extends ChangeNotifier {
-  AnalyzedInstruction? _analyzedInstruction;
-  AnalyzedInstruction? get analyzedInstruction => _analyzedInstruction;
   FilterRecipe? _filterRecipe;
   FilterRecipe? get filterRecipe => _filterRecipe;
   String query = '';
@@ -18,16 +16,13 @@ class RecipeProvider extends ChangeNotifier {
 
   RecipeProvider() {
     fetchRecipe();
-    fetchAnalyzedInstruction();
-    fetchFilterRecipe();
   }
 
   void fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&offset=${Random().nextInt(3)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
-
       notifyListeners();
     } else if (response.statusCode == 404) {
       apiId = Random().nextInt(5000);
@@ -37,26 +32,26 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-  void fetchAnalyzedInstruction() async {
-    final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/$apiId/analyzedInstructions?apiKey=$apiKey&stepBreakdown=true'));
-    if (response.statusCode == 200) {
-      _analyzedInstruction =
-          AnalyzedInstruction.fromJson(jsonDecode(response.body)[0]);
-      notifyListeners();
-    } else {
-      throw Exception('Failed to load AnalyzedInstruction');
-    }
-  }
+  // void fetchAnalyzedInstruction() async {
+  //   final response = await http.get(Uri.parse(
+  //       '$apiUrl/recipes/$apiId/analyzedInstructions?apiKey=$apiKey&stepBreakdown=true'));
+  //   if (response.statusCode == 200) {
+  //     _analyzedInstruction =
+  //         AnalyzedInstruction.fromJson(jsonDecode(response.body)[0]);
+  //     notifyListeners();
+  //   } else {
+  //     throw Exception('Failed to load AnalyzedInstruction');
+  //   }
+  // }
 
-  void fetchFilterRecipe() async {
-    final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1'));
-    if (response.statusCode == 200) {
-      _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
-      notifyListeners();
-    } else {
-      throw Exception('Failed to load FilterRecipe');
-    }
-  }
+  // void fetchFilterRecipe() async {
+  //   final response = await http.get(Uri.parse(
+  //       '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1'));
+  //   if (response.statusCode == 200) {
+  //     _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
+  //     notifyListeners();
+  //   } else {
+  //     throw Exception('Failed to load FilterRecipe');
+  //   }
+  // }
 }

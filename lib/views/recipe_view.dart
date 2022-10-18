@@ -202,8 +202,8 @@ class _RecipeViewState extends State<RecipeView> {
 
   Widget recipeInstructions() {
     return Consumer<RecipeProvider>(
-      builder: (context, steps, child) {
-        if (steps.analyzedInstruction != null) {
+      builder: (context, recipe, child) {
+        if (recipe.filterRecipe != null) {
           return Expanded(
             child: Column(
               children: [
@@ -216,19 +216,20 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: steps.analyzedInstruction!.steps.length,
+                    itemCount: recipe
+                        .filterRecipe!.results[0].analyzedInstructions.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           leading: Text(
-                            steps.analyzedInstruction!.steps[index].number
-                                .toString(),
+                            '${index + 1}',
                             style: const TextStyle(
                               fontSize: 14,
                             ),
                           ),
                           title: Html(
-                            data: steps.analyzedInstruction!.steps[index].step,
+                            data: recipe.filterRecipe!.results[0]
+                                .analyzedInstructions[index].steps[index].step,
                             style: {
                               '#': Style(
                                 fontSize: const FontSize(14),
@@ -250,3 +251,19 @@ class _RecipeViewState extends State<RecipeView> {
     );
   }
 }
+
+
+// itemCount: steps.analyzedInstruction!.steps.length,
+//                     itemBuilder: (context, index) {
+//                       return Card(
+//                         child: ListTile(
+//                           leading: Text(
+//                             steps.analyzedInstruction!.steps[index].number
+//                                 .toString(),
+//                             style: const TextStyle(
+//                               fontSize: 14,
+//                             ),
+//                           ),
+//                           title: Html(
+//                             data: steps.analyzedInstruction!.steps[index].step,
+//                             style: {
