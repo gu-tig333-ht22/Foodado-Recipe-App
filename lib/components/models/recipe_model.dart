@@ -8,7 +8,6 @@ class Recipe {
   final int readyInMinutes;
   final List<String> extendedIngredients;
   final String summary;
-  //analyzedInstructions
   final List<Steps> steps;
 
   Recipe({

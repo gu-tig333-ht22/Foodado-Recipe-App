@@ -11,5 +11,3 @@ BoxShadow shadow = BoxShadow(
   blurRadius: 7,
   offset: const Offset(0, 0),
 );
-
-const exampleLogo = 'assets/images/example_logo.png';

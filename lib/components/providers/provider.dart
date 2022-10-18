@@ -20,38 +20,14 @@ class RecipeProvider extends ChangeNotifier {
 
   void fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&offset=${Random().nextInt(3)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();
     } else if (response.statusCode == 404) {
-      apiId = Random().nextInt(5000);
       fetchRecipe();
     } else {
       throw Exception('Failed to load Recipe');
     }
   }
-
-  // void fetchAnalyzedInstruction() async {
-  //   final response = await http.get(Uri.parse(
-  //       '$apiUrl/recipes/$apiId/analyzedInstructions?apiKey=$apiKey&stepBreakdown=true'));
-  //   if (response.statusCode == 200) {
-  //     _analyzedInstruction =
-  //         AnalyzedInstruction.fromJson(jsonDecode(response.body)[0]);
-  //     notifyListeners();
-  //   } else {
-  //     throw Exception('Failed to load AnalyzedInstruction');
-  //   }
-  // }
-
-  // void fetchFilterRecipe() async {
-  //   final response = await http.get(Uri.parse(
-  //       '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1'));
-  //   if (response.statusCode == 200) {
-  //     _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
-  //     notifyListeners();
-  //   } else {
-  //     throw Exception('Failed to load FilterRecipe');
-  //   }
-  // }
 }
