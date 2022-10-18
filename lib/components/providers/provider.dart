@@ -9,8 +9,6 @@ import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:http/http.dart' as http;
 
 class RecipeProvider extends ChangeNotifier {
-  Recipe? _recipe;
-  Recipe? get recipe => _recipe;
   AnalyzedInstruction? _analyzedInstruction;
   AnalyzedInstruction? get analyzedInstruction => _analyzedInstruction;
   FilterRecipe? _filterRecipe;
@@ -26,9 +24,10 @@ class RecipeProvider extends ChangeNotifier {
 
   void fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/$apiId/information?apiKey=$apiKey&includeNutrition=false'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1'));
     if (response.statusCode == 200) {
-      _recipe = Recipe.fromJson(jsonDecode(response.body));
+      _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
+
       notifyListeners();
     } else if (response.statusCode == 404) {
       apiId = Random().nextInt(5000);
