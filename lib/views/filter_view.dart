@@ -166,7 +166,7 @@ class _FilterViewState extends State<FilterView> {
           activeColor: secondaryColor,
           values: RangeValues(_startvalue, _endvalue),
           min: 0,
-          max: 500,
+          max: 700,
           divisions: 5,
           labels: RangeLabels(
             _startvalue.round().toString(),

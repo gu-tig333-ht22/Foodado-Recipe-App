@@ -5,8 +5,9 @@ import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
-
 import '../components/models/recipe_model.dart';
+
+bool checked = false;
 
 class RecipeView extends StatefulWidget {
   const RecipeView({Key? key}) : super(key: key);
@@ -168,12 +169,13 @@ class _RecipeViewState extends State<RecipeView> {
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
-                          leading: IconButton(
-                            icon: const Icon(
-                              Icons.check_box_outline_blank_rounded,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {},
+                          leading: Checkbox(
+                            value: checked,
+                            onChanged: (bool? newvalue) {
+                              setState(() {
+                                checked = !checked;
+                              });
+                            },
                           ),
                           title: Html(
                             data: recipe.recipe!.extendedIngredients[index],
