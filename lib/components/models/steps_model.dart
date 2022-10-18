@@ -1,17 +1,3 @@
-class AnalyzedInstructions {
-  final List<Steps> steps;
-
-  const AnalyzedInstructions({
-    required this.steps,
-  });
-
-  factory AnalyzedInstructions.fromJson(Map<String, dynamic> json) {
-    return AnalyzedInstructions(
-      steps: List<Steps>.from(json['steps'].map((x) => Steps.fromJson(x))),
-    );
-  }
-}
-
 class Steps {
   final String step;
   final int number;
