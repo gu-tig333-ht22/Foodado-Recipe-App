@@ -14,9 +14,9 @@ class FilterView extends StatefulWidget {
 
 class _FilterViewState extends State<FilterView> {
   final TextEditingController _controller = TextEditingController();
-  double _value2 = 0;
-  double _startvalue = 0;
-  double _endvalue = 500;
+  double maxReadyTime = 15;
+  double minCalories = 0;
+  double maxCalories = 800;
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +80,8 @@ class _FilterViewState extends State<FilterView> {
       'Snack',
       'Drink'
     ];
-    return Consumer<RecipeProvider>(
-      builder: (context, recipe, child) {
+    return Consumer<RecipeProvider>(builder: (context, recipe, child) {
+      if (recipe.filterRecipe != null) {
         return Column(
           children: [
             SizedBox(
@@ -117,8 +117,10 @@ class _FilterViewState extends State<FilterView> {
             ),
           ],
         );
-      },
-    );
+      } else {
+        return Container();
+      }
+    });
   }
 
   Widget searchIncludeIngredients() {
@@ -173,36 +175,40 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget caloriesFilter() {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            'Calories per serving',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        RangeSlider(
-          activeColor: secondaryColor,
-          values: RangeValues(_startvalue, _endvalue),
-          min: 0,
-          max: 500,
-          divisions: 5,
-          labels: RangeLabels(
-            _startvalue.round().toString(),
-            _endvalue.round().toString(),
-          ),
-          onChanged: (values) {
-            setState(() {
-              _startvalue = values.start;
-              _endvalue = values.end;
-            });
-          },
-        ),
-      ],
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.filterRecipe != null) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Calories per serving',
+                ),
+              ),
+              RangeSlider(
+                activeColor: secondaryColor,
+                values: RangeValues(minCalories, maxCalories),
+                min: 0,
+                max: 800,
+                divisions: 8,
+                labels: RangeLabels(
+                  '${minCalories.round()}kcal',
+                  '${maxCalories.round()}kcal',
+                ),
+                onChanged: (values) {
+                  setState(() {
+                    minCalories = values.start;
+                    maxCalories = values.end;
+                  });
+                },
+              ),
+            ],
+          );
+        } else {
+          return Container();
+        }
+      },
     );
   }
 
@@ -211,18 +217,20 @@ class _FilterViewState extends State<FilterView> {
       children: [
         const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('Prep Time'),
+          child: Text(
+            'Max cooking Time',
+          ),
         ),
         Slider(
           activeColor: secondaryColor,
-          value: _value2,
-          min: 0,
-          max: 240,
-          divisions: 8,
-          label: _value2.round().toString(),
+          value: maxReadyTime,
+          min: 15,
+          max: 160,
+          divisions: 16,
+          label: '${maxReadyTime.round()} min',
           onChanged: (double value) {
             setState(() {
-              _value2 = value;
+              maxReadyTime = value;
             });
           },
         ),
@@ -295,29 +303,37 @@ class _FilterViewState extends State<FilterView> {
   Widget applyButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        return SizedBox(
-          width: 200,
-          height: 40,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(secondaryColor),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        if (recipe.filterRecipe != null) {
+          return SizedBox(
+            width: 200,
+            height: 40,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(secondaryColor),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
+              onPressed: () {
+                recipe.minCalories = minCalories.round().toString();
+                recipe.maxCalories = maxCalories.round().toString();
+                recipe.maxReadyTime = maxReadyTime.round().toString();
+                recipe.setRecipeQuery(_controller.text);
+                recipe.fetchRecipe();
+                Navigator.of(context).pushNamed(scrambleViewRoute);
+              },
+              child: const Text(
+                'Apply Filter',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
             ),
-            onPressed: () {
-              recipe.setRecipeQuery(_controller.text);
-              recipe.fetchRecipe();
-              Navigator.of(context).pushNamed(scrambleViewRoute);
-            },
-            child: const Text(
-              'Apply Filter',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-        );
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
