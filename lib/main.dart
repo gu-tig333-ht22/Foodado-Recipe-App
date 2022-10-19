@@ -10,7 +10,8 @@ import 'views/scramble_view.dart';
 import 'views/info_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [

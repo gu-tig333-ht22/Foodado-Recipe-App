@@ -34,7 +34,8 @@ dependencies:
   http:
   flutter_html:
   provider:
-  
+  path_provider:
+  sqflite:  
 
 
     

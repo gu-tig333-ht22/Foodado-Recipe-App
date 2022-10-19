@@ -18,6 +18,21 @@ class ScrambleView extends StatefulWidget {
 }
 
 class _ScrambleViewState extends State<ScrambleView> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+  }
+
+  //future for loading
+  Future refresh() async {
+    setState(() => isLoading = true);
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,25 +58,30 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
       ),
       // bottomNavigationBar: bottomNavigationBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            recipeCard(),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: nextRecipeButton(),
-              ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : buildBody(),
+    );
+  }
+
+  Widget buildBody() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          recipeCard(),
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: nextRecipeButton(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-//recipecard with assets/recipe_image.jpg
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
