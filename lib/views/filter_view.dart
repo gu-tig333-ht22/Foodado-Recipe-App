@@ -18,6 +18,17 @@ class _FilterViewState extends State<FilterView> {
   double _startvalue = 0;
   double _endvalue = 500;
 
+  List<dynamic> dietaryRestrictions = [
+    ['Vegan', false],
+    ['Vegetarian', false],
+    ['Gluten Free', false],
+    ['Dairy Free', false],
+    ['Nut Free', false],
+    ['Egg Free', false],
+    ['Soy Free', false],
+    ['Fish Free', false],
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,17 +130,13 @@ class _FilterViewState extends State<FilterView> {
     );
   }
 
+  void checkboxChanged(bool? value, int index) {
+    setState(() {
+      dietaryRestrictions[index][1] = !dietaryRestrictions[index][1];
+    });
+  }
+
   Widget dietaryRestrictionsFilter() {
-    List<String> dietaryRestrictions = [
-      'Vegan',
-      'Vegetarian',
-      'Gluten Free',
-      'Dairy Free',
-      'Nut Free',
-      'Egg Free',
-      'Soy Free',
-      'Fish Free',
-    ];
     return Wrap(
       children: [
         for (int i = 0; i < dietaryRestrictions.length; i++)
@@ -138,13 +145,13 @@ class _FilterViewState extends State<FilterView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(dietaryRestrictions[i]),
+                Text(dietaryRestrictions[i][0]),
                 Checkbox(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  value: false,
-                  onChanged: (bool? value) {},
+                  value: dietaryRestrictions[i][1],
+                  onChanged: (value) => checkboxChanged(value, i),
                 ),
               ],
             ),
