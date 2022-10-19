@@ -59,8 +59,22 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearfetchRecipe() {
-    _filterRecipe = null;
+  void clearFilters() {
+    query = '';
+    type = '';
+    minCalories = '50';
+    maxCalories = '800';
+    maxReadyTime = '160';
+    dietaryRestrictions = [
+      ['Vegan', false],
+      ['Vegetarian', false],
+      ['Gluten Free', false],
+      ['Dairy Free', false],
+      ['Nut Free', false],
+      ['Egg Free', false],
+      ['Soy Free', false],
+      ['Fish Free', false],
+    ];
     notifyListeners();
   }
 }

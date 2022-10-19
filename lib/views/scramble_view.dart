@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
@@ -18,6 +18,21 @@ class ScrambleView extends StatefulWidget {
 }
 
 class _ScrambleViewState extends State<ScrambleView> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    delay();
+  }
+
+  //future for loading
+  Future delay() async {
+    setState(() => isLoading = true);
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,25 +58,34 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
       ),
       // bottomNavigationBar: bottomNavigationBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            recipeCard(),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: nextRecipeButton(),
-              ),
+      body: isLoading
+          ? Center(
+              child: LoadingBouncingGrid.square(
+              backgroundColor: secondaryColor,
+              size: 100,
+            ))
+          : buildBody(),
+    );
+  }
+
+  Widget buildBody() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          recipeCard(),
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: nextRecipeButton(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-//recipecard with assets/recipe_image.jpg
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
