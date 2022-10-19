@@ -9,6 +9,7 @@ class Recipe {
   final List<String> extendedIngredients;
   final String summary;
   final List<Steps> steps;
+  final List<bool> ingredientDone;
 
   Recipe({
     required this.id,
@@ -19,6 +20,7 @@ class Recipe {
     required this.summary,
     required this.extendedIngredients,
     required this.steps,
+    required this.ingredientDone,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
@@ -33,6 +35,8 @@ class Recipe {
       summary: json['summary'] ?? '',
       steps: List<Steps>.from(json['analyzedInstructions'][0]['steps']
           .map((x) => Steps.fromJson(x))),
+      ingredientDone:
+          List<bool>.from(json['extendedIngredients'].map((x) => false)),
     );
   }
 }

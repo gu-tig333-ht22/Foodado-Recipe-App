@@ -169,12 +169,15 @@ class _RecipeViewState extends State<RecipeView> {
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
-                          leading: IconButton(
-                            icon: const Icon(
-                              Icons.check_box_outline_blank_rounded,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {},
+                          leading: Checkbox(
+                            value: recipe
+                                .filterRecipe!.results[0].ingredientDone[index],
+                            onChanged: (value) {
+                              setState(() {
+                                recipe.filterRecipe!.results[0]
+                                    .ingredientDone[index] = value!;
+                              });
+                            },
                           ),
                           title: Html(
                             data: recipe.filterRecipe!.results[0]

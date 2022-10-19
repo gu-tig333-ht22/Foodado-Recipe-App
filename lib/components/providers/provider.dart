@@ -15,7 +15,17 @@ class RecipeProvider extends ChangeNotifier {
   String minCalories = '50';
   String maxCalories = '800';
   String maxReadyTime = '160';
-  List dietaryRestrictions = [];
+
+  List<dynamic> dietaryRestrictions = [
+    ['Vegan', false],
+    ['Vegetarian', false],
+    ['Gluten Free', false],
+    ['Dairy Free', false],
+    ['Nut Free', false],
+    ['Egg Free', false],
+    ['Soy Free', false],
+    ['Fish Free', false],
+  ];
 
   RecipeProvider() {
     fetchRecipe();
@@ -51,6 +61,11 @@ class RecipeProvider extends ChangeNotifier {
 
   void clearfetchRecipe() {
     _filterRecipe = null;
+    notifyListeners();
+  }
+
+  void setIngredientDone(int index, bool value) {
+    _filterRecipe!.results[0].ingredientDone[index] = value;
     notifyListeners();
   }
 }
