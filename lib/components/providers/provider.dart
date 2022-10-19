@@ -63,9 +63,4 @@ class RecipeProvider extends ChangeNotifier {
     _filterRecipe = null;
     notifyListeners();
   }
-
-  void setIngredientDone(int index, bool value) {
-    _filterRecipe!.results[0].ingredientDone[index] = value;
-    notifyListeners();
-  }
 }

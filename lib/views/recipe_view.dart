@@ -45,14 +45,38 @@ class _RecipeViewState extends State<RecipeView> {
           },
         ),
         actions: [
-          //reset filter button
-          IconButton(
-            icon: const Icon(
-              Icons.favorite_border_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () {}, // add to favorites
+          Consumer<RecipeProvider>(
+            builder: (context, recipe, child) {
+              if (recipe.filterRecipe == null) {
+                return IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.black,
+                  ),
+                );
+              } else {
+                return IconButton(
+                  onPressed: () {
+                    setState(() {
+                      recipe.filterRecipe!.results[0].isFavorite =
+                          !recipe.filterRecipe!.results[0].isFavorite;
+                    });
+                  },
+                  icon: recipe.filterRecipe!.results[0].isFavorite
+                      ? const Icon(
+                          Icons.favorite,
+                          color: secondaryColor,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                          color: Colors.black,
+                        ),
+                );
+              }
+            },
           ),
+          //consumer with favourite icon set isFavourite to true when pressed and vice versa
         ],
         leading: IconButton(
           icon: const Icon(
