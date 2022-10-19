@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:provider/provider.dart';
+import '../components/providers/provider.dart';
 import '/constants/routes.dart';
 
 class FilterView extends StatefulWidget {
@@ -11,6 +13,7 @@ class FilterView extends StatefulWidget {
 }
 
 class _FilterViewState extends State<FilterView> {
+  final TextEditingController _controller = TextEditingController();
   double _value2 = 0;
   double _startvalue = 0;
   double _endvalue = 500;
@@ -18,52 +21,54 @@ class _FilterViewState extends State<FilterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          elevation: 0,
-          title: const Text(
-            'Filter',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            //reset filter button
-            IconButton(
-              icon: const Icon(
-                Icons.refresh_rounded,
-                color: Colors.black,
-              ),
-              onPressed: () {},
-            ),
-          ],
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(devViewRoute);
-            },
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
+        title: const Text(
+          'Filter',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              recipeTypeFilter(),
-              searchIncludeIngredients(),
-              dietaryRestrictionsFilter(),
-              caloriesFilter(),
-              prepTimeFilter(),
-              costFilter(),
-              applyButton(),
-            ],
+        actions: [
+          //reset filter button
+          IconButton(
+            icon: const Icon(
+              Icons.refresh_rounded,
+              color: Colors.black,
+            ),
+            onPressed: () {},
           ),
-        ));
+        ],
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed(devViewRoute);
+          },
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            recipeTypeFilter(),
+            searchIncludeIngredients(),
+            dietaryRestrictionsFilter(),
+            caloriesFilter(),
+            prepTimeFilter(),
+            costFilter(),
+            applyButton(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget recipeTypeFilter() {
@@ -97,12 +102,11 @@ class _FilterViewState extends State<FilterView> {
     );
   }
 
-//searchbar for including specific ingredients, rounded corners
-
   Widget searchIncludeIngredients() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
+        controller: _controller,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -183,7 +187,6 @@ class _FilterViewState extends State<FilterView> {
     );
   }
 
-//slider for prep time default 0-60 min
   Widget prepTimeFilter() {
     return Column(
       children: [
@@ -271,26 +274,32 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget applyButton() {
-    return Container(
-      width: 200,
-      height: 40,
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: TextButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(scrambleViewRoute);
-        },
-        child: const Text(
-          'Apply',
-          style: TextStyle(
-            fontSize: 14,
-            letterSpacing: 0.8,
-            color: backgroundColor,
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        return SizedBox(
+          width: 200,
+          height: 40,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(secondaryColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            onPressed: () {
+              recipe.query = _controller.text;
+              recipe.fetchRecipe();
+              Navigator.of(context).pushNamed(scrambleViewRoute);
+            },
+            child: const Text(
+              'Apply Filter',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:grupp_5/components/models/steps_model.dart';
+
 class Recipe {
   final int id;
   final String title;
@@ -6,6 +8,7 @@ class Recipe {
   final int readyInMinutes;
   final List<String> extendedIngredients;
   final String summary;
+  final List<Steps> steps;
 
   Recipe({
     required this.id,
@@ -15,6 +18,7 @@ class Recipe {
     required this.servings,
     required this.summary,
     required this.extendedIngredients,
+    required this.steps,
   });
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
@@ -27,6 +31,8 @@ class Recipe {
       extendedIngredients: List<String>.from(
           json['extendedIngredients'].map((x) => x['original'])),
       summary: json['summary'] ?? '',
+      steps: List<Steps>.from(json['analyzedInstructions'][0]['steps']
+          .map((x) => Steps.fromJson(x))),
     );
   }
 }

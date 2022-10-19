@@ -26,7 +26,7 @@ class _RecipeViewState extends State<RecipeView> {
         elevation: 0,
         title: Consumer<RecipeProvider>(
           builder: (context, recipe, child) {
-            if (recipe.recipe == null) {
+            if (recipe.filterRecipe == null) {
               return const Text(
                 'Recipe',
                 style: TextStyle(
@@ -36,7 +36,7 @@ class _RecipeViewState extends State<RecipeView> {
               );
             } else {
               return Text(
-                recipe.recipe!.title,
+                recipe.filterRecipe!.results[0].title,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class _RecipeViewState extends State<RecipeView> {
   Widget recipeImage() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.recipe?.image == null) {
+        if (recipe.filterRecipe?.results == null) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -91,7 +91,7 @@ class _RecipeViewState extends State<RecipeView> {
             height: 220,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(recipe.recipe!.image),
+                image: NetworkImage(recipe.filterRecipe!.results[0].image),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -107,7 +107,7 @@ class _RecipeViewState extends State<RecipeView> {
       padding: const EdgeInsets.all(8.0),
       child: Consumer<RecipeProvider>(
         builder: (context, recipe, child) {
-          if (recipe.recipe != null) {
+          if (recipe.filterRecipe != null) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -118,7 +118,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.recipe!.readyInMinutes} min',
+                      '${recipe.filterRecipe!.results[0].readyInMinutes} min',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -132,7 +132,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.recipe!.servings} servings',
+                      '${recipe.filterRecipe!.results[0].servings} servings',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -152,7 +152,7 @@ class _RecipeViewState extends State<RecipeView> {
   Widget recipeIngredients() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.recipe != null) {
+        if (recipe.filterRecipe != null) {
           return Expanded(
             child: Column(
               children: [
@@ -165,7 +165,8 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: recipe.recipe!.extendedIngredients.length,
+                    itemCount: recipe
+                        .filterRecipe!.results[0].extendedIngredients.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
@@ -178,7 +179,8 @@ class _RecipeViewState extends State<RecipeView> {
                             },
                           ),
                           title: Html(
-                            data: recipe.recipe!.extendedIngredients[index],
+                            data: recipe.filterRecipe!.results[0]
+                                .extendedIngredients[index],
                             style: {
                               '#': Style(
                                 fontSize: const FontSize(14),
@@ -202,8 +204,8 @@ class _RecipeViewState extends State<RecipeView> {
 
   Widget recipeInstructions() {
     return Consumer<RecipeProvider>(
-      builder: (context, steps, child) {
-        if (steps.analyzedInstruction != null) {
+      builder: (context, recipe, child) {
+        if (recipe.filterRecipe != null) {
           return Expanded(
             child: Column(
               children: [
@@ -216,19 +218,20 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: steps.analyzedInstruction!.steps.length,
+                    itemCount: recipe.filterRecipe!.results[0].steps.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           leading: Text(
-                            steps.analyzedInstruction!.steps[index].number
+                            recipe.filterRecipe!.results[0].steps[index].number
                                 .toString(),
                             style: const TextStyle(
                               fontSize: 14,
                             ),
                           ),
                           title: Html(
-                            data: steps.analyzedInstruction!.steps[index].step,
+                            data: recipe
+                                .filterRecipe!.results[0].steps[index].step,
                             style: {
                               '#': Style(
                                 fontSize: const FontSize(14),

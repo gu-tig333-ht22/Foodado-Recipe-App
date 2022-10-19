@@ -65,7 +65,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.recipe != null) {
+        if (recipe.filterRecipe != null) {
           return GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
             child: Container(
@@ -83,7 +83,8 @@ class _ScrambleViewState extends State<ScrambleView> {
                     height: 230,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(recipe.recipe!.image),
+                        image:
+                            NetworkImage(recipe.filterRecipe!.results[0].image),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: const BorderRadius.only(
@@ -108,7 +109,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            recipe.recipe!.title,
+                            recipe.filterRecipe!.results[0].title,
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -119,7 +120,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                           ),
 
                           Html(
-                            data: recipe.recipe!.summary,
+                            data: recipe.filterRecipe!.results[0].summary,
                             style: {
                               '#': Style(
                                 textAlign: TextAlign.center,
@@ -144,7 +145,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                       color: secondaryColor.withOpacity(0.4),
                                     ),
                                     Text(
-                                      '${recipe.recipe!.readyInMinutes} min',
+                                      '${recipe.filterRecipe!.results[0].readyInMinutes} min',
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),
@@ -158,7 +159,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                       color: secondaryColor.withOpacity(0.4),
                                     ),
                                     Text(
-                                      '${recipe.recipe!.servings} servings',
+                                      '${recipe.filterRecipe!.results[0].servings} servings',
                                       style: const TextStyle(
                                         fontSize: 14,
                                       ),
@@ -188,13 +189,11 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget nextRecipeButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.recipe != null) {
+        if (recipe.filterRecipe != null) {
           return GestureDetector(
             onTap: () {
               setState(() {
-                apiId = Random().nextInt(5000);
                 recipe.fetchRecipe();
-                recipe.fetchAnalyzedInstruction();
               });
             },
             child: Container(

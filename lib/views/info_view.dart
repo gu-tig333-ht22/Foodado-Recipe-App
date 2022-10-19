@@ -65,7 +65,6 @@ class _InfoViewState extends State<InfoView> {
                       onPressed: () {
                         setState(() {
                           recipe.query = _controller.text;
-                          recipe.fetchFilterRecipe();
                         });
                       },
                       child: const Text('Execute'),
