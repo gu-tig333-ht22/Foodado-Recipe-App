@@ -42,13 +42,15 @@ class RecipeDatabase {
       ${RecipeFields.summary} $textType,
       ${RecipeFields.isFavorite} $boolType
      
-      ${RecipeFields.steps} $textType
-      ${RecipeFields.ingredientDone} $boolType
+  
+      
     
     )
     ''');
   }
-  // ${RecipeFields.extendedIngredients} $textType
+  //${RecipeFields.extendedIngredients} $textType
+  //${RecipeFields.steps} $textType
+  //${RecipeFields.ingredientDone} $boolType
 
   Future<Recipe> create(Recipe recipe) async {
     final db = await instance.database;

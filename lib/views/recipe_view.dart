@@ -4,6 +4,7 @@ import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:grupp_5/components/db/recipe_database.dart';
 import '/constants/routes.dart';
 
 import '../components/models/recipe_model.dart';
@@ -16,6 +17,27 @@ class RecipeView extends StatefulWidget {
 }
 
 class _RecipeViewState extends State<RecipeView> {
+  late List<Recipe> recipes;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    refreshRecipes();
+  }
+
+  @override
+  void dispose() {
+    RecipeDatabase.instance.close();
+    super.dispose();
+  }
+
+  Future refreshRecipes() async {
+    setState(() => isLoading = true);
+    this.recipes = await RecipeDatabase.instance.readAllRecipes();
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +81,9 @@ class _RecipeViewState extends State<RecipeView> {
                 return IconButton(
                   onPressed: () {
                     setState(() {
+                      //add to db
+                      RecipeDatabase.instance
+                          .create(recipe.filterRecipe!.results[0]);
                       recipe.filterRecipe!.results[0].isFavorite =
                           !recipe.filterRecipe!.results[0].isFavorite;
                     });
