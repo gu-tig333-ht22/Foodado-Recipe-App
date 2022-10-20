@@ -77,4 +77,7 @@ class RecipeProvider extends ChangeNotifier {
     ];
     notifyListeners();
   }
+  //getRecipe()
+
+  // Future getRecipe() async {
 }

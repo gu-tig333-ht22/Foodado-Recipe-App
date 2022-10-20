@@ -3,6 +3,7 @@ import 'package:grupp_5/components/db/recipe_database.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:loading_animations/loading_animations.dart';
 import '/constants/routes.dart';
 
 class SaveView extends StatefulWidget {
@@ -71,7 +72,10 @@ class _SaveViewState extends State<SaveView> {
         ),
         body: Center(
             child: isLoading
-                ? const CircularProgressIndicator()
+                ? LoadingBouncingGrid.square(
+                    backgroundColor: secondaryColor,
+                    size: 100,
+                  )
                 : recipeDb.isEmpty
                     ? const Text('No saved recipes')
                     : buildRecipes()),

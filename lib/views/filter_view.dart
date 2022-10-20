@@ -107,6 +107,7 @@ class _FilterViewState extends State<FilterView> {
             SizedBox(
               height: 50,
               child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 itemCount: recipeType.length,
                 itemBuilder: (context, index) {
