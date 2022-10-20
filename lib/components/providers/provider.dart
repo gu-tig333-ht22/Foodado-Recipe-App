@@ -31,14 +31,14 @@ class RecipeProvider extends ChangeNotifier {
     fetchRecipe();
   }
 
-  void fetchRecipe() async {
+  Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
         '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();
     } else if (response.statusCode == 404) {
-      fetchRecipe();
+      throw Exception('Recipe not found');
     } else {
       throw Exception('Failed to load Recipe');
     }
@@ -59,8 +59,22 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearfetchRecipe() {
-    _filterRecipe = null;
+  void clearFilters() {
+    query = '';
+    type = '';
+    minCalories = '50';
+    maxCalories = '800';
+    maxReadyTime = '160';
+    dietaryRestrictions = [
+      ['Vegan', false],
+      ['Vegetarian', false],
+      ['Gluten Free', false],
+      ['Dairy Free', false],
+      ['Nut Free', false],
+      ['Egg Free', false],
+      ['Soy Free', false],
+      ['Fish Free', false],
+    ];
     notifyListeners();
   }
 }

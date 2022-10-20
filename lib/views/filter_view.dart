@@ -57,7 +57,10 @@ class _FilterViewState extends State<FilterView> {
               Icons.refresh_rounded,
               color: Colors.black,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<RecipeProvider>(context, listen: false)
+                  .clearFilters();
+            },
           ),
         ],
         leading: IconButton(
