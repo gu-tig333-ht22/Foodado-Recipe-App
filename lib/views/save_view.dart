@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/components/db/recipe_database.dart';
+import 'package:grupp_5/components/models/recipe_db_model.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/constants/constants.dart';
 import '/constants/routes.dart';
 
@@ -10,9 +13,29 @@ class SaveView extends StatefulWidget {
 }
 
 class _SaveViewState extends State<SaveView> {
+  late List<RecipeDb> recipeDb;
+  bool isLoading = false;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  void initState() {
+    super.initState();
+    refreshRecipes();
+  }
+
+  @override
+  void dispose() {
+    // RecipeDatabase.instance.close();
+    super.dispose();
+  }
+
+  Future refreshRecipes() async {
+    setState(() => isLoading = true);
+    this.recipeDb = await RecipeDatabase.instance.readAllRecipes();
+    setState(() => isLoading = false);
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           centerTitle: true,
@@ -24,6 +47,18 @@ class _SaveViewState extends State<SaveView> {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.grey,
+              ),
+              onPressed: () async {
+                await RecipeDatabase.instance.deleteAll();
+                refreshRecipes();
+              },
+            ),
+          ],
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
@@ -34,130 +69,126 @@ class _SaveViewState extends State<SaveView> {
             },
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              searchIncludeIngredients(),
-              recipeTypeFilter(),
-              pictures(),
-            ],
-          ),
-        ));
-  }
+        body: Center(
+            child: isLoading
+                ? const CircularProgressIndicator()
+                : recipeDb.isEmpty
+                    ? const Text('No saved recipes')
+                    : buildRecipes()),
+      );
 
-  Widget recipeTypeFilter() {
-    List<String> recipeType = [
-      'Lunch',
-      'Breakfast',
-      'Dinner',
-      'Dessert',
-    ];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        for (int i = 0; i < recipeType.length; i++)
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: const BorderSide(color: Colors.black),
+  Widget buildRecipes() {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
+      child: GridView.count(
+        crossAxisCount: 2,
+        children: [
+          for (final recipe in recipeDb)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 300,
+                height: 230,
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  boxShadow: [shadow],
                 ),
-              ),
-            ),
-            onPressed: () {},
-            child: Text(
-              recipeType[i],
-              style: const TextStyle(color: secondaryColor),
-            ),
-          ),
-      ],
-    );
-  }
-
-  Widget searchIncludeIngredients() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          labelText: 'Search for ingredients to include',
-          prefixIcon: const Icon(Icons.search),
-        ),
-      ),
-    );
-  }
-
-  Widget pictures() {
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: [
-            for (int i = 0; i < 10; i++)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 300,
-                  height: 230,
-                  decoration: const BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 300,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        image: //network
+                            DecorationImage(
+                          image: NetworkImage(recipe.image),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 140,
+                    Expanded(
+                      child: Container(
                         decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/recipe_image.jpg'),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
                           ),
                         ),
                       ),
-                      //IMAGE
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            ),
-                          ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        recipe.title,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Poke Bowl',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
+
+  //  Widget recipeTypeFilter() {
+//     List<String> recipeType = [
+//       'Lunch',
+//       'Breakfast',
+//       'Dinner',
+//       'Dessert',
+//     ];
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         for (int i = 0; i < recipeType.length; i++)
+//           OutlinedButton(
+//             style: ButtonStyle(
+//               backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+//               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+//                 RoundedRectangleBorder(
+//                   borderRadius: BorderRadius.circular(10),
+//                   side: const BorderSide(color: Colors.black),
+//                 ),
+//               ),
+//             ),
+//             onPressed: () {},
+//             child: Text(
+//               recipeType[i],
+//               style: const TextStyle(color: secondaryColor),
+//             ),
+//           ),
+//       ],
+//     );
+//   }
+
+//   Widget searchIncludeIngredients() {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: TextField(
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(
+//             borderRadius: BorderRadius.circular(10),
+//           ),
+//           labelText: 'Search for ingredients to include',
+//           prefixIcon: const Icon(Icons.search),
+//         ),
+//       ),
+//     );
+//   }
 }

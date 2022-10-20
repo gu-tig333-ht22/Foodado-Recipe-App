@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
+import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
+import 'package:grupp_5/components/db/recipe_database.dart';
 import '/constants/routes.dart';
 import '../components/models/recipe_model.dart';
 
@@ -18,6 +20,27 @@ class RecipeView extends StatefulWidget {
 }
 
 class _RecipeViewState extends State<RecipeView> {
+  late List<RecipeDb> recipeDb;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    refreshRecipes();
+  }
+
+  @override
+  void dispose() {
+    // RecipeDatabase.instance.close();
+    super.dispose();
+  }
+
+  Future refreshRecipes() async {
+    setState(() => isLoading = true);
+    this.recipeDb = await RecipeDatabase.instance.readAllRecipes();
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +86,13 @@ class _RecipeViewState extends State<RecipeView> {
                     setState(() {
                       recipe.filterRecipe!.results[0].isFavorite =
                           !recipe.filterRecipe!.results[0].isFavorite;
+                      RecipeDatabase.instance.create(
+                        RecipeDb(
+                          recipe.filterRecipe!.results[0].id,
+                          recipe.filterRecipe!.results[0].title,
+                          recipe.filterRecipe!.results[0].image,
+                        ),
+                      );
                     });
                   },
                   icon: recipe.filterRecipe!.results[0].isFavorite

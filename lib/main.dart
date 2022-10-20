@@ -21,6 +21,8 @@ void main() async {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
           textTheme: GoogleFonts.montserratTextTheme(),
+          scaffoldBackgroundColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         debugShowCheckedModeBanner: false,
         home: const DevView(),
