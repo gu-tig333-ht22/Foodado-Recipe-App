@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
 
@@ -105,9 +106,7 @@ class _RecipeViewState extends State<RecipeView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe?.results == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: Container());
         } else {
           return Container(
             width: 320,
@@ -165,7 +164,12 @@ class _RecipeViewState extends State<RecipeView> {
               ],
             );
           } else {
-            return Container();
+            return Center(
+              child: LoadingBouncingGrid.square(
+                backgroundColor: secondaryColor,
+                size: 50,
+              ),
+            );
           }
         },
       ),

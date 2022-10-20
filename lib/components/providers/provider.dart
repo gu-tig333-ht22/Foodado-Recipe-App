@@ -31,14 +31,14 @@ class RecipeProvider extends ChangeNotifier {
     fetchRecipe();
   }
 
-  void fetchRecipe() async {
+  Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
         '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();
     } else if (response.statusCode == 404) {
-      fetchRecipe();
+      throw Exception('Recipe not found');
     } else {
       throw Exception('Failed to load Recipe');
     }
