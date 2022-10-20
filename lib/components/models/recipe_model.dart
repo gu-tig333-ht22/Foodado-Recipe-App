@@ -39,7 +39,6 @@ class Recipe {
           .map((x) => Steps.fromJson(x))),
       ingredientDone:
           List<bool>.from(json['extendedIngredients'].map((x) => false)),
-      //isfavourite id to false
       isFavorite: false,
     );
   }

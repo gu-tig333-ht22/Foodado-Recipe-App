@@ -29,9 +29,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   //future for loading
   Future delay() async {
     setState(() => isLoading = true);
-    //call provider
-    await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() => isLoading = false);
   }
 
