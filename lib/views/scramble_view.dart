@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
@@ -18,6 +18,21 @@ class ScrambleView extends StatefulWidget {
 }
 
 class _ScrambleViewState extends State<ScrambleView> {
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    delay();
+  }
+
+  //future for loading
+  Future delay() async {
+    setState(() => isLoading = true);
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() => isLoading = false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,29 +58,41 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
       ),
       // bottomNavigationBar: bottomNavigationBar(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            recipeCard(),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: nextRecipeButton(),
-              ),
+      body: isLoading
+          ? Center(
+              child: LoadingBouncingGrid.square(
+              backgroundColor: secondaryColor,
+              size: 100,
+            ))
+          : buildBody(),
+    );
+  }
+
+  Widget buildBody() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          recipeCard(),
+          Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: nextRecipeButton(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-//recipecard with assets/recipe_image.jpg
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe != null) {
+        if (recipe.filterRecipe == null ||
+            recipe.filterRecipe!.results.isEmpty) {
+          return noRecipesFound();
+        } else {
           return GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
             child: Container(
@@ -83,8 +110,9 @@ class _ScrambleViewState extends State<ScrambleView> {
                     height: 230,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image:
-                            NetworkImage(recipe.filterRecipe!.results[0].image),
+                        image: NetworkImage(recipe
+                                .filterRecipe?.results[0].image ??
+                            'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
                         fit: BoxFit.cover,
                       ),
                       borderRadius: const BorderRadius.only(
@@ -177,8 +205,6 @@ class _ScrambleViewState extends State<ScrambleView> {
               ),
             ),
           );
-        } else {
-          return const CircularProgressIndicator();
         }
       },
     );
@@ -189,7 +215,10 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget nextRecipeButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe != null) {
+        if (recipe.filterRecipe == null ||
+            recipe.filterRecipe!.results.isEmpty) {
+          return Container();
+        } else {
           return GestureDetector(
             onTap: () {
               setState(() {
@@ -216,8 +245,6 @@ class _ScrambleViewState extends State<ScrambleView> {
               ),
             ),
           );
-        } else {
-          return Container();
         }
       },
     );
@@ -237,6 +264,62 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
       ],
       selectedItemColor: secondaryColor,
+    );
+  }
+
+  Widget noRecipesFound() {
+    return Column(
+      children: [
+        Container(
+          width: 700,
+          height: 400,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/empty.jpg'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
+          child: const Text(
+            //text center
+            'No recipes found!' + '\n' + 'Please try again.',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            //navigate to filter
+            Navigator.of(context).pushNamed(filterViewRoute);
+          },
+          child: Container(
+            width: 300,
+            height: 50,
+            decoration: BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [shadow],
+            ),
+            child: const Center(
+              child: Text(
+                'Go Back',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

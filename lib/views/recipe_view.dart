@@ -3,6 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
 import '../components/models/recipe_model.dart';
@@ -46,14 +47,38 @@ class _RecipeViewState extends State<RecipeView> {
           },
         ),
         actions: [
-          //reset filter button
-          IconButton(
-            icon: const Icon(
-              Icons.favorite_border_rounded,
-              color: Colors.black,
-            ),
-            onPressed: () {}, // add to favorites
+          Consumer<RecipeProvider>(
+            builder: (context, recipe, child) {
+              if (recipe.filterRecipe == null) {
+                return IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.black,
+                  ),
+                );
+              } else {
+                return IconButton(
+                  onPressed: () {
+                    setState(() {
+                      recipe.filterRecipe!.results[0].isFavorite =
+                          !recipe.filterRecipe!.results[0].isFavorite;
+                    });
+                  },
+                  icon: recipe.filterRecipe!.results[0].isFavorite
+                      ? const Icon(
+                          Icons.favorite,
+                          color: secondaryColor,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                          color: Colors.black,
+                        ),
+                );
+              }
+            },
           ),
+          //consumer with favourite icon set isFavourite to true when pressed and vice versa
         ],
         leading: IconButton(
           icon: const Icon(
@@ -82,9 +107,7 @@ class _RecipeViewState extends State<RecipeView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe?.results == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: Container());
         } else {
           return Container(
             width: 320,
@@ -142,7 +165,12 @@ class _RecipeViewState extends State<RecipeView> {
               ],
             );
           } else {
-            return Container();
+            return Center(
+              child: LoadingBouncingGrid.square(
+                backgroundColor: secondaryColor,
+                size: 50,
+              ),
+            );
           }
         },
       ),
@@ -171,10 +199,12 @@ class _RecipeViewState extends State<RecipeView> {
                       return Card(
                         child: ListTile(
                           leading: Checkbox(
-                            value: checked,
-                            onChanged: (bool? newvalue) {
+                            value: recipe
+                                .filterRecipe!.results[0].ingredientDone[index],
+                            onChanged: (value) {
                               setState(() {
-                                checked = !checked;
+                                recipe.filterRecipe!.results[0]
+                                    .ingredientDone[index] = value!;
                               });
                             },
                           ),
