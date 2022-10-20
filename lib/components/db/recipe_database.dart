@@ -1,7 +1,7 @@
 //import path
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../models/recipe_model.dart';
+import '../models/recipe_db_model.dart';
 
 //https://www.youtube.com/watch?v=UpKrhZ0Hppk
 
@@ -15,7 +15,7 @@ class RecipeDatabase {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('recipe.db');
+    _database = await _initDB('recipeDb.db');
     return _database!;
   }
 
@@ -36,34 +36,24 @@ class RecipeDatabase {
     CREATE TABLE $tableRecipe (
       ${RecipeFields.id} $idType,
       ${RecipeFields.title} $textType,
-      ${RecipeFields.image} $textType,
-      ${RecipeFields.servings} $intType,
-      ${RecipeFields.readyInMinutes} $intType,
-      ${RecipeFields.summary} $textType,
-      ${RecipeFields.isFavorite} $boolType
-     
-  
-      
-    
+      ${RecipeFields.image} $textType
+
     )
     ''');
   }
-  //${RecipeFields.extendedIngredients} $textType
-  //${RecipeFields.steps} $textType
-  //${RecipeFields.ingredientDone} $boolType
 
-  Future<Recipe> create(Recipe recipe) async {
+  Future<RecipeDb> create(RecipeDb recipeDb) async {
     final db = await instance.database;
 
     // final json = recipe.toJson();
     // final columns = '${RecipeFields.title}, ${RecipeFields.image}, ${RecipeFields.servings}, ${RecipeFields.readyInMinutes}, ${RecipeFields.summary}, ${RecipeFields.isFavorite}';
     // final values = '${json[RecipeFields.title]}, ${json[RecipeFields.image]}, ${json[RecipeFields.servings]}, ${json[RecipeFields.readyInMinutes]}, ${json[RecipeFields.summary]}, ${json[RecipeFields.isFavorite]}';
 
-    final id = await db.insert(tableRecipe, recipe.toJson());
-    return recipe.copy(id: id);
+    final id = await db.insert(tableRecipe, recipeDb.toJson());
+    return recipeDb.copy(id: id);
   }
 
-  Future<Recipe> readRecipe(int id) async {
+  Future<RecipeDb> readRecipe(int id) async {
     final db = await instance.database;
 
     final maps = await db.query(
@@ -74,35 +64,32 @@ class RecipeDatabase {
     );
 
     if (maps.isNotEmpty) {
-      return Recipe.fromJsonDb(maps.first); //fromjsonDb????
+      return RecipeDb.fromJson(maps.first);
     } else {
       throw Exception('ID $id not found');
     }
   }
 
-  Future<List<Recipe>> readAllRecipes() async {
+  Future<List<RecipeDb>> readAllRecipes() async {
     final db = await instance.database;
 
     final orderBy = '${RecipeFields.title} ASC';
     final result = await db.query(tableRecipe, orderBy: orderBy);
 
-    return result
-        .map((json) => Recipe.fromJsonDb(json))
-        .toList(); //fromjsonDb????
+    return result.map((json) => RecipeDb.fromJson(json)).toList();
   }
 
-  Future<int> update(Recipe recipe) async {
+  Future<int> update(RecipeDb recipeDb) async {
     final db = await instance.database;
 
     return db.update(
       tableRecipe,
-      recipe.toJson(),
+      recipeDb.toJson(),
       where: '${RecipeFields.id} = ?',
-      whereArgs: [recipe.id],
+      whereArgs: [recipeDb.id],
     );
   }
 
-  //delete
   Future<int> delete(int id) async {
     final db = await instance.database;
 
@@ -110,6 +97,15 @@ class RecipeDatabase {
       tableRecipe,
       where: '${RecipeFields.id} = ?',
       whereArgs: [id],
+    );
+  }
+
+  //deleteAll
+  Future<int> deleteAll() async {
+    final db = await instance.database;
+
+    return await db.delete(
+      tableRecipe,
     );
   }
 

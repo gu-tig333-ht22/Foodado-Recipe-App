@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:grupp_5/components/models/steps_model.dart';
+import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class RecipeView extends StatefulWidget {
 }
 
 class _RecipeViewState extends State<RecipeView> {
-  late List<Recipe> recipes;
+  late List<RecipeDb> recipeDb;
   bool isLoading = false;
 
   @override
@@ -28,13 +29,13 @@ class _RecipeViewState extends State<RecipeView> {
 
   @override
   void dispose() {
-    RecipeDatabase.instance.close();
+    // RecipeDatabase.instance.close();
     super.dispose();
   }
 
   Future refreshRecipes() async {
     setState(() => isLoading = true);
-    this.recipes = await RecipeDatabase.instance.readAllRecipes();
+    this.recipeDb = await RecipeDatabase.instance.readAllRecipes();
     setState(() => isLoading = false);
   }
 
@@ -81,11 +82,15 @@ class _RecipeViewState extends State<RecipeView> {
                 return IconButton(
                   onPressed: () {
                     setState(() {
-                      //add to db
-                      RecipeDatabase.instance
-                          .create(recipe.filterRecipe!.results[0]);
                       recipe.filterRecipe!.results[0].isFavorite =
                           !recipe.filterRecipe!.results[0].isFavorite;
+                      RecipeDatabase.instance.create(
+                        RecipeDb(
+                          recipe.filterRecipe!.results[0].id,
+                          recipe.filterRecipe!.results[0].title,
+                          recipe.filterRecipe!.results[0].image,
+                        ),
+                      );
                     });
                   },
                   icon: recipe.filterRecipe!.results[0].isFavorite
