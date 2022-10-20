@@ -6,8 +6,9 @@ import 'package:grupp_5/constants/constants.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
-
 import '../components/models/recipe_model.dart';
+
+bool checked = false;
 
 class RecipeView extends StatefulWidget {
   const RecipeView({Key? key}) : super(key: key);

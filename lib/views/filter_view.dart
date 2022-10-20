@@ -35,6 +35,17 @@ class _FilterViewState extends State<FilterView> {
     });
   }
 
+  List<dynamic> dietaryRestrictions = [
+    ['Vegan', false],
+    ['Vegetarian', false],
+    ['Gluten Free', false],
+    ['Dairy Free', false],
+    ['Nut Free', false],
+    ['Egg Free', false],
+    ['Soy Free', false],
+    ['Fish Free', false],
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,6 +169,12 @@ class _FilterViewState extends State<FilterView> {
       ),
       //tags for ingredients
     );
+  }
+
+  void checkboxChanged(bool? value, int index) {
+    setState(() {
+      dietaryRestrictions[index][1] = !dietaryRestrictions[index][1];
+    });
   }
 
   Widget dietaryRestrictionsFilter() {
