@@ -37,7 +37,7 @@ dependencies:
   path_provider:
   sqflite:  
   loading_animations:
-  
+  shared_preferences: ^2.0.15
 
 
 

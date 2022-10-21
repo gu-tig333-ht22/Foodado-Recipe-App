@@ -5,6 +5,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '../components/providers/provider.dart';
 import '/constants/routes.dart';
+import 'package:grupp_5/components/models/preferences_service.dart';
 
 class FilterView extends StatefulWidget {
   const FilterView({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class FilterView extends StatefulWidget {
 }
 
 class _FilterViewState extends State<FilterView> {
+  final _preferencesService = PreferencesService();
   final TextEditingController _controller = TextEditingController();
   double maxReadyTime = 15;
   double minCalories = 0;
@@ -35,6 +37,7 @@ class _FilterViewState extends State<FilterView> {
   void initState() {
     super.initState();
     delay();
+    _populateFilter();
   }
 
   Future delay() async {
@@ -46,6 +49,22 @@ class _FilterViewState extends State<FilterView> {
   checkboxChanged(bool? value, int index) {
     setState(() {
       dietaryRestrictions[index][1] = !dietaryRestrictions[index][1];
+    });
+  }
+
+  void _saveSettings() {
+    final newSettings = filterSettings(
+        maxCal: maxCalories, minCal: minCalories, maxReadyTime: maxReadyTime);
+
+    _preferencesService.saveSettings(newSettings);
+  }
+
+  void _populateFilter() async {
+    final filterSettings = await _preferencesService.getSettings();
+    setState(() {
+      maxCalories = filterSettings.maxCal;
+      minCalories = filterSettings.minCal;
+      maxReadyTime = filterSettings.maxReadyTime;
     });
   }
 
@@ -353,6 +372,7 @@ class _FilterViewState extends State<FilterView> {
               recipe.setRecipeQuery(_controller.text);
               recipe.fetchRecipe();
               Navigator.of(context).pushNamed(scrambleViewRoute);
+              _saveSettings();
             },
             child: const Text(
               'Apply Filter',
