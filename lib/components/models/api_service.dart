@@ -1,2 +1,2 @@
-String apiKey = "b3a7b37a81e2498dbe9868c459b32882";
+String apiKey = "ec66543326024142ace94ec5ab7908ff";
 String apiUrl = "https://api.spoonacular.com";
