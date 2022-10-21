@@ -6,4 +6,4 @@ const filterViewRoute = '/filter_view.dart';
 const recipeViewRoute = '/recipe_view';
 const devViewRoute = '/dev_view';
 const saveViewRoute = '/save_view';
-const IntroViewRoute = '/intro_view';
+const introViewRoute = '/intro_view';

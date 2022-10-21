@@ -55,7 +55,7 @@ class _DevViewState extends State<DevView> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(IntroViewRoute);
+                Navigator.of(context).pushNamed(introViewRoute);
               },
               child: const Text('Intro view'),
             ),

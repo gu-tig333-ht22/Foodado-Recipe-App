@@ -16,11 +16,9 @@ class _IntroViewState extends State<IntroView> {
         title: "Welcome to the Recipe App",
         body:
             "This app will help you find recipes based on the ingredients you have at home.",
-        image: const Center(
-          child: Image(
-            image: AssetImage('assets/images/empty_doge.png'),
-            height: 175.0,
-          ),
+        image: Center(
+          child: //lotie
+              Lottie.asset('assets/intro_images/recipe_book.json'),
         ),
         decoration: const PageDecoration(
           pageColor: Colors.white,
@@ -41,8 +39,8 @@ class _IntroViewState extends State<IntroView> {
             "First, you need to enter the ingredients you have at home. Then, you can filter the recipes based on your preferences. Finally, you can save the recipes you like.",
         image: const Center(
           child: Image(
-            image: AssetImage('assets/images/ingredients.png'),
-            height: 100.0,
+            image: AssetImage('assets/empty.jpg'),
+            height: 175.0,
           ),
         ),
         decoration: const PageDecoration(
@@ -64,14 +62,14 @@ class _IntroViewState extends State<IntroView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
-              "Click on the button below to start using the app",
+              'Click on the button below \n to start using the app',
               style: TextStyle(color: Colors.black, fontSize: 19.0),
             ),
           ],
         ),
         image: const Center(
           child: Image(
-            image: AssetImage('assets/images/recipe.png'),
+            image: AssetImage('assets/recipe_image.jpg'),
             height: 175.0,
           ),
         ),

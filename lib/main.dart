@@ -34,7 +34,7 @@ void main() async {
           filterViewRoute: (context) => const FilterView(),
           recipeViewRoute: (context) => const RecipeView(),
           saveViewRoute: (context) => const SaveView(),
-          IntroViewRoute: (context) => const IntroView(),
+          introViewRoute: (context) => const IntroView(),
         },
       ),
     ),
