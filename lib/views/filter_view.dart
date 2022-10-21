@@ -203,10 +203,19 @@ class _FilterViewState extends State<FilterView> {
                   recipe.dietaryRestrictions.length,
                   (index) => Padding(
                     padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                    child: FilterChip(
-                      label: Text(recipe.dietaryRestrictions[index][0]),
+                    child: ChoiceChip(
+                      pressElevation: 10,
+                      selectedColor: secondaryColor,
+                      label: Text(
+                        recipe.dietaryRestrictions[index][0],
+                        style: TextStyle(
+                          color: recipe.dietaryRestrictions[index][1]
+                              ? backgroundColor
+                              : Colors.black,
+                        ),
+                      ),
                       selected: recipe.dietaryRestrictions[index][1],
-                      onSelected: (bool value) {
+                      onSelected: (bool? value) {
                         checkboxChanged(value, index);
                       },
                     ),
