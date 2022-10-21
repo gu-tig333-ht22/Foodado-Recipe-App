@@ -17,14 +17,14 @@ class RecipeProvider extends ChangeNotifier {
   String maxReadyTime = '160';
 
   List<dynamic> dietaryRestrictions = [
-    ['Vegan', false],
     ['Vegetarian', false],
+    ['Ketogenic', false],
     ['Gluten Free', false],
-    ['Dairy Free', false],
-    ['Nut Free', false],
-    ['Egg Free', false],
-    ['Soy Free', false],
-    ['Fish Free', false],
+    ['Lacto-Vegetarian', false],
+    ['Ovo-Vegetarian', false],
+    ['Pescetarian', false],
+    ['Paleo', false],
+    ['Whole30', false],
   ];
 
   RecipeProvider() {
@@ -33,7 +33,7 @@ class RecipeProvider extends ChangeNotifier {
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();

@@ -14,3 +14,15 @@ class FilterRecipe {
     );
   }
 }
+
+class filterSettings {
+  final double maxCal;
+  final double minCal;
+  final double maxReadyTime;
+
+  filterSettings({
+    required this.maxCal,
+    required this.minCal,
+    required this.maxReadyTime,
+  });
+}

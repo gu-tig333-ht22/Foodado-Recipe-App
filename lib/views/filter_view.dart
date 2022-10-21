@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '../components/providers/provider.dart';
 import '/constants/routes.dart';
+import 'package:grupp_5/components/db/preferences_service.dart';
 
 class FilterView extends StatefulWidget {
   const FilterView({Key? key}) : super(key: key);
@@ -13,25 +15,48 @@ class FilterView extends StatefulWidget {
 }
 
 class _FilterViewState extends State<FilterView> {
+  final _preferencesService = PreferencesService();
   final TextEditingController _controller = TextEditingController();
   double maxReadyTime = 15;
   double minCalories = 0;
   double maxCalories = 800;
+  bool isLoading = false;
 
-  List<dynamic> dietaryRestrictions = [
-    ['Vegan', false],
-    ['Vegetarian', false],
-    ['Gluten Free', false],
-    ['Dairy Free', false],
-    ['Nut Free', false],
-    ['Egg Free', false],
-    ['Soy Free', false],
-    ['Fish Free', false],
-  ];
+  @override
+  void initState() {
+    super.initState();
+    delay();
+    _populateFilter();
+  }
+
+  Future delay() async {
+    setState(() => isLoading = true);
+    await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
+    setState(() => isLoading = false);
+  }
+
+  void _saveSettings() {
+    final newSettings = filterSettings(
+        maxCal: maxCalories, minCal: minCalories, maxReadyTime: maxReadyTime);
+
+    _preferencesService.saveSettings(newSettings);
+  }
+
+  void _populateFilter() async {
+    final filterSettings = await _preferencesService.getSettings();
+    setState(() {
+      maxCalories = filterSettings.maxCal;
+      minCalories = filterSettings.minCal;
+      maxReadyTime = filterSettings.maxReadyTime;
+    });
+  }
 
   checkboxChanged(bool? value, int index) {
     setState(() {
-      dietaryRestrictions[index][1] = !dietaryRestrictions[index][1];
+      Provider.of<RecipeProvider>(context, listen: false)
+              .dietaryRestrictions[index][1] =
+          !Provider.of<RecipeProvider>(context, listen: false)
+              .dietaryRestrictions[index][1];
     });
   }
 
@@ -73,20 +98,27 @@ class _FilterViewState extends State<FilterView> {
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            recipeTypeFilter(),
-            searchIncludeIngredients(),
-            dietaryRestrictionsFilter(),
-            caloriesFilter(),
-            prepTimeFilter(),
-            costFilter(),
-            applyButton(),
-          ],
-        ),
+      body: Center(
+        child: isLoading
+            ? LoadingBouncingGrid.square(
+                backgroundColor: secondaryColor,
+                size: 100,
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    recipeTypeFilter(),
+                    searchIncludeIngredients(),
+                    dietaryRestrictionsFilter(),
+                    caloriesFilter(),
+                    prepTimeFilter(),
+                    // costFilter(),
+                    applyButton(),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -101,46 +133,42 @@ class _FilterViewState extends State<FilterView> {
       'Drink'
     ];
     return Consumer<RecipeProvider>(builder: (context, recipe, child) {
-      if (recipe.filterRecipe != null) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 50,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: recipeType.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        recipe.setRecipeType(recipeType[index]);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shadowColor: Colors.transparent,
-                        foregroundColor: recipe.type == recipeType[index]
-                            ? Colors.white
-                            : Colors.black,
-                        backgroundColor: recipe.type == recipeType[index]
-                            ? secondaryColor
-                            : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          side: const BorderSide(color: secondaryColor),
-                        ),
+      return Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: recipeType.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      recipe.setRecipeType(recipeType[index]);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.transparent,
+                      foregroundColor: recipe.type == recipeType[index]
+                          ? Colors.white
+                          : Colors.black,
+                      backgroundColor: recipe.type == recipeType[index]
+                          ? secondaryColor
+                          : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        side: const BorderSide(color: secondaryColor),
                       ),
-                      child: Text(recipeType[index]),
                     ),
-                  );
-                },
-              ),
+                    child: Text(recipeType[index]),
+                  ),
+                );
+              },
             ),
-          ],
-        );
-      } else {
-        return Container();
-      }
+          ),
+        ],
+      );
     });
   }
 
@@ -162,63 +190,78 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget dietaryRestrictionsFilter() {
-    return Wrap(
-      children: [
-        for (int i = 0; i < dietaryRestrictions.length; i++)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(dietaryRestrictions[i][0]),
-                Checkbox(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        return ListView(
+          shrinkWrap: true,
+          children: [
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                clipBehavior: Clip.antiAlias,
+                children: List.generate(
+                  recipe.dietaryRestrictions.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                    child: FilterChip(
+                      label: Text(recipe.dietaryRestrictions[index][0]),
+                      selected: recipe.dietaryRestrictions[index][1],
+                      onSelected: (bool value) {
+                        checkboxChanged(value, index);
+                      },
+                    ),
                   ),
-                  value: dietaryRestrictions[i][1],
-                  onChanged: (value) => checkboxChanged(value, i),
                 ),
-              ],
+              ),
             ),
-          ),
-      ],
+          ],
+        );
+      },
     );
   }
 
   Widget caloriesFilter() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe != null) {
-          return Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Calories per serving',
-                ),
+        return Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Calories per serving',
               ),
-              RangeSlider(
-                activeColor: secondaryColor,
-                values: RangeValues(minCalories, maxCalories),
-                min: 0,
-                max: 800,
-                divisions: 8,
-                labels: RangeLabels(
-                  '${minCalories.round()}kcal',
-                  '${maxCalories.round()}kcal',
-                ),
-                onChanged: (values) {
+            ),
+            RangeSlider(
+              activeColor: secondaryColor,
+              values: RangeValues(minCalories, maxCalories),
+              min: 0,
+              max: 800,
+              divisions: 8,
+              labels: RangeLabels(
+                '${minCalories.round()}kcal',
+                '${maxCalories.round()}kcal',
+              ),
+              onChanged: (values) {
+                if (minCalories + maxCalories < 200) {
+                  setState(() {
+                    minCalories = values.start;
+                    maxCalories = values.end + 100;
+                  });
+                } else if (maxCalories - minCalories <= 100) {
+                  setState(() {
+                    minCalories = values.start - 100;
+                    maxCalories = values.end;
+                  });
+                } else {
                   setState(() {
                     minCalories = values.start;
                     maxCalories = values.end;
                   });
-                },
-              ),
-            ],
-          );
-        } else {
-          return Container();
-        }
+                }
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -236,8 +279,8 @@ class _FilterViewState extends State<FilterView> {
           activeColor: secondaryColor,
           value: maxReadyTime,
           min: 15,
-          max: 160,
-          divisions: 16,
+          max: 150,
+          divisions: 9,
           label: '${maxReadyTime.round()} min',
           onChanged: (double value) {
             setState(() {
@@ -314,37 +357,33 @@ class _FilterViewState extends State<FilterView> {
   Widget applyButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe != null) {
-          return SizedBox(
-            width: 200,
-            height: 40,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(secondaryColor),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+        return SizedBox(
+          width: 200,
+          height: 40,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(secondaryColor),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                recipe.minCalories = minCalories.round().toString();
-                recipe.maxCalories = maxCalories.round().toString();
-                recipe.maxReadyTime = maxReadyTime.round().toString();
-                recipe.setRecipeQuery(_controller.text);
-                recipe.fetchRecipe();
-                Navigator.of(context).pushNamed(scrambleViewRoute);
-              },
-              child: const Text(
-                'Apply Filter',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
             ),
-          );
-        } else {
-          return Container();
-        }
+            onPressed: () {
+              recipe.minCalories = minCalories.round().toString();
+              recipe.maxCalories = maxCalories.round().toString();
+              recipe.maxReadyTime = maxReadyTime.round().toString();
+              recipe.setRecipeQuery(_controller.text);
+              recipe.fetchRecipe();
+              Navigator.of(context).pushNamed(scrambleViewRoute);
+              _saveSettings();
+            },
+            child: const Text(
+              'Apply Filter',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        );
       },
     );
   }
