@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -59,11 +60,29 @@ class _IntroViewState extends State<IntroView> {
       PageViewModel(
         title: "Let's get started",
         bodyWidget: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              'Click on the button below \n to start using the app',
-              style: TextStyle(color: Colors.black, fontSize: 19.0),
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const SizedBox(width: 20.0, height: 100.0),
+            const Text(
+              'Be',
+              style: TextStyle(fontSize: 43.0),
+            ),
+            const SizedBox(width: 20.0, height: 100.0),
+            DefaultTextStyle(
+              style: const TextStyle(
+                fontSize: 40.0,
+                fontFamily: 'Horizon',
+              ),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  RotateAnimatedText('AWESOME'),
+                  RotateAnimatedText('OPTIMISTIC'),
+                  RotateAnimatedText('DIFFERENT'),
+                ],
+                onTap: () {
+                  print("Tap Event");
+                },
+              ),
             ),
           ],
         ),
