@@ -22,17 +22,6 @@ class _FilterViewState extends State<FilterView> {
   double maxCalories = 800;
   bool isLoading = false;
 
-  List<dynamic> dietaryRestrictions = [
-    ['Vegan', false],
-    ['Vegetarian', false],
-    ['Gluten Free', false],
-    ['Dairy Free', false],
-    ['Nut Free', false],
-    ['Egg Free', false],
-    ['Soy Free', false],
-    ['Fish Free', false],
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -44,12 +33,6 @@ class _FilterViewState extends State<FilterView> {
     setState(() => isLoading = true);
     await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
     setState(() => isLoading = false);
-  }
-
-  checkboxChanged(bool? value, int index) {
-    setState(() {
-      dietaryRestrictions[index][1] = !dietaryRestrictions[index][1];
-    });
   }
 
   void _saveSettings() {
@@ -65,6 +48,15 @@ class _FilterViewState extends State<FilterView> {
       maxCalories = filterSettings.maxCal;
       minCalories = filterSettings.minCal;
       maxReadyTime = filterSettings.maxReadyTime;
+    });
+  }
+
+  checkboxChanged(bool? value, int index) {
+    setState(() {
+      Provider.of<RecipeProvider>(context, listen: false)
+              .dietaryRestrictions[index][1] =
+          !Provider.of<RecipeProvider>(context, listen: false)
+              .dietaryRestrictions[index][1];
     });
   }
 
@@ -122,7 +114,7 @@ class _FilterViewState extends State<FilterView> {
                     dietaryRestrictionsFilter(),
                     caloriesFilter(),
                     prepTimeFilter(),
-                    costFilter(),
+                    // costFilter(),
                     applyButton(),
                   ],
                 ),
@@ -198,26 +190,33 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget dietaryRestrictionsFilter() {
-    return Wrap(
-      children: [
-        for (int i = 0; i < dietaryRestrictions.length; i++)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(dietaryRestrictions[i][0]),
-                Checkbox(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        return ListView(
+          shrinkWrap: true,
+          children: [
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                clipBehavior: Clip.antiAlias,
+                children: List.generate(
+                  recipe.dietaryRestrictions.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                    child: FilterChip(
+                      label: Text(recipe.dietaryRestrictions[index][0]),
+                      selected: recipe.dietaryRestrictions[index][1],
+                      onSelected: (bool value) {
+                        checkboxChanged(value, index);
+                      },
+                    ),
                   ),
-                  value: dietaryRestrictions[i][1],
-                  onChanged: (value) => checkboxChanged(value, i),
                 ),
-              ],
+              ),
             ),
-          ),
-      ],
+          ],
+        );
+      },
     );
   }
 
@@ -248,6 +247,11 @@ class _FilterViewState extends State<FilterView> {
                     minCalories = values.start;
                     maxCalories = values.end + 100;
                   });
+                } else if (maxCalories - minCalories <= 100) {
+                  setState(() {
+                    minCalories = values.start - 100;
+                    maxCalories = values.end;
+                  });
                 } else {
                   setState(() {
                     minCalories = values.start;
@@ -275,8 +279,8 @@ class _FilterViewState extends State<FilterView> {
           activeColor: secondaryColor,
           value: maxReadyTime,
           min: 15,
-          max: 160,
-          divisions: 16,
+          max: 150,
+          divisions: 9,
           label: '${maxReadyTime.round()} min',
           onChanged: (double value) {
             setState(() {

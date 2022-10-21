@@ -17,14 +17,14 @@ class RecipeProvider extends ChangeNotifier {
   String maxReadyTime = '160';
 
   List<dynamic> dietaryRestrictions = [
-    ['Vegan', false],
     ['Vegetarian', false],
+    ['Ketogenic', false],
     ['Gluten Free', false],
-    ['Dairy Free', false],
-    ['Nut Free', false],
-    ['Egg Free', false],
-    ['Soy Free', false],
-    ['Fish Free', false],
+    ['Lacto-Vegetarian', false],
+    ['Ovo-Vegetarian', false],
+    ['Pescetarian', false],
+    ['Paleo', false],
+    ['Whole30', false],
   ];
 
   RecipeProvider() {
