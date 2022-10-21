@@ -1,9 +1,4 @@
-import 'dart:math';
-import 'package:loading_animations/loading_animations.dart';
 import 'package:flutter/material.dart';
-import 'package:grupp_5/components/models/api_service.dart';
-import 'package:grupp_5/components/models/recipe_model.dart';
-import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
 import '../constants/constants.dart';

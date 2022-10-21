@@ -112,6 +112,5 @@ class _IntroViewState extends State<IntroView> {
         ),
       ),
     );
-    throw UnimplementedError();
   }
 }
