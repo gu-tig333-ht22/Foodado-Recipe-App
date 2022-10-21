@@ -18,7 +18,7 @@ class PreferencesService {
     return filterSettings(
       maxCal: maxCal ?? 0,
       minCal: minCal ?? 0,
-      maxReadyTime: maxReadyTime ?? 0,
+      maxReadyTime: maxReadyTime ?? 15,
     );
   }
 }
