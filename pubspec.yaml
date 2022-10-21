@@ -36,7 +36,6 @@ dependencies:
   provider:
   path_provider:
   sqflite:  
-  loading_animations:
   introduction_screen: ^3.0.1
   lottie: ^1.4.3
   animated_text_kit: 
@@ -87,6 +86,7 @@ flutter:
       - assets/empty.jpg
       - assets/empty_doge.png
       - assets/intro_images/
+      - assets/loading.json
     
 
   # An image asset can refer to one or more resolution-specific "variants", see

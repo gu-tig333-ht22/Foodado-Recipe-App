@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 const Color primaryColor = Color(0xFFE0E0E0);
 const Color secondaryColor = Color.fromRGBO(76, 175, 80, 1);
@@ -11,3 +12,5 @@ BoxShadow shadow = BoxShadow(
   blurRadius: 7,
   offset: const Offset(0, 0),
 );
+
+LottieBuilder loadingAnimation = Lottie.asset('assets/loading.json');

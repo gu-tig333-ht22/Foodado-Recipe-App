@@ -4,11 +4,8 @@ import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
-import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:grupp_5/components/db/recipe_database.dart';
-import '/constants/routes.dart';
-import '../components/models/recipe_model.dart';
 
 bool checked = false;
 
@@ -195,12 +192,7 @@ class _RecipeViewState extends State<RecipeView> {
               ],
             );
           } else {
-            return Center(
-              child: LoadingBouncingGrid.square(
-                backgroundColor: secondaryColor,
-                size: 50,
-              ),
-            );
+            return Center(child: loadingAnimation);
           }
         },
       ),
