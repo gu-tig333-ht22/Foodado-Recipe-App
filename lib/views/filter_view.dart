@@ -5,7 +5,7 @@ import 'package:loading_animations/loading_animations.dart';
 import 'package:provider/provider.dart';
 import '../components/providers/provider.dart';
 import '/constants/routes.dart';
-import 'package:grupp_5/components/models/preferences_service.dart';
+import 'package:grupp_5/components/db/preferences_service.dart';
 
 class FilterView extends StatefulWidget {
   const FilterView({Key? key}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'filter_model.dart';
+import '../models/filter_model.dart';
 
 class PreferencesService {
   Future saveSettings(filterSettings settings) async {
