@@ -14,7 +14,7 @@ class _IntroViewState extends State<IntroView> {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
-        title: "Welcome to the Recipe App",
+        title: "Welcome to Foodado",
         body:
             "This app will help you find recipes based on the ingredients you have at home.",
         image: Center(
@@ -37,12 +37,9 @@ class _IntroViewState extends State<IntroView> {
       PageViewModel(
         title: "How to use the app",
         body:
-            "First, you need to enter the ingredients you have at home. Then, you can filter the recipes based on your preferences. Finally, you can save the recipes you like.",
-        image: const Center(
-          child: Image(
-            image: AssetImage('assets/empty.jpg'),
-            height: 175.0,
-          ),
+            "It's simple! Use the filter function to generate recipes based on your own preferences. \n \n Let Foodado do the rest for you!",
+        image: Center(
+          child: Lottie.asset('assets/intro_images/wondering_woman.json'),
         ),
         decoration: const PageDecoration(
           pageColor: Colors.white,
@@ -58,50 +55,37 @@ class _IntroViewState extends State<IntroView> {
         ),
       ),
       PageViewModel(
-        title: "Let's get started",
+        //lets get started button with an image
+        title: "Let's get started!",
         bodyWidget: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const SizedBox(width: 20.0, height: 100.0),
-            const Text(
-              'Be',
-              style: TextStyle(fontSize: 43.0),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              "Click on the ",
+              style: TextStyle(fontSize: 19.0),
             ),
-            const SizedBox(width: 20.0, height: 100.0),
-            DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: 40.0,
-                fontFamily: 'Horizon',
-              ),
-              child: AnimatedTextKit(
-                animatedTexts: [
-                  RotateAnimatedText('AWESOME'),
-                  RotateAnimatedText('OPTIMISTIC'),
-                  RotateAnimatedText('DIFFERENT'),
-                ],
-                onTap: () {
-                  print("Tap Event");
-                },
-              ),
+            Icon(Icons.arrow_forward),
+            Text(
+              " button to get started!",
+              style: TextStyle(fontSize: 19.0),
             ),
           ],
         ),
-        image: const Center(
-          child: Image(
-            image: AssetImage('assets/recipe_image.jpg'),
-            height: 175.0,
+        image: Center(
+          child: Lottie.asset(
+            'assets/intro_images/chef.json',
           ),
         ),
         decoration: const PageDecoration(
-          pageColor: Color.fromARGB(75, 58, 180, 28),
+          pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
             color: Colors.black,
             fontSize: 28.0,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),
@@ -118,7 +102,7 @@ class _IntroViewState extends State<IntroView> {
       showSkipButton: true,
       skip: const Text('Skip'),
       next: const Icon(Icons.arrow_forward),
-      done: const Text('Done', style: TextStyle(fontWeight: FontWeight.bold)),
+      done: const Icon(Icons.arrow_forward),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),
