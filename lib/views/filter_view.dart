@@ -51,15 +51,6 @@ class _FilterViewState extends State<FilterView> {
     });
   }
 
-  checkboxChanged(bool? value, int index) {
-    setState(() {
-      Provider.of<RecipeProvider>(context, listen: false)
-              .dietaryRestrictions[index][1] =
-          !Provider.of<RecipeProvider>(context, listen: false)
-              .dietaryRestrictions[index][1];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,6 +181,16 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget dietaryRestrictionsFilter() {
+    List<String> diet = [
+      'Vegetarian',
+      'Ketogenic',
+      'Gluten Free',
+      'Lacto-Vegetarian',
+      'Ovo-Vegetarian',
+      'Pescetarian'
+          'Paleo',
+      'Whole30'
+    ];
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         return ListView(
@@ -199,28 +200,30 @@ class _FilterViewState extends State<FilterView> {
               child: Wrap(
                 alignment: WrapAlignment.center,
                 clipBehavior: Clip.antiAlias,
-                children: List.generate(
-                  recipe.dietaryRestrictions.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                    child: ChoiceChip(
-                      pressElevation: 10,
-                      selectedColor: secondaryColor,
-                      label: Text(
-                        recipe.dietaryRestrictions[index][0],
-                        style: TextStyle(
-                          color: recipe.dietaryRestrictions[index][1]
-                              ? backgroundColor
+                children: [
+                  for (var i = 0; i < diet.length; i++)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          recipe.setDiet(diet[i]);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shadowColor: Colors.transparent,
+                          foregroundColor: recipe.diet == diet[i]
+                              ? Colors.white
                               : Colors.black,
+                          backgroundColor: recipe.diet == diet[i]
+                              ? secondaryColor
+                              : Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
                         ),
+                        child: Text(diet[i]),
                       ),
-                      selected: recipe.dietaryRestrictions[index][1],
-                      onSelected: (bool? value) {
-                        checkboxChanged(value, index);
-                      },
                     ),
-                  ),
-                ),
+                ],
               ),
             ),
           ],
@@ -383,6 +386,7 @@ class _FilterViewState extends State<FilterView> {
               recipe.maxCalories = maxCalories.round().toString();
               recipe.maxReadyTime = maxReadyTime.round().toString();
               recipe.setRecipeQuery(_controller.text);
+              recipe.setDiet(recipe.diet);
               recipe.fetchRecipe();
               Navigator.of(context).pushNamed(scrambleViewRoute);
               _saveSettings();

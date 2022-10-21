@@ -26,7 +26,7 @@ void main() async {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         debugShowCheckedModeBanner: false,
-        home: const IntroView(),
+        home: const DevView(),
         routes: {
           devViewRoute: (context) => const DevView(),
           infoViewRoute: (context) => const InfoView(),

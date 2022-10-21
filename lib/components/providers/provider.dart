@@ -12,20 +12,10 @@ class RecipeProvider extends ChangeNotifier {
   FilterRecipe? get filterRecipe => _filterRecipe;
   String query = '';
   String type = '';
+  String diet = '';
   String minCalories = '50';
   String maxCalories = '800';
   String maxReadyTime = '160';
-
-  List<dynamic> dietaryRestrictions = [
-    ['Vegetarian', false],
-    ['Ketogenic', false],
-    ['Gluten Free', false],
-    ['Lacto-Vegetarian', false],
-    ['Ovo-Vegetarian', false],
-    ['Pescetarian', false],
-    ['Paleo', false],
-    ['Whole30', false],
-  ];
 
   RecipeProvider() {
     fetchRecipe();
@@ -33,7 +23,7 @@ class RecipeProvider extends ChangeNotifier {
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();
@@ -54,8 +44,8 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setDietaryRestrictions(List dietaryRestrictions) {
-    this.dietaryRestrictions = dietaryRestrictions;
+  void setDiet(String diet) {
+    this.diet = diet;
     notifyListeners();
   }
 
@@ -65,16 +55,7 @@ class RecipeProvider extends ChangeNotifier {
     minCalories = '50';
     maxCalories = '800';
     maxReadyTime = '160';
-    dietaryRestrictions = [
-      ['Vegan', false],
-      ['Vegetarian', false],
-      ['Gluten Free', false],
-      ['Dairy Free', false],
-      ['Nut Free', false],
-      ['Egg Free', false],
-      ['Soy Free', false],
-      ['Fish Free', false],
-    ];
+    diet = '';
     notifyListeners();
   }
   //getRecipe()
