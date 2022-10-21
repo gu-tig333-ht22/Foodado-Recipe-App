@@ -195,12 +195,7 @@ class _RecipeViewState extends State<RecipeView> {
               ],
             );
           } else {
-            return Center(
-              child: LoadingBouncingGrid.square(
-                backgroundColor: secondaryColor,
-                size: 50,
-              ),
-            );
+            return Center(child: loadingAnimation);
           }
         },
       ),

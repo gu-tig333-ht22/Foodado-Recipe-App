@@ -59,13 +59,7 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
       ),
       // bottomNavigationBar: bottomNavigationBar(),
-      body: isLoading
-          ? Center(
-              child: LoadingBouncingGrid.square(
-              backgroundColor: secondaryColor,
-              size: 100,
-            ))
-          : buildBody(),
+      body: isLoading ? Center(child: loadingAnimation) : buildBody(),
     );
   }
 

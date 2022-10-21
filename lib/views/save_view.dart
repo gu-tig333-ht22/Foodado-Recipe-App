@@ -72,10 +72,7 @@ class _SaveViewState extends State<SaveView> {
         ),
         body: Center(
             child: isLoading
-                ? LoadingBouncingGrid.square(
-                    backgroundColor: secondaryColor,
-                    size: 100,
-                  )
+                ? loadingAnimation
                 : recipeDb.isEmpty
                     ? const Text('No saved recipes')
                     : buildRecipes()),
