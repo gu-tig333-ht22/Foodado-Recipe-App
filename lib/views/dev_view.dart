@@ -53,6 +53,12 @@ class _DevViewState extends State<DevView> {
               },
               child: const Text('Save View'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(introViewRoute);
+              },
+              child: const Text('Intro view'),
+            ),
           ],
         ),
       ),

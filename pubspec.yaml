@@ -37,7 +37,11 @@ dependencies:
   path_provider:
   sqflite:  
   loading_animations:
+  introduction_screen: ^3.0.1
+  lottie: ^1.4.3
+  animated_text_kit: 
   shared_preferences: ^2.0.15
+
 
 
 
@@ -59,7 +63,6 @@ dev_dependencies:
   flutter_native_splash:
 
 flutter_native_splash:
-  # color: "#FFFFFF"
   background_image: "assets/splash_screen/foodado_splash.png"
   android: true
   ios: true
@@ -80,9 +83,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/recipe_image.jpg
-    - assets/empty.jpg
-    - assets/empty_doge.png
+      - assets/recipe_image.jpg
+      - assets/empty.jpg
+      - assets/empty_doge.png
+      - assets/intro_images/
     
 
   # An image asset can refer to one or more resolution-specific "variants", see
