@@ -26,7 +26,7 @@ class _RecipeViewState extends State<RecipeView> {
   @override
   void initState() {
     super.initState();
-    refreshRecipes();
+    delay();
   }
 
   @override
@@ -35,7 +35,7 @@ class _RecipeViewState extends State<RecipeView> {
     super.dispose();
   }
 
-  Future refreshRecipes() async {
+  Future delay() async {
     setState(() => isLoading = true);
     this.recipeDb = await RecipeDatabase.instance.readAllRecipes();
     setState(() => isLoading = false);
