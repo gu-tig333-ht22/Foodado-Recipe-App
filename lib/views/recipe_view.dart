@@ -117,16 +117,18 @@ class _RecipeViewState extends State<RecipeView> {
           },
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          recipeImage(),
-          recipeInfo(),
-          recipeIngredients(),
-          recipeInstructions(),
-        ],
-      ),
+      body: isLoading
+          ? loadingAnimation
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                recipeImage(),
+                recipeInfo(),
+                recipeIngredients(),
+                recipeInstructions(),
+              ],
+            ),
     );
   }
 
