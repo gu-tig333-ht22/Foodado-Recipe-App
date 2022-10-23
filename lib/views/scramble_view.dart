@@ -136,7 +136,6 @@ class _ScrambleViewState extends State<ScrambleView> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           Html(
                             data: recipe.filterRecipe!.results[0].summary,
                             style: {
@@ -148,10 +147,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                               ),
                             },
                           ),
-
-                          //cooking time, difficulty, servings
                           Padding(
-                            //padding top
                             padding: const EdgeInsets.only(top: 0.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

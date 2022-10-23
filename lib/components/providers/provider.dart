@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
-import 'package:grupp_5/components/models/saved_recipe_model.dart';
 
 import 'package:http/http.dart' as http;
 
 class RecipeProvider extends ChangeNotifier {
   FilterRecipe? _filterRecipe;
   FilterRecipe? get filterRecipe => _filterRecipe;
-  Recipe? _recipe;
-  Recipe? get savedRecipe => _recipe;
+  Recipe? _savedRecipe;
+  Recipe? get savedRecipe => _savedRecipe;
   String recipeId = '';
   String query = '';
   String type = '';
@@ -43,7 +42,7 @@ class RecipeProvider extends ChangeNotifier {
     final response = await http.get(Uri.parse(
         '$apiUrl/recipes/$recipeId/information?apiKey=$apiKey&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1'));
     if (response.statusCode == 200) {
-      _recipe = Recipe.fromJson(jsonDecode(response.body));
+      _savedRecipe = Recipe.fromJson(jsonDecode(response.body));
       notifyListeners();
     } else if (response.statusCode == 404) {
       throw Exception('Recipe not found, recipe id: $recipeId');
