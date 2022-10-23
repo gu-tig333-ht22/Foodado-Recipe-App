@@ -4,6 +4,7 @@ import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:grupp_5/constants/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:grupp_5/components/db/recipe_database.dart';
 
@@ -79,29 +80,14 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                 );
               } else {
                 return IconButton(
-                  onPressed: () {
-                    setState(() {
-                      recipe.savedRecipe!.isFavorite =
-                          !recipe.savedRecipe!.isFavorite;
-                      RecipeDatabase.instance.create(
-                        RecipeDb(
-                          recipe.savedRecipe!.id,
-                          recipe.savedRecipe!.title,
-                          recipe.savedRecipe!.image,
-                        ),
-                      );
-                    });
-                  },
-                  icon: recipe.savedRecipe!.isFavorite
-                      ? const Icon(
-                          Icons.favorite,
-                          color: secondaryColor,
-                        )
-                      : const Icon(
-                          Icons.favorite_border,
-                          color: Colors.black,
-                        ),
-                );
+                    onPressed: () {
+                      setState(() {
+                        RecipeDatabase.instance.delete(recipe.savedRecipe!.id);
+
+                        Navigator.of(context).popAndPushNamed(saveViewRoute);
+                      });
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.grey));
               }
             },
           ),

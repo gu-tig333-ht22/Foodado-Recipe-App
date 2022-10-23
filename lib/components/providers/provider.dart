@@ -22,10 +22,9 @@ class RecipeProvider extends ChangeNotifier {
   String maxCalories = '800';
   String maxReadyTime = '160';
 
-  RecipeProvider() {
-    fetchRecipe();
-    getSavedRecipe();
-  }
+  // RecipeProvider() {
+  //   fetchRecipe();
+  // }
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
@@ -40,7 +39,6 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
-//$apiUrl/recipes/complexSearch?apiKey=$apiKey&recipeBoxId$recipeId&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1
   Future getSavedRecipe() async {
     final response = await http.get(Uri.parse(
         '$apiUrl/recipes/$recipeId/information?apiKey=$apiKey&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1'));
