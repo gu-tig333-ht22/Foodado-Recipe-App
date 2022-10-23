@@ -4,12 +4,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 
 import 'package:http/http.dart' as http;
 
 class RecipeProvider extends ChangeNotifier {
   FilterRecipe? _filterRecipe;
   FilterRecipe? get filterRecipe => _filterRecipe;
+  Recipe? _savedRecipe;
+  Recipe? get savedRecipe => _savedRecipe;
+  String recipeId = '';
   String query = '';
   String type = '';
   String diet = '';
@@ -17,9 +21,9 @@ class RecipeProvider extends ChangeNotifier {
   String maxCalories = '800';
   String maxReadyTime = '160';
 
-  RecipeProvider() {
-    fetchRecipe();
-  }
+  // RecipeProvider() {
+  //   fetchRecipe();
+  // }
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
@@ -29,6 +33,19 @@ class RecipeProvider extends ChangeNotifier {
       notifyListeners();
     } else if (response.statusCode == 404) {
       throw Exception('Recipe not found');
+    } else {
+      throw Exception('Failed to load Recipe');
+    }
+  }
+
+  Future getSavedRecipe() async {
+    final response = await http.get(Uri.parse(
+        '$apiUrl/recipes/$recipeId/information?apiKey=$apiKey&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1'));
+    if (response.statusCode == 200) {
+      _savedRecipe = Recipe.fromJson(jsonDecode(response.body));
+      notifyListeners();
+    } else if (response.statusCode == 404) {
+      throw Exception('Recipe not found, recipe id: $recipeId');
     } else {
       throw Exception('Failed to load Recipe');
     }
@@ -49,6 +66,11 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setRecipeId(String recipeId) async {
+    this.recipeId = recipeId;
+    notifyListeners();
+  }
+
   void clearFilters() {
     query = '';
     type = '';
@@ -58,7 +80,4 @@ class RecipeProvider extends ChangeNotifier {
     diet = '';
     notifyListeners();
   }
-  //getRecipe()
-
-  // Future getRecipe() async {
 }

@@ -35,7 +35,7 @@ class _FilterViewState extends State<FilterView> {
   }
 
   void _saveSettings() {
-    final newSettings = filterSettings(
+    final newSettings = FilterSettings(
         maxCal: maxCalories, minCal: minCalories, maxReadyTime: maxReadyTime);
 
     _preferencesService.saveSettings(newSettings);

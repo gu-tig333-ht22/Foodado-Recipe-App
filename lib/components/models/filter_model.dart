@@ -15,12 +15,12 @@ class FilterRecipe {
   }
 }
 
-class filterSettings {
+class FilterSettings {
   final double maxCal;
   final double minCal;
   final double maxReadyTime;
 
-  filterSettings({
+  FilterSettings({
     required this.maxCal,
     required this.minCal,
     required this.maxReadyTime,
