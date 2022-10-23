@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/components/db/recipe_database.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
+import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
+import 'package:provider/provider.dart';
 import '/constants/routes.dart';
 
 class SaveView extends StatefulWidget {
@@ -79,7 +81,13 @@ class _SaveViewState extends State<SaveView> {
 
   Widget buildRecipes() {
     return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
+      onTap: () {
+        setState(() {
+          Provider.of<RecipeProvider>(context, listen: false).recipeId = '40';
+        });
+
+        Navigator.of(context).pushNamed(recipeSavedRoute);
+      },
       child: GridView.count(
         crossAxisCount: 2,
         children: [

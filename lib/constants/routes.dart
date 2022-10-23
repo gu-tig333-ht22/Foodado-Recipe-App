@@ -7,3 +7,4 @@ const recipeViewRoute = '/recipe_view';
 const devViewRoute = '/dev_view';
 const saveViewRoute = '/save_view';
 const introViewRoute = '/intro_view';
+const recipeSavedRoute = '/recipe_saved';
