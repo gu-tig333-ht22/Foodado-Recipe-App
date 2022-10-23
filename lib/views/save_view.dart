@@ -80,20 +80,22 @@ class _SaveViewState extends State<SaveView> {
       );
 
   Widget buildRecipes() {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          Provider.of<RecipeProvider>(context, listen: false).recipeId = '40';
-        });
+    return GridView.count(
+      crossAxisCount: 2,
+      children: [
+        for (final recipeDb in recipeDb)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<RecipeProvider>(context, listen: false)
+                    .setRecipeId(recipeDb.id.toString());
+                Provider.of<RecipeProvider>(context, listen: false)
+                    .getSavedRecipe();
 
-        Navigator.of(context).pushNamed(recipeSavedRoute);
-      },
-      child: GridView.count(
-        crossAxisCount: 2,
-        children: [
-          for (final recipe in recipeDb)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+                print('this is the recipe id of db: ${recipeDb.id}');
+                Navigator.of(context).pushNamed(recipeSavedRoute);
+              },
               child: Container(
                 width: 300,
                 height: 230,
@@ -112,7 +114,7 @@ class _SaveViewState extends State<SaveView> {
                       decoration: BoxDecoration(
                         image: //network
                             DecorationImage(
-                          image: NetworkImage(recipe.image),
+                          image: NetworkImage(recipeDb.image),
                           fit: BoxFit.cover,
                         ),
                         borderRadius: const BorderRadius.only(
@@ -138,7 +140,7 @@ class _SaveViewState extends State<SaveView> {
                         textAlign: TextAlign.center,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        recipe.title,
+                        recipeDb.title,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -149,8 +151,8 @@ class _SaveViewState extends State<SaveView> {
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 

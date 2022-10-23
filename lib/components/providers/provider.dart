@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/models/saved_recipe_model.dart';
 
 import 'package:http/http.dart' as http;
@@ -11,9 +12,9 @@ import 'package:http/http.dart' as http;
 class RecipeProvider extends ChangeNotifier {
   FilterRecipe? _filterRecipe;
   FilterRecipe? get filterRecipe => _filterRecipe;
-  SavedRecipe? _savedRecipe;
-  SavedRecipe? get savedRecipe => _savedRecipe;
-  String recipeId = '18';
+  Recipe? _recipe;
+  Recipe? get savedRecipe => _recipe;
+  String recipeId = '';
   String query = '';
   String type = '';
   String diet = '';
@@ -39,14 +40,15 @@ class RecipeProvider extends ChangeNotifier {
     }
   }
 
+//$apiUrl/recipes/complexSearch?apiKey=$apiKey&recipeBoxId$recipeId&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1
   Future getSavedRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&recipeBoxId$recipeId&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1'));
+        '$apiUrl/recipes/$recipeId/information?apiKey=$apiKey&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1'));
     if (response.statusCode == 200) {
-      _savedRecipe = SavedRecipe.fromJson(jsonDecode(response.body));
+      _recipe = Recipe.fromJson(jsonDecode(response.body));
       notifyListeners();
     } else if (response.statusCode == 404) {
-      throw Exception('Recipe not found');
+      throw Exception('Recipe not found, recipe id: $recipeId');
     } else {
       throw Exception('Failed to load Recipe');
     }
@@ -64,6 +66,11 @@ class RecipeProvider extends ChangeNotifier {
 
   void setDiet(String diet) {
     this.diet = diet;
+    notifyListeners();
+  }
+
+  void setRecipeId(String recipeId) async {
+    this.recipeId = recipeId;
     notifyListeners();
   }
 

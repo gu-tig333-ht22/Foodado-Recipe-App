@@ -57,7 +57,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
               );
             } else {
               return Text(
-                recipe.savedRecipe!.results[0].title,
+                recipe.savedRecipe!.title,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -81,18 +81,18 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                 return IconButton(
                   onPressed: () {
                     setState(() {
-                      recipe.savedRecipe!.results[0].isFavorite =
-                          !recipe.savedRecipe!.results[0].isFavorite;
+                      recipe.savedRecipe!.isFavorite =
+                          !recipe.savedRecipe!.isFavorite;
                       RecipeDatabase.instance.create(
                         RecipeDb(
-                          recipe.savedRecipe!.results[0].id,
-                          recipe.savedRecipe!.results[0].title,
-                          recipe.savedRecipe!.results[0].image,
+                          recipe.savedRecipe!.id,
+                          recipe.savedRecipe!.title,
+                          recipe.savedRecipe!.image,
                         ),
                       );
                     });
                   },
-                  icon: recipe.savedRecipe!.results[0].isFavorite
+                  icon: recipe.savedRecipe!.isFavorite
                       ? const Icon(
                           Icons.favorite,
                           color: secondaryColor,
@@ -135,7 +135,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
   Widget recipeImage() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.savedRecipe?.results == null) {
+        if (recipe.savedRecipe == null) {
           return Center(child: Container());
         } else {
           return Container(
@@ -143,7 +143,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
             height: 220,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(recipe.savedRecipe!.results[0].image),
+                image: NetworkImage(recipe.savedRecipe!.image),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -170,7 +170,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.savedRecipe!.results[0].readyInMinutes} min',
+                      '${recipe.savedRecipe!.readyInMinutes} min',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -184,7 +184,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.savedRecipe!.results[0].servings} servings',
+                      '${recipe.savedRecipe!.servings} servings',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -217,24 +217,22 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: recipe
-                        .savedRecipe!.results[0].extendedIngredients.length,
+                    itemCount: recipe.savedRecipe!.extendedIngredients.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           leading: Checkbox(
-                            value: recipe
-                                .savedRecipe!.results[0].ingredientDone[index],
+                            value: recipe.savedRecipe!.ingredientDone[index],
                             onChanged: (value) {
                               setState(() {
-                                recipe.savedRecipe!.results[0]
-                                    .ingredientDone[index] = value!;
+                                recipe.savedRecipe!.ingredientDone[index] =
+                                    value!;
                               });
                             },
                           ),
                           title: Html(
-                            data: recipe.savedRecipe!.results[0]
-                                .extendedIngredients[index],
+                            data:
+                                recipe.savedRecipe!.extendedIngredients[index],
                             style: {
                               '#': Style(
                                 fontSize: const FontSize(14),
@@ -272,20 +270,18 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: recipe.savedRecipe!.results[0].steps.length,
+                    itemCount: recipe.savedRecipe!.steps.length,
                     itemBuilder: (context, index) {
                       return Card(
                         child: ListTile(
                           leading: Text(
-                            recipe.savedRecipe!.results[0].steps[index].number
-                                .toString(),
+                            recipe.savedRecipe!.steps[index].number.toString(),
                             style: const TextStyle(
                               fontSize: 14,
                             ),
                           ),
                           title: Html(
-                            data: recipe
-                                .savedRecipe!.results[0].steps[index].step,
+                            data: recipe.savedRecipe!.steps[index].step,
                             style: {
                               '#': Style(
                                 fontSize: const FontSize(14),
