@@ -101,7 +101,6 @@ class _FilterViewState extends State<FilterView> {
                     dietaryRestrictionsFilter(),
                     caloriesFilter(),
                     prepTimeFilter(),
-                    // costFilter(),
                     applyButton(),
                   ],
                 ),

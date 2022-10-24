@@ -82,6 +82,7 @@ class _SaveViewState extends State<SaveView> {
   Widget buildRecipes() {
     return Consumer<RecipeProvider>(builder: (context, recipe, child) {
       return GridView.count(
+        physics: const BouncingScrollPhysics(),
         crossAxisCount: 2,
         children: [
           for (final recipeDb in recipeDb)

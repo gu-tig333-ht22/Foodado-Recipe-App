@@ -86,11 +86,10 @@ class _RecipeViewState extends State<RecipeView> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Recipe saved'),
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: Colors.grey,
                           padding: EdgeInsets.all(10),
                           behavior: SnackBarBehavior.floating,
                           margin: EdgeInsets.all(30),
-                          elevation: 30,
                           duration: Duration(seconds: 3)),
                     );
                     setState(() {
