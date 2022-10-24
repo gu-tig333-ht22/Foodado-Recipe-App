@@ -118,7 +118,6 @@ class _RecipeViewState extends State<RecipeView> {
               }
             },
           ),
-          //consumer with favourite icon set isFavourite to true when pressed and vice versa
         ],
         leading: IconButton(
           icon: const Icon(
