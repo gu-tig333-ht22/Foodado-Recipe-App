@@ -19,6 +19,9 @@ class RecipeView extends StatefulWidget {
 class _RecipeViewState extends State<RecipeView> {
   late List<RecipeDb> recipeDb;
   bool isLoading = false;
+  bool summaryExpanded = true;
+  bool ingredientsExpanded = false;
+  bool instructionsExpanded = false;
 
   @override
   void initState() {
@@ -80,6 +83,16 @@ class _RecipeViewState extends State<RecipeView> {
               } else {
                 return IconButton(
                   onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Recipe saved'),
+                          backgroundColor: Colors.blueGrey,
+                          padding: EdgeInsets.all(10),
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(30),
+                          elevation: 30,
+                          duration: Duration(seconds: 3)),
+                    );
                     setState(() {
                       recipe.filterRecipe!.results[0].isFavorite =
                           !recipe.filterRecipe!.results[0].isFavorite;
@@ -105,7 +118,6 @@ class _RecipeViewState extends State<RecipeView> {
               }
             },
           ),
-          //consumer with favourite icon set isFavourite to true when pressed and vice versa
         ],
         leading: IconButton(
           icon: const Icon(
@@ -119,15 +131,20 @@ class _RecipeViewState extends State<RecipeView> {
       ),
       body: isLoading
           ? loadingAnimation
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                recipeImage(),
-                recipeInfo(),
-                recipeIngredients(),
-                recipeInstructions(),
-              ],
+          : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  recipeImage(),
+                  recipeInfo(),
+                  recipeSummary(),
+                  recipeIngredients(),
+                  recipeInstructions(),
+                ],
+              ),
             ),
     );
   }
@@ -153,6 +170,8 @@ class _RecipeViewState extends State<RecipeView> {
       },
     );
   }
+
+// make the recipeingredients widget collapsable
 
   Widget recipeInfo() {
     return Padding(
@@ -201,51 +220,101 @@ class _RecipeViewState extends State<RecipeView> {
     );
   }
 
+  //recipeSummary() with expansionTile
+  Widget recipeSummary() {
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        if (recipe.filterRecipe != null) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 3, left: 3),
+            child: ExpansionTile(
+              textColor: Colors.black,
+              title: const Text(
+                'Summary',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              children: [
+                Html(data: recipe.filterRecipe!.results[0].summary),
+              ],
+            ),
+          );
+        } else {
+          return Center(child: loadingAnimation);
+        }
+      },
+    );
+  }
+
   Widget recipeIngredients() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
-          return Expanded(
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 0,
+            ),
             child: Column(
               children: [
-                const Text(
-                  'Ingredients',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: recipe
-                        .filterRecipe!.results[0].extendedIngredients.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          leading: Checkbox(
-                            value: recipe
-                                .filterRecipe!.results[0].ingredientDone[index],
-                            onChanged: (value) {
-                              setState(() {
-                                recipe.filterRecipe!.results[0]
-                                    .ingredientDone[index] = value!;
-                              });
-                            },
-                          ),
-                          title: Html(
-                            data: recipe.filterRecipe!.results[0]
-                                .extendedIngredients[index],
-                            style: {
-                              '#': Style(
-                                fontSize: const FontSize(14),
-                              ),
-                            },
-                          ),
-                        ),
-                      );
+                Padding(
+                  padding: const EdgeInsets.only(right: 3, left: 3),
+                  child: ExpansionTile(
+                    textColor: Colors.black,
+                    title: const Text(
+                      'Ingredients',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    //toggleExpanded
+                    onExpansionChanged: (value) {
+                      setState(() {
+                        ingredientsExpanded = value;
+                      });
                     },
                   ),
                 ),
+                ingredientsExpanded
+                    ? Container()
+                    : ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minHeight: 0,
+                        ),
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: recipe.filterRecipe!.results[0]
+                              .extendedIngredients.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                leading: Checkbox(
+                                  value: recipe.filterRecipe!.results[0]
+                                      .ingredientDone[index],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      recipe.filterRecipe!.results[0]
+                                          .ingredientDone[index] = value!;
+                                    });
+                                  },
+                                ),
+                                title: Html(
+                                  data: recipe.filterRecipe!.results[0]
+                                      .extendedIngredients[index],
+                                  style: {
+                                    '#': Style(
+                                      fontSize: const FontSize(14),
+                                    ),
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
               ],
             ),
           );
@@ -256,47 +325,74 @@ class _RecipeViewState extends State<RecipeView> {
     );
   }
 
+//toggleExpanded
+
   Widget recipeInstructions() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
-          return Expanded(
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: 0,
+            ),
             child: Column(
               children: [
-                const Text(
-                  'Instructions',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: recipe.filterRecipe!.results[0].steps.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          leading: Text(
-                            recipe.filterRecipe!.results[0].steps[index].number
-                                .toString(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          title: Html(
-                            data: recipe
-                                .filterRecipe!.results[0].steps[index].step,
-                            style: {
-                              '#': Style(
-                                fontSize: const FontSize(14),
-                              ),
-                            },
-                          ),
-                        ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 3, left: 3),
+                  child: ExpansionTile(
+                    textColor: Colors.black,
+                    title: const Text(
+                      'Instructions',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onExpansionChanged: (value) {
+                      setState(
+                        () {
+                          instructionsExpanded = value;
+                        },
                       );
                     },
                   ),
                 ),
+                instructionsExpanded
+                    ? Container()
+                    : ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 0,
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              recipe.filterRecipe!.results[0].steps.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                              child: ListTile(
+                                leading: Text(
+                                  recipe.filterRecipe!.results[0].steps[index]
+                                      .number
+                                      .toString(),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                title: Html(
+                                  data: recipe.filterRecipe!.results[0]
+                                      .steps[index].step,
+                                  style: {
+                                    '#': Style(
+                                      fontSize: const FontSize(14),
+                                    ),
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
               ],
             ),
           );
