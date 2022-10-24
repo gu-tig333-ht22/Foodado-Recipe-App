@@ -280,6 +280,14 @@ class _RecipeViewState extends State<RecipeView> {
     );
   }
 
+//is expanded true or false
+   toggleExpanded() {
+    var isExpanded = true;
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
+
   Widget recipeInstructions() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
@@ -298,7 +306,13 @@ class _RecipeViewState extends State<RecipeView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
+                  //toggleExpanded
+                  onExpansionChanged: (value) {
+                    toggleExpanded();
+                  },
                 ),
+                if (toggleExpanded() ? true )
                 ConstrainedBox(
                   constraints: BoxConstraints(
                     minHeight: 0,
