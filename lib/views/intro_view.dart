@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:grupp_5/constants/routes.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -97,7 +98,7 @@ class _IntroViewState extends State<IntroView> {
     return IntroductionScreen(
       pages: getPages(),
       onDone: () {
-        Navigator.of(context).pushNamed('/dev_view');
+        Navigator.of(context).pushNamed(scrambleViewRoute);
       },
       showSkipButton: true,
       skip: const Text('Skip'),
