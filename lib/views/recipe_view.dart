@@ -80,6 +80,16 @@ class _RecipeViewState extends State<RecipeView> {
               } else {
                 return IconButton(
                   onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Recipe saved'),
+                          backgroundColor: Colors.blueGrey,
+                          padding: EdgeInsets.all(10),
+                          behavior: SnackBarBehavior.floating,
+                          margin: EdgeInsets.all(30),
+                          elevation: 30,
+                          duration: Duration(seconds: 3)),
+                    );
                     setState(() {
                       recipe.filterRecipe!.results[0].isFavorite =
                           !recipe.filterRecipe!.results[0].isFavorite;
@@ -119,15 +129,19 @@ class _RecipeViewState extends State<RecipeView> {
       ),
       body: isLoading
           ? loadingAnimation
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                recipeImage(),
-                recipeInfo(),
-                recipeIngredients(),
-                recipeInstructions(),
-              ],
+          : SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  recipeImage(),
+                  recipeInfo(),
+                  recipeIngredients(),
+                  recipeInstructions(),
+                ],
+              ),
             ),
     );
   }
@@ -153,6 +167,8 @@ class _RecipeViewState extends State<RecipeView> {
       },
     );
   }
+
+// make the recipeingredients widget collapsable
 
   Widget recipeInfo() {
     return Padding(
@@ -205,7 +221,10 @@ class _RecipeViewState extends State<RecipeView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
-          return Expanded(
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 2000,
+            ),
             child: Column(
               children: [
                 const Text(
@@ -215,7 +234,10 @@ class _RecipeViewState extends State<RecipeView> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 2000,
+                  ),
                   child: ListView.builder(
                     itemCount: recipe
                         .filterRecipe!.results[0].extendedIngredients.length,
@@ -260,7 +282,10 @@ class _RecipeViewState extends State<RecipeView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
-          return Expanded(
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 2000,
+            ),
             child: Column(
               children: [
                 const Text(
@@ -270,7 +295,10 @@ class _RecipeViewState extends State<RecipeView> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Expanded(
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: 2000,
+                  ),
                   child: ListView.builder(
                     itemCount: recipe.filterRecipe!.results[0].steps.length,
                     itemBuilder: (context, index) {
