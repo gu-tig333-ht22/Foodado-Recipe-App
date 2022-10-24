@@ -43,6 +43,17 @@ class _ScrambleViewState extends State<ScrambleView> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.folder_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.of(context).pushNamed(saveViewRoute);
+            },
+          ),
+        ],
         leading: IconButton(
           icon: const Icon(
             Icons.sort,
