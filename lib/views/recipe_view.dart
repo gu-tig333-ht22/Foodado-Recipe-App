@@ -223,7 +223,7 @@ class _RecipeViewState extends State<RecipeView> {
         if (recipe.filterRecipe != null) {
           return ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: 2000,
+              minHeight: 0,
             ),
             child: Column(
               children: [
@@ -236,9 +236,11 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: 2000,
+                    minHeight: 0,
                   ),
                   child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
                     itemCount: recipe
                         .filterRecipe!.results[0].extendedIngredients.length,
                     itemBuilder: (context, index) {
@@ -284,22 +286,26 @@ class _RecipeViewState extends State<RecipeView> {
         if (recipe.filterRecipe != null) {
           return ConstrainedBox(
             constraints: BoxConstraints(
-              maxHeight: 2000,
+              minHeight: 0,
             ),
             child: Column(
               children: [
-                const Text(
-                  'Instructions',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                ExpansionTile(
+                  title: const Text(
+                    'Instructions',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: 2000,
+                    minHeight: 0,
                   ),
                   child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: recipe.filterRecipe!.results[0].steps.length,
                     itemBuilder: (context, index) {
                       return Card(
