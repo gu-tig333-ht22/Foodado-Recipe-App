@@ -96,115 +96,111 @@ class _ScrambleViewState extends State<ScrambleView> {
             recipe.filterRecipe!.results.isEmpty) {
           return noRecipesFound();
         } else {
-          return Dismissible(
-            key: UniqueKey(),
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
-              child: Container(
-                width: 350,
-                height: 490,
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [shadow],
-                ),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 350,
+          return GestureDetector(
+            onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
+            child: Container(
+              width: 350,
+              height: 490,
+              decoration: BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [shadow],
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 350,
+                    height: 230,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(recipe
+                                .filterRecipe?.results[0].image ??
+                            'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 300,
                       height: 230,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(recipe
-                                  .filterRecipe?.results[0].image ??
-                              'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
+                      decoration: const BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: 300,
-                        height: 230,
-                        decoration: const BoxDecoration(
-                          color: backgroundColor,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            recipe.filterRecipe!.results[0].title,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              recipe.filterRecipe!.results[0].title,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                          Html(
+                            data: recipe.filterRecipe!.results[0].summary,
+                            style: {
+                              '#': Style(
+                                textAlign: TextAlign.center,
+                                fontSize: const FontSize(16),
+                                maxLines: 6,
+                                textOverflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                            Html(
-                              data: recipe.filterRecipe!.results[0].summary,
-                              style: {
-                                '#': Style(
-                                  textAlign: TextAlign.center,
-                                  fontSize: const FontSize(16),
-                                  maxLines: 6,
-                                  textOverflow: TextOverflow.ellipsis,
+                            },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 0.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.access_time_rounded,
+                                      color: secondaryColor.withOpacity(0.4),
+                                    ),
+                                    Text(
+                                      '${recipe.filterRecipe!.results[0].readyInMinutes} min',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              },
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.people,
+                                      color: secondaryColor.withOpacity(0.4),
+                                    ),
+                                    Text(
+                                      '${recipe.filterRecipe!.results[0].servings} servings',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 0.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Icon(
-                                        Icons.access_time_rounded,
-                                        color: secondaryColor.withOpacity(0.4),
-                                      ),
-                                      Text(
-                                        '${recipe.filterRecipe!.results[0].readyInMinutes} min',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Icon(
-                                        Icons.people,
-                                        color: secondaryColor.withOpacity(0.4),
-                                      ),
-                                      Text(
-                                        '${recipe.filterRecipe!.results[0].servings} servings',
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -228,7 +224,6 @@ class _ScrambleViewState extends State<ScrambleView> {
                 recipe.fetchRecipe();
               });
             },
-            // make the next recipe button stay at the bottom of the screen even when the page changes size (e.g. when the keyboard is shown) by wrapping it in a LayoutBuilder and using the maxHeight property  of the BoxConstraints object  to set the height of the button
             child: Container(
               width: 300,
               height: 50,
