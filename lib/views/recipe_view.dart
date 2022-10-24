@@ -270,7 +270,6 @@ class _RecipeViewState extends State<RecipeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
                     //toggleExpanded
                     onExpansionChanged: (value) {
                       setState(() {
@@ -343,7 +342,6 @@ class _RecipeViewState extends State<RecipeView> {
                   padding: const EdgeInsets.only(right: 3, left: 3),
                   child: ExpansionTile(
                     textColor: Colors.black,
-
                     title: const Text(
                       'Instructions',
                       style: TextStyle(
@@ -351,8 +349,6 @@ class _RecipeViewState extends State<RecipeView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-
-                    //toggleExpanded
                     onExpansionChanged: (value) {
                       setState(
                         () {
