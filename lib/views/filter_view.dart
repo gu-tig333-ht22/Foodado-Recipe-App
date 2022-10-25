@@ -20,6 +20,8 @@ class _FilterViewState extends State<FilterView> {
   double minCalories = 0;
   double maxCalories = 800;
   bool isLoading = false;
+  String SelectedDiet = "";
+  String SelectedType = "";
 
   @override
   void initState() {
@@ -36,9 +38,23 @@ class _FilterViewState extends State<FilterView> {
 
   void _saveSettings() {
     final newSettings = FilterSettings(
-        maxCal: maxCalories, minCal: minCalories, maxReadyTime: maxReadyTime);
+        maxCal: maxCalories,
+        minCal: minCalories,
+        maxReadyTime: maxReadyTime,
+        selectedDiet: SelectedDiet,
+        selectedType: SelectedType);
 
     _preferencesService.saveSettings(newSettings);
+  }
+
+  void clearSettings() {
+    setState(() {
+      maxCalories = 800;
+      minCalories = 0;
+      maxReadyTime = 15;
+      SelectedDiet = "";
+      SelectedType = "";
+    });
   }
 
   void _populateFilter() async {
@@ -47,6 +63,8 @@ class _FilterViewState extends State<FilterView> {
       maxCalories = filterSettings.maxCal;
       minCalories = filterSettings.minCal;
       maxReadyTime = filterSettings.maxReadyTime;
+      SelectedDiet = filterSettings.selectedDiet;
+      SelectedType = filterSettings.selectedType;
     });
   }
 
@@ -73,8 +91,7 @@ class _FilterViewState extends State<FilterView> {
               color: Colors.black,
             ),
             onPressed: () {
-              Provider.of<RecipeProvider>(context, listen: false)
-                  .clearFilters();
+              clearSettings();
             },
           ),
         ],
@@ -132,14 +149,15 @@ class _FilterViewState extends State<FilterView> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      recipe.setRecipeType(recipeType[index]);
+                      SelectedType = recipeType[index];
+                      recipe.setRecipeType(SelectedType);
                     },
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.transparent,
-                      foregroundColor: recipe.type == recipeType[index]
+                      foregroundColor: SelectedType == recipeType[index]
                           ? Colors.white
                           : Colors.black,
-                      backgroundColor: recipe.type == recipeType[index]
+                      backgroundColor: SelectedType == recipeType[index]
                           ? secondaryColor
                           : Colors.white,
                       shape: RoundedRectangleBorder(
@@ -201,14 +219,16 @@ class _FilterViewState extends State<FilterView> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          recipe.setDiet(diet[i]);
+                          SelectedDiet = diet[i];
+                          recipe.setDiet(SelectedDiet);
+                          print(SelectedDiet);
                         },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.transparent,
-                          foregroundColor: recipe.diet == diet[i]
+                          foregroundColor: SelectedDiet == diet[i]
                               ? Colors.white
                               : Colors.black,
-                          backgroundColor: recipe.diet == diet[i]
+                          backgroundColor: SelectedDiet == diet[i]
                               ? secondaryColor
                               : Colors.grey[200],
                           shape: RoundedRectangleBorder(
@@ -381,7 +401,7 @@ class _FilterViewState extends State<FilterView> {
               recipe.maxCalories = maxCalories.round().toString();
               recipe.maxReadyTime = maxReadyTime.round().toString();
               recipe.setRecipeQuery(_controller.text);
-              recipe.setDiet(recipe.diet);
+              recipe.setDiet(recipe.SelectedDiet);
               recipe.fetchRecipe();
               Navigator.of(context).pushNamed(scrambleViewRoute);
               _saveSettings();

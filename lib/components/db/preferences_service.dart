@@ -7,6 +7,8 @@ class PreferencesService {
     await preferences.setDouble('maxCal', settings.maxCal);
     await preferences.setDouble('minCal', settings.minCal);
     await preferences.setDouble("maxReadyTime", settings.maxReadyTime);
+    await preferences.setString("selectedDiet", settings.selectedDiet);
+    await preferences.setString("selectedType", settings.selectedType);
   }
 
   Future<FilterSettings> getSettings() async {
@@ -14,11 +16,15 @@ class PreferencesService {
     final maxCal = preferences.getDouble('maxCal');
     final minCal = preferences.getDouble('minCal');
     final maxReadyTime = preferences.getDouble('maxReadyTime');
+    final selectedDiet = preferences.getString('selectedDiet');
+    final selectedType = preferences.getString('selectedType');
 
     return FilterSettings(
       maxCal: maxCal ?? 0,
       minCal: minCal ?? 0,
       maxReadyTime: maxReadyTime ?? 15,
+      selectedDiet: selectedDiet ?? '',
+      selectedType: selectedType ?? '',
     );
   }
 }
