@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:grupp_5/constants/constants.dart';
 import 'package:grupp_5/constants/routes.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -45,11 +46,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -63,12 +64,13 @@ class _IntroViewState extends State<IntroView> {
           children: const [
             Text(
               "Click on the ",
-              style: TextStyle(fontSize: 19.0),
+              style: TextStyle(fontSize: 19.0, color: secondaryColor),
+              selectionColor: secondaryColor,
             ),
             Icon(Icons.arrow_forward),
             Text(
               " button to get started!",
-              style: TextStyle(fontSize: 19.0),
+              style: TextStyle(fontSize: 19.0, color: secondaryColor),
             ),
           ],
         ),
@@ -80,11 +82,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -101,13 +103,25 @@ class _IntroViewState extends State<IntroView> {
         Navigator.of(context).pushNamed(scrambleViewRoute);
       },
       showSkipButton: true,
-      skip: const Text('Skip'),
-      next: const Icon(Icons.arrow_forward),
-      done: const Icon(Icons.arrow_forward),
+      skip: const Text(
+        'Skip',
+        style: TextStyle(
+          color: secondaryColor,
+        ),
+      ),
+      next: const Icon(
+        Icons.arrow_forward,
+        color: secondaryColor,
+      ),
+      done: const Icon(
+        Icons.arrow_forward,
+        color: secondaryColor,
+      ),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
-        color: Color(0xFFBDBDBD),
+        color: secondaryColor,
         activeSize: Size(22.0, 10.0),
+        activeColor: secondaryColor,
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
