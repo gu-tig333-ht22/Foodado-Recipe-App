@@ -76,8 +76,6 @@ class _SaveViewState extends State<SaveView> {
                     ),
                   ],
                 );
-                await RecipeDatabase.instance.deleteAll();
-                refreshRecipes();
               },
             ),
           ],
