@@ -68,8 +68,8 @@ class _SaveViewState extends State<SaveView> {
                     ),
                     TextButton(
                       child: const Text("Delete"),
-                      onPressed: () async {
-                        await RecipeDatabase.instance.deleteAll();
+                      onPressed: () {
+                        RecipeDatabase.instance.deleteAll();
                         refreshRecipes();
                         Navigator.pop(context);
                       },
