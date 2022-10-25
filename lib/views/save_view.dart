@@ -56,8 +56,26 @@ class _SaveViewState extends State<SaveView> {
                 color: Colors.grey,
               ),
               onPressed: () async {
-                await RecipeDatabase.instance.deleteAll();
-                refreshRecipes();
+                AlertDialog(
+                  title: const Text("Delete all recipes?"),
+                  content: const Text("This action cannot be undone."),
+                  actions: [
+                    TextButton(
+                      child: const Text("Cancel"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    TextButton(
+                      child: const Text("Delete"),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await RecipeDatabase.instance.deleteAll();
+                        refreshRecipes();
+                      },
+                    ),
+                  ],
+                );
               },
             ),
           ],
