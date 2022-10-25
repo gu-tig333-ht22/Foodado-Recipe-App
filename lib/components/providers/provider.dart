@@ -24,12 +24,15 @@ class RecipeProvider extends ChangeNotifier {
   // RecipeProvider() {
   //   fetchRecipe();
   // }
+  //$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
-      _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
+      _filterRecipe = FilterRecipe.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
+
       notifyListeners();
     } else if (response.statusCode == 404) {
       throw Exception('Recipe not found');
@@ -78,6 +81,11 @@ class RecipeProvider extends ChangeNotifier {
     maxCalories = '800';
     maxReadyTime = '160';
     diet = '';
+    notifyListeners();
+  }
+
+  nextRecipe() {
+    filterRecipe!.results.removeAt(0);
     notifyListeners();
   }
 }

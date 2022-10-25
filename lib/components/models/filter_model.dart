@@ -9,8 +9,8 @@ class FilterRecipe {
 
   factory FilterRecipe.fromJson(Map<String, dynamic> json) {
     return FilterRecipe(
-      results:
-          List<Recipe>.from(json['results'].map((x) => Recipe.fromJson(x))),
+      results: List<Recipe>.from(
+          json['results'].map((x) => Recipe.fromJson(x)).toList()),
     );
   }
 }
