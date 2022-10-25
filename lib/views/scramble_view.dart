@@ -208,18 +208,19 @@ class _ScrambleViewState extends State<ScrambleView> {
             recipe.filterRecipe!.results.isEmpty) {
           return noRecipesFound();
         } else {
-          return GestureDetector(
-            onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: AppinioSwiper(
-                key: UniqueKey(),
-                cards: [
-                  for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
-                    bodyContainer(),
-                ],
-              ),
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: AppinioSwiper(
+              key: UniqueKey(),
+              cards: [
+                for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
+                  GestureDetector(
+                      onTap: () => Navigator.of(context).pushNamed(
+                            recipeViewRoute,
+                          ),
+                      child: bodyContainer()),
+              ],
             ),
           );
         }
@@ -239,8 +240,7 @@ class _ScrambleViewState extends State<ScrambleView> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                recipe.filterRecipe!.results[0 + 1];
-                recipe.fetchRecipe();
+                recipe.nextRecipe();
               });
             },
             child: Container(

@@ -83,4 +83,9 @@ class RecipeProvider extends ChangeNotifier {
     diet = '';
     notifyListeners();
   }
+
+  nextRecipe() {
+    filterRecipe!.results.removeAt(0);
+    notifyListeners();
+  }
 }
