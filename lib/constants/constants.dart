@@ -14,3 +14,16 @@ BoxShadow shadow = BoxShadow(
 );
 
 LottieBuilder loadingAnimation = Lottie.asset('assets/loading.json');
+
+void customSnackbar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(text),
+      backgroundColor: Colors.grey,
+      padding: const EdgeInsets.all(10),
+      behavior: SnackBarBehavior.floating,
+      margin: const EdgeInsets.all(30),
+      duration: const Duration(seconds: 3),
+    ),
+  );
+}
