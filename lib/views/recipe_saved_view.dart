@@ -187,7 +187,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
               ],
             );
           } else {
-            return Center(child: loadingAnimation);
+            return Container();
           }
         },
       ),

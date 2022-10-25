@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../constants/constants.dart';
 import '/constants/routes.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:appinio_swiper/appinio_swiper.dart';
 
 class ScrambleView extends StatefulWidget {
   const ScrambleView({Key? key}) : super(key: key);
@@ -209,14 +210,16 @@ class _ScrambleViewState extends State<ScrambleView> {
         } else {
           return GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(recipeViewRoute),
-            child: Draggable(
-              feedback: bodyContainer(),
-              child: bodyContainer(),
-              onDragEnd: (x) {
-                if (x.offset != Offset(0, 0)) {
-                  recipe.fetchRecipe();
-                }
-              },
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: AppinioSwiper(
+                key: UniqueKey(),
+                cards: [
+                  for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
+                    bodyContainer(),
+                ],
+              ),
             ),
           );
         }
