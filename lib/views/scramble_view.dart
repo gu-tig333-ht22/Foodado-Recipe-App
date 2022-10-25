@@ -239,6 +239,7 @@ class _ScrambleViewState extends State<ScrambleView> {
           return GestureDetector(
             onTap: () {
               setState(() {
+                recipe.filterRecipe!.results[0 + 1];
                 recipe.fetchRecipe();
               });
             },
