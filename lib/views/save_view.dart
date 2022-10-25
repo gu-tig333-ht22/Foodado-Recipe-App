@@ -56,26 +56,32 @@ class _SaveViewState extends State<SaveView> {
                 color: Colors.grey,
               ),
               onPressed: () async {
-                AlertDialog(
-                  title: const Text("Delete all recipes?"),
-                  content: const Text("This action cannot be undone."),
-                  actions: [
-                    TextButton(
-                      child: const Text("Cancel"),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    TextButton(
-                      child: const Text("Delete"),
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        await RecipeDatabase.instance.deleteAll();
-                        refreshRecipes();
-                      },
-                    ),
-                  ],
+                AlertDialog;
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Delete all recipes?'),
+                    content: const Text('This action cannot be undone.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Cancel',
+                            style: TextStyle(color: secondaryColor)),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await RecipeDatabase.instance.deleteAll();
+                          Navigator.of(context).pop();
+                          refreshRecipes();
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
                 );
+                await RecipeDatabase.instance.deleteAll();
+                refreshRecipes();
+                customSnackbar(context, 'All recipes deleted');
               },
             ),
           ],
