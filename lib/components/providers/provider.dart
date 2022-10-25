@@ -16,8 +16,8 @@ class RecipeProvider extends ChangeNotifier {
   Recipe? get savedRecipe => _savedRecipe;
   String recipeId = '';
   String query = '';
-  String SelectedType = '';
-  String SelectedDiet = '';
+  String type = '';
+  String diet = '';
   String minCalories = '50';
   String maxCalories = '800';
   String maxReadyTime = '160';
@@ -28,7 +28,7 @@ class RecipeProvider extends ChangeNotifier {
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$SelectedType&diet=$SelectedDiet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=1&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(jsonDecode(response.body));
       notifyListeners();
@@ -53,7 +53,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void setRecipeType(String type) {
-    this.SelectedType = type;
+    this.type = type;
 
     notifyListeners();
   }
@@ -64,7 +64,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void setDiet(String diet) {
-    this.SelectedDiet = diet;
+    this.diet = diet;
 
     notifyListeners();
   }
@@ -76,11 +76,11 @@ class RecipeProvider extends ChangeNotifier {
 
   void clearFilters() {
     query = '';
-    SelectedType = '';
+    type = '';
     minCalories = '50';
     maxCalories = '800';
     maxReadyTime = '160';
-    SelectedDiet = '';
+    diet = '';
 
     notifyListeners();
   }

@@ -45,19 +45,19 @@ class _InfoViewState extends State<InfoView> {
                     ),
                     TextButton(
                       onPressed: () {
-                        recipe.SelectedType = 'appetizer';
+                        recipe.type = 'appetizer';
                       },
                       child: const Text('Appetizer'),
                     ),
                     TextButton(
                       onPressed: () {
-                        recipe.SelectedType = 'main course';
+                        recipe.type = 'main course';
                       },
                       child: const Text('Main course'),
                     ),
                     TextButton(
                       onPressed: () {
-                        recipe.SelectedType = 'dessert';
+                        recipe.type = 'dessert';
                       },
                       child: const Text('Dessert'),
                     ),
