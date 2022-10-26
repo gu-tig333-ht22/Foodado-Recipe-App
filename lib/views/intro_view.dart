@@ -26,7 +26,9 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.black,
+
+            color: fourthColor,
+
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
@@ -46,7 +48,7 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: Colors.black,
+            color: fourthColor,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
@@ -64,13 +66,12 @@ class _IntroViewState extends State<IntroView> {
           children: const [
             Text(
               "Click on the ",
-              style: TextStyle(fontSize: 19.0, color: Colors.black),
-              selectionColor: Colors.black,
+              style: TextStyle(fontSize: 19.0, color: fourthColor),
             ),
             Icon(Icons.arrow_forward),
             Text(
               " button to get started!",
-              style: TextStyle(fontSize: 19.0, color: Colors.black),
+              style: TextStyle(fontSize: 19.0, color: fourthColor),
             ),
           ],
         ),
@@ -106,20 +107,20 @@ class _IntroViewState extends State<IntroView> {
       skip: const Text(
         'Skip',
         style: TextStyle(
-          color: Colors.black,
+          color: fourthColor,
         ),
       ),
       next: const Icon(
         Icons.arrow_forward,
-        color: Colors.black,
+        color: fourthColor,
       ),
       done: const Icon(
         Icons.arrow_forward,
-        color: secondaryColor,
+        color: fourthColor,
       ),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
-        color: Colors.grey,
+        color: fifthColor,
         activeSize: Size(22.0, 10.0),
         activeColor: secondaryColor,
         activeShape: RoundedRectangleBorder(
