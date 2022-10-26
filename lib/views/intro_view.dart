@@ -26,11 +26,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -46,11 +46,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -64,13 +64,13 @@ class _IntroViewState extends State<IntroView> {
           children: const [
             Text(
               "Click on the ",
-              style: TextStyle(fontSize: 19.0, color: secondaryColor),
-              selectionColor: secondaryColor,
+              style: TextStyle(fontSize: 19.0, color: Colors.black),
+              selectionColor: Colors.black,
             ),
             Icon(Icons.arrow_forward),
             Text(
               " button to get started!",
-              style: TextStyle(fontSize: 19.0, color: secondaryColor),
+              style: TextStyle(fontSize: 19.0, color: Colors.black),
             ),
           ],
         ),
@@ -82,11 +82,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: secondaryColor,
+            color: Colors.black,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -106,12 +106,12 @@ class _IntroViewState extends State<IntroView> {
       skip: const Text(
         'Skip',
         style: TextStyle(
-          color: secondaryColor,
+          color: Colors.black,
         ),
       ),
       next: const Icon(
         Icons.arrow_forward,
-        color: secondaryColor,
+        color: Colors.black,
       ),
       done: const Icon(
         Icons.arrow_forward,
@@ -119,7 +119,7 @@ class _IntroViewState extends State<IntroView> {
       ),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
-        color: secondaryColor,
+        color: Colors.grey,
         activeSize: Size(22.0, 10.0),
         activeColor: secondaryColor,
         activeShape: RoundedRectangleBorder(
