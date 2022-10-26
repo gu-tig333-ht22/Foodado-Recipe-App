@@ -20,15 +20,17 @@ class RecipeProvider extends ChangeNotifier {
   String minCalories = '50';
   String maxCalories = '800';
   String maxReadyTime = '160';
-
-  // RecipeProvider() {
-  //   fetchRecipe();
-  // }
-  //$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}
+  int index = 0;
+  List<Recipe> get recipes {
+    if (_filterRecipe == null) {
+      return [];
+    }
+    return _filterRecipe!.results;
+  }
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=15&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(300)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
@@ -85,7 +87,14 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   nextRecipe() {
-    filterRecipe!.results.removeAt(0);
+    //recipe
+    if (index < recipes.length - 1) {
+      recipes.removeAt(0);
+    } else {
+      fetchRecipe();
+      print('fetching new recipes');
+    }
+
     notifyListeners();
   }
 }

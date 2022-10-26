@@ -25,10 +25,18 @@ class _ScrambleViewState extends State<ScrambleView> {
 
   //future for loading
   Future delay() async {
-    setState(() => isLoading = true);
-    //await Future.delayed(const Duration(seconds: 1));
-    await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
-    setState(() => isLoading = false);
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -218,7 +226,7 @@ class _ScrambleViewState extends State<ScrambleView> {
               onSwipe: (int index, AppinioSwiperDirection direction) =>
                   recipe.nextRecipe(),
               cards: [
-                for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
+                for (var i = 0; i < recipe.recipes.length; i++)
                   GestureDetector(
                       onTap: () => Navigator.of(context).pushNamed(
                             recipeViewRoute,
