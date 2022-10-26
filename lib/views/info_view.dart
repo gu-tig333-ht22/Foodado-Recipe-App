@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
+import 'package:appinio_swiper/appinio_swiper.dart';
 
 class InfoView extends StatefulWidget {
   const InfoView({Key? key}) : super(key: key);
@@ -12,7 +13,14 @@ class InfoView extends StatefulWidget {
 class _InfoViewState extends State<InfoView> {
   final TextEditingController _controller = TextEditingController();
 
-  @override
+//appinio_swiper
+  List<String> cards = [
+    'https://images.unsplash.com/photo-1616161611111-1b1b1b1b1b1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    'https://images.unsplash.com/photo-1616161611111-1b1b1b1b1b1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    'https://images.unsplash.com/photo-1616161611111-1b1b1b1b1b1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+    'https://images.unsplash.com/photo-1616161611111-1b1b1b1b1b1b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,60 +30,7 @@ class _InfoViewState extends State<InfoView> {
           'Info View',
         ),
       ),
-      body: Center(
-        child: Consumer<RecipeProvider>(
-          builder: (context, recipe, child) {
-            return ListView.builder(
-              //image and id
-              itemCount: recipe.filterRecipe!.results.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Image.network(
-                      recipe.filterRecipe!.results[index].image,
-                    ),
-                    Text(
-                      recipe.filterRecipe!.results[index].id.toString(),
-                    ),
-                    TextField(
-                      controller: _controller,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter a search term',
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        recipe.type = 'appetizer';
-                      },
-                      child: const Text('Appetizer'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        recipe.type = 'main course';
-                      },
-                      child: const Text('Main course'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        recipe.type = 'dessert';
-                      },
-                      child: const Text('Dessert'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          recipe.query = _controller.text;
-                        });
-                      },
-                      child: const Text('Execute'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      ),
+      body: Container(),
     );
   }
 }
