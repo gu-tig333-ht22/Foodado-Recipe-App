@@ -15,6 +15,7 @@ class ScrambleView extends StatefulWidget {
 
 class _ScrambleViewState extends State<ScrambleView> {
   bool isLoading = false;
+  AppinioSwiperController swiperController = AppinioSwiperController();
 
   @override
   void initState() {
@@ -201,6 +202,10 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
+  void printa() {
+    print('printa');
+  }
+
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
@@ -209,10 +214,13 @@ class _ScrambleViewState extends State<ScrambleView> {
           return noRecipesFound();
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.6,
+            height: MediaQuery.of(context).size.height * 0.60,
             width: MediaQuery.of(context).size.width * 0.9,
             child: AppinioSwiper(
+              controller: swiperController,
               key: UniqueKey(),
+              onSwipe: (int index, AppinioSwiperDirection direction) =>
+                  recipe.nextRecipe(),
               cards: [
                 for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
                   GestureDetector(
