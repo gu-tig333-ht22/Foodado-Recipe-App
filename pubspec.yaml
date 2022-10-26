@@ -40,6 +40,7 @@ dependencies:
   lottie: ^1.4.3
   animated_text_kit: 
   shared_preferences: ^2.0.15
+  appinio_swiper:
 
 
 
