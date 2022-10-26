@@ -20,6 +20,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   @override
   void initState() {
     super.initState();
+
     delay();
   }
 
@@ -89,7 +90,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             padding: const EdgeInsets.all(25.0),
             child: Padding(
               padding: const EdgeInsets.only(top: 30.0),
-              child: nextRecipeButton(),
+              child: buttons(),
             ),
           ),
         ],
@@ -97,7 +98,49 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-// write code that places the widget recipecard and the nextrecipe button on fixed positions on the screen
+  Widget buttons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        GestureDetector(
+          onTap: () {
+            customSnackbar(context, 'Undo swipe');
+          },
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [shadow],
+            ),
+            child: const Icon(
+              Icons.replay,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            customSnackbar(context, 'Recipe saved');
+          },
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: secondaryColor,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [shadow],
+            ),
+            child: const Icon(
+              Icons.favorite_border_outlined,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget cardContainer() {
     return Consumer<RecipeProvider>(
@@ -117,7 +160,8 @@ class _ScrambleViewState extends State<ScrambleView> {
                 height: 230,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: NetworkImage(recipe.filterRecipe?.results[0].image ??
+                    image: NetworkImage(recipe
+                            .filterRecipe?.results[recipe.index].image ??
                         'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
                     fit: BoxFit.cover,
                   ),
@@ -143,7 +187,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        recipe.filterRecipe!.results[0].title,
+                        recipe.filterRecipe!.results[recipe.index].title,
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -153,7 +197,8 @@ class _ScrambleViewState extends State<ScrambleView> {
                         ),
                       ),
                       Html(
-                        data: recipe.filterRecipe!.results[0].summary,
+                        data:
+                            recipe.filterRecipe!.results[recipe.index].summary,
                         style: {
                           '#': Style(
                             textAlign: TextAlign.center,
@@ -175,7 +220,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                   color: secondaryColor.withOpacity(0.4),
                                 ),
                                 Text(
-                                  '${recipe.filterRecipe!.results[0].readyInMinutes} min',
+                                  '${recipe.filterRecipe!.results[recipe.index].readyInMinutes} min',
                                   style: const TextStyle(
                                     fontSize: 14,
                                   ),
@@ -189,7 +234,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                                   color: secondaryColor.withOpacity(0.4),
                                 ),
                                 Text(
-                                  '${recipe.filterRecipe!.results[0].servings} servings',
+                                  '${recipe.filterRecipe!.results[recipe.index].servings} servings',
                                   style: const TextStyle(
                                     fontSize: 14,
                                   ),
@@ -223,6 +268,13 @@ class _ScrambleViewState extends State<ScrambleView> {
             child: AppinioSwiper(
               controller: swiperController,
               key: UniqueKey(),
+              //maxAngle
+              allowUnswipe: true,
+              unswipe: (bool unswipe) {
+                if (unswipe) {
+                  swiperController.unswipe();
+                }
+              },
               onSwipe: (int index, AppinioSwiperDirection direction) =>
                   recipe.nextRecipe(),
               cards: [

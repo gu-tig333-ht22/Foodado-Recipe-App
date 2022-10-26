@@ -87,14 +87,12 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   nextRecipe() {
-    //recipe
     if (index < recipes.length - 1) {
       recipes.removeAt(0);
     } else {
       fetchRecipe();
       print('fetching new recipes');
     }
-
     notifyListeners();
   }
 }

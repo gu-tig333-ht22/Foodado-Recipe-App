@@ -60,7 +60,7 @@ class _RecipeViewState extends State<RecipeView> {
               );
             } else {
               return Text(
-                recipe.filterRecipe!.results[0].title,
+                recipe.filterRecipe!.results[recipe.index].title,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -93,18 +93,19 @@ class _RecipeViewState extends State<RecipeView> {
                           duration: Duration(seconds: 3)),
                     );
                     setState(() {
-                      recipe.filterRecipe!.results[0].isFavorite =
-                          !recipe.filterRecipe!.results[0].isFavorite;
+                      recipe.filterRecipe!.results[recipe.index].isFavorite =
+                          !recipe
+                              .filterRecipe!.results[recipe.index].isFavorite;
                       RecipeDatabase.instance.create(
                         RecipeDb(
-                          recipe.filterRecipe!.results[0].id,
-                          recipe.filterRecipe!.results[0].title,
-                          recipe.filterRecipe!.results[0].image,
+                          recipe.filterRecipe!.results[recipe.index].id,
+                          recipe.filterRecipe!.results[recipe.index].title,
+                          recipe.filterRecipe!.results[recipe.index].image,
                         ),
                       );
                     });
                   },
-                  icon: recipe.filterRecipe!.results[0].isFavorite
+                  icon: recipe.filterRecipe!.results[recipe.index].isFavorite
                       ? const Icon(
                           Icons.favorite,
                           color: secondaryColor,
@@ -159,7 +160,8 @@ class _RecipeViewState extends State<RecipeView> {
             height: 220,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(recipe.filterRecipe!.results[0].image),
+                image: NetworkImage(
+                    recipe.filterRecipe!.results[recipe.index].image),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -188,7 +190,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.filterRecipe!.results[0].readyInMinutes} min',
+                      '${recipe.filterRecipe!.results[recipe.index].readyInMinutes} min',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -202,7 +204,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.filterRecipe!.results[0].servings} servings',
+                      '${recipe.filterRecipe!.results[recipe.index].servings} servings',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -236,7 +238,7 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
               ),
               children: [
-                Html(data: recipe.filterRecipe!.results[0].summary),
+                Html(data: recipe.filterRecipe!.results[recipe.index].summary),
               ],
             ),
           );
@@ -285,23 +287,27 @@ class _RecipeViewState extends State<RecipeView> {
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: recipe.filterRecipe!.results[0]
+                          itemCount: recipe.filterRecipe!.results[recipe.index]
                               .extendedIngredients.length,
                           itemBuilder: (context, index) {
                             return Card(
                               child: ListTile(
                                 leading: Checkbox(
-                                  value: recipe.filterRecipe!.results[0]
+                                  value: recipe
+                                      .filterRecipe!
+                                      .results[recipe.index]
                                       .ingredientDone[index],
                                   onChanged: (value) {
                                     setState(() {
-                                      recipe.filterRecipe!.results[0]
+                                      recipe.filterRecipe!.results[recipe.index]
                                           .ingredientDone[index] = value!;
                                     });
                                   },
                                 ),
                                 title: Html(
-                                  data: recipe.filterRecipe!.results[0]
+                                  data: recipe
+                                      .filterRecipe!
+                                      .results[recipe.index]
                                       .extendedIngredients[index],
                                   style: {
                                     '#': Style(
@@ -365,22 +371,22 @@ class _RecipeViewState extends State<RecipeView> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount:
-                              recipe.filterRecipe!.results[0].steps.length,
+                          itemCount: recipe
+                              .filterRecipe!.results[recipe.index].steps.length,
                           itemBuilder: (context, index) {
                             return Card(
                               child: ListTile(
                                 leading: Text(
-                                  recipe.filterRecipe!.results[0].steps[index]
-                                      .number
+                                  recipe.filterRecipe!.results[recipe.index]
+                                      .steps[index].number
                                       .toString(),
                                   style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
                                 title: Html(
-                                  data: recipe.filterRecipe!.results[0]
-                                      .steps[index].step,
+                                  data: recipe.filterRecipe!
+                                      .results[recipe.index].steps[index].step,
                                   style: {
                                     '#': Style(
                                       fontSize: const FontSize(14),
