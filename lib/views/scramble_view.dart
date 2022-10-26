@@ -247,9 +247,7 @@ class _ScrambleViewState extends State<ScrambleView> {
         } else {
           return GestureDetector(
             onTap: () {
-              setState(() {
-                recipe.nextRecipe();
-              });
+              swiperController.swipeLeft();
             },
             child: Container(
               width: 300,
