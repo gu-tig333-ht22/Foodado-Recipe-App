@@ -26,13 +26,11 @@ class _IntroViewState extends State<IntroView> {
         decoration: const PageDecoration(
           pageColor: Colors.white,
           bodyTextStyle: TextStyle(
-
             color: fourthColor,
-
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -52,7 +50,7 @@ class _IntroViewState extends State<IntroView> {
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
@@ -87,7 +85,7 @@ class _IntroViewState extends State<IntroView> {
             fontSize: 19.0,
           ),
           titleTextStyle: TextStyle(
-            color: Colors.black,
+            color: secondaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.w800,
           ),
