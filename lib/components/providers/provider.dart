@@ -28,7 +28,7 @@ class RecipeProvider extends ChangeNotifier {
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(20)}'));
     if (response.statusCode == 200) {
       _filterRecipe = FilterRecipe.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
