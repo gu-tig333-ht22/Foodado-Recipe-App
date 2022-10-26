@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
-import '../constants/constants.dart';
+import '../../constants/constants.dart';
 import '/constants/routes.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
@@ -91,7 +91,7 @@ class _ScrambleViewState extends State<ScrambleView> {
 
 // write code that places the widget recipecard and the nextrecipe button on fixed positions on the screen
 
-  Widget bodyContainer() {
+  Widget cardContainer() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         return Container(
@@ -202,10 +202,6 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-  void printa() {
-    print('printa');
-  }
-
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
@@ -227,7 +223,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                       onTap: () => Navigator.of(context).pushNamed(
                             recipeViewRoute,
                           ),
-                      child: bodyContainer()),
+                      child: cardContainer()),
               ],
             ),
           );
