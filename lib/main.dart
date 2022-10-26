@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/providers/provider.dart';
-import 'package:grupp_5/views/dev_view.dart';
-import 'package:grupp_5/views/intro_view.dart';
-import 'package:grupp_5/views/recipe_saved_view.dart';
-import 'package:grupp_5/views/save_view.dart';
+import 'package:grupp_5/views/intro_view/intro_view.dart';
+import 'package:grupp_5/views/recipe_view/recipe_saved_view.dart';
+import 'package:grupp_5/views/save_view/save_view.dart';
 import 'package:provider/provider.dart';
 import '/constants/routes.dart';
-import 'views/filter_view.dart';
-import 'views/recipe_view.dart';
-import 'views/scramble_view.dart';
-import 'views/info_view.dart';
+import 'views/filter_view/filter_view.dart';
+import 'views/recipe_view/recipe_view.dart';
+import 'views/scramble_view/scramble_view.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
@@ -29,8 +28,6 @@ void main() async {
         debugShowCheckedModeBanner: false,
         home: const IntroView(),
         routes: {
-          devViewRoute: (context) => const DevView(),
-          infoViewRoute: (context) => const InfoView(),
           scrambleViewRoute: (context) => const ScrambleView(),
           filterViewRoute: (context) => const FilterView(),
           recipeViewRoute: (context) => const RecipeView(),

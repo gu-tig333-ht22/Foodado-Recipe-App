@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
-import '../components/providers/provider.dart';
+import '../../components/providers/provider.dart';
 import '/constants/routes.dart';
 import 'package:grupp_5/components/db/preferences_service.dart';
 
