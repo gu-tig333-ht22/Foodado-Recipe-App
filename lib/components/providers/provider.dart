@@ -20,18 +20,27 @@ class RecipeProvider extends ChangeNotifier {
   String minCalories = '50';
   String maxCalories = '800';
   String maxReadyTime = '160';
-
-  // RecipeProvider() {
-  //   fetchRecipe();
-  // }
-  //$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&offset=${Random().nextInt(20)}
+  int index = 0;
+  List<Recipe> get recipes {
+    if (_filterRecipe == null) {
+      return [];
+    }
+    return _filterRecipe!.results;
+  }
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=10&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=15&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(1)}'));
     if (response.statusCode == 200) {
-      _filterRecipe = FilterRecipe.fromJson(
+      print('fetchRecipe');
+
+      var results = FilterRecipe.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
+      if (_filterRecipe == null) {
+        _filterRecipe = results;
+      } else {
+        _filterRecipe!.results.addAll(results.results);
+      }
 
       notifyListeners();
     } else if (response.statusCode == 404) {
@@ -84,8 +93,28 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  clearRecipes() {
+    _filterRecipe = null;
+    notifyListeners();
+  }
+
   nextRecipe() {
-    filterRecipe!.results.removeAt(0);
+    if (recipes.length > 1) {
+      recipes.removeLast();
+      print('next');
+    } else {
+      fetchRecipe();
+      print('fetching new recipes');
+    }
+    notifyListeners();
+  }
+
+  void setIsFavorite() {
+    if (recipes.last.isFavorite == false) {
+      recipes.last.isFavorite = true;
+    } else {
+      recipes.last.isFavorite = false;
+    }
     notifyListeners();
   }
 }

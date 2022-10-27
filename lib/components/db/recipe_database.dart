@@ -100,7 +100,6 @@ class RecipeDatabase {
     );
   }
 
-  //deleteAll
   Future<int> deleteAll() async {
     final db = await instance.database;
 

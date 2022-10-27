@@ -21,11 +21,11 @@ void customSnackbar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(text),
-      backgroundColor: Colors.grey,
+      backgroundColor: secondaryColor,
       padding: const EdgeInsets.all(10),
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(30),
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     ),
   );
 }

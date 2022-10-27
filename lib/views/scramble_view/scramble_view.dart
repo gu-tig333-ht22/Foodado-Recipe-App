@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grupp_5/components/db/recipe_database.dart';
+import 'package:grupp_5/components/models/recipe_db_model.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
 import '../../constants/constants.dart';
@@ -25,10 +28,17 @@ class _ScrambleViewState extends State<ScrambleView> {
 
   //future for loading
   Future delay() async {
-    setState(() => isLoading = true);
-    //await Future.delayed(const Duration(seconds: 1));
-    await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
-    setState(() => isLoading = false);
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      await Provider.of<RecipeProvider>(context, listen: false).fetchRecipe();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -62,6 +72,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             color: Colors.black,
           ),
           onPressed: () {
+            Provider.of<RecipeProvider>(context, listen: false).clearRecipes();
             Navigator.of(context).pushNamed(filterViewRoute);
           },
         ),
@@ -81,7 +92,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             padding: const EdgeInsets.all(25.0),
             child: Padding(
               padding: const EdgeInsets.only(top: 30.0),
-              child: nextRecipeButton(),
+              child: buttons(),
             ),
           ),
         ],
@@ -89,141 +100,215 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-// write code that places the widget recipecard and the nextrecipe button on fixed positions on the screen
-
-  Widget cardContainer() {
+  Widget buttons() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        return Container(
-          width: 350,
-          height: 490,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [shadow],
-          ),
-          child: Column(
+        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
+          return noRecipesFound();
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                width: 350,
-                height: 230,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(recipe.filterRecipe?.results[0].image ??
-                        'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
-                    fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () {
+                  customSnackbar(context, 'Undo swipe');
+                  swiperController.unswipe();
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [shadow],
                   ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
+                  child: const Icon(
+                    Icons.replay,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 300,
-                  height: 230,
-                  decoration: const BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        recipe.filterRecipe!.results[0].title,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Html(
-                        data: recipe.filterRecipe!.results[0].summary,
-                        style: {
-                          '#': Style(
-                            textAlign: TextAlign.center,
-                            fontSize: const FontSize(16),
-                            maxLines: 6,
-                            textOverflow: TextOverflow.ellipsis,
+              GestureDetector(
+                onTap: () {
+                  setState(
+                    () {
+                      recipe.setIsFavorite();
+                      if (recipe.recipes.last.isFavorite == true) {
+                        RecipeDatabase.instance.create(
+                          RecipeDb(
+                            recipe.recipes.last.id,
+                            recipe.recipes.last.title,
+                            recipe.recipes.last.image,
                           ),
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.access_time_rounded,
-                                  color: secondaryColor.withOpacity(0.4),
-                                ),
-                                Text(
-                                  '${recipe.filterRecipe!.results[0].readyInMinutes} min',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.people,
-                                  color: secondaryColor.withOpacity(0.4),
-                                ),
-                                Text(
-                                  '${recipe.filterRecipe!.results[0].servings} servings',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                        );
+                      } else {
+                        RecipeDatabase.instance.delete(
+                          recipe.recipes.last.id,
+                        );
+                      }
+                    },
+                  );
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [shadow],
                   ),
+                  child: recipe.recipes.last.isFavorite
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                          color: Colors.white,
+                        ),
                 ),
               ),
             ],
-          ),
-        );
+          );
+        }
       },
+    );
+  }
+
+  Widget cardContainer(Recipe recipe) {
+    return Container(
+      width: 350,
+      height: 490,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [shadow],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 350,
+            height: 230,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(recipe.image),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 300,
+              height: 230,
+              decoration: const BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    recipe.title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Html(
+                    data: recipe.summary,
+                    style: {
+                      '#': Style(
+                        textAlign: TextAlign.center,
+                        fontSize: const FontSize(16),
+                        maxLines: 6,
+                        textOverflow: TextOverflow.ellipsis,
+                      ),
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            Icon(
+                              Icons.access_time_rounded,
+                              color: secondaryColor.withOpacity(0.4),
+                            ),
+                            Text(
+                              '${recipe.readyInMinutes} min',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Icon(
+                              Icons.people,
+                              color: secondaryColor.withOpacity(0.4),
+                            ),
+                            Text(
+                              '${recipe.servings} servings',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe == null ||
-            recipe.filterRecipe!.results.isEmpty) {
+        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
           return noRecipesFound();
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.60,
+            height: MediaQuery.of(context).size.height * 0.65,
             width: MediaQuery.of(context).size.width * 0.9,
             child: AppinioSwiper(
               controller: swiperController,
               key: UniqueKey(),
+              allowUnswipe: true,
+              unswipe: (bool unswipe) {
+                if (unswipe) {
+                  swiperController.unswipe();
+                }
+              },
               onSwipe: (int index, AppinioSwiperDirection direction) =>
                   recipe.nextRecipe(),
               cards: [
-                for (var i = 0; i < recipe.filterRecipe!.results.length; i++)
+                for (var i = 0; i < recipe.recipes.length; i++)
                   GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed(
-                            recipeViewRoute,
-                          ),
-                      child: cardContainer()),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      recipeViewRoute,
+                    ),
+                    child: cardContainer(recipe.recipes[i]),
+                  ),
               ],
             ),
           );
@@ -237,8 +322,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget nextRecipeButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe == null ||
-            recipe.filterRecipe!.results.isEmpty) {
+        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
           return Container();
         } else {
           return GestureDetector(
@@ -302,11 +386,11 @@ class _ScrambleViewState extends State<ScrambleView> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0, bottom: 30.0),
-          child: const Text(
+        const Padding(
+          padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+          child: Text(
             //text center
-            'No recipes found!' + '\n' + 'Please try again.',
+            'No recipes found!\nPlease try again.',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -315,7 +399,6 @@ class _ScrambleViewState extends State<ScrambleView> {
         ),
         GestureDetector(
           onTap: () {
-            //navigate to filter
             Navigator.of(context).pushNamed(filterViewRoute);
           },
           child: Container(
