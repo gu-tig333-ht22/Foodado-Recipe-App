@@ -31,7 +31,6 @@ class _RecipeViewState extends State<RecipeView> {
 
   @override
   void dispose() {
-    // RecipeDatabase.instance.close();
     super.dispose();
   }
 
@@ -60,7 +59,7 @@ class _RecipeViewState extends State<RecipeView> {
               );
             } else {
               return Text(
-                recipe.filterRecipe!.results[recipe.index].title,
+                recipe.recipes.last.title,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -79,24 +78,22 @@ class _RecipeViewState extends State<RecipeView> {
                   onPressed: () {
                     setState(() {
                       recipe.setIsFavorite();
-                      if (recipe
-                              .filterRecipe!.results[recipe.index].isFavorite ==
-                          true) {
+                      if (recipe.recipes.last.isFavorite == true) {
                         RecipeDatabase.instance.create(
                           RecipeDb(
-                            recipe.filterRecipe!.results[recipe.index].id,
-                            recipe.filterRecipe!.results[recipe.index].title,
-                            recipe.filterRecipe!.results[recipe.index].image,
+                            recipe.recipes.last.id,
+                            recipe.recipes.last.title,
+                            recipe.recipes.last.image,
                           ),
                         );
                       } else {
                         RecipeDatabase.instance.delete(
-                          recipe.filterRecipe!.results[recipe.index].id,
+                          recipe.recipes.last.id,
                         );
                       }
                     });
                   },
-                  icon: recipe.filterRecipe!.results[recipe.index].isFavorite
+                  icon: recipe.recipes.last.isFavorite
                       ? const Icon(
                           Icons.favorite,
                           color: secondaryColor,
@@ -153,8 +150,7 @@ class _RecipeViewState extends State<RecipeView> {
             height: 220,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    recipe.filterRecipe!.results[recipe.index].image),
+                image: NetworkImage(recipe.recipes.last.image),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -183,7 +179,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.filterRecipe!.results[recipe.index].readyInMinutes} min',
+                      '${recipe.recipes.last.readyInMinutes} min',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -197,7 +193,7 @@ class _RecipeViewState extends State<RecipeView> {
                       color: secondaryColor.withOpacity(0.4),
                     ),
                     Text(
-                      '${recipe.filterRecipe!.results[recipe.index].servings} servings',
+                      '${recipe.recipes.last.servings} servings',
                       style: const TextStyle(
                         fontSize: 14,
                       ),
@@ -231,7 +227,7 @@ class _RecipeViewState extends State<RecipeView> {
                 ),
               ),
               children: [
-                Html(data: recipe.filterRecipe!.results[recipe.index].summary),
+                Html(data: recipe.recipes.last.summary),
               ],
             ),
           );
@@ -280,28 +276,24 @@ class _RecipeViewState extends State<RecipeView> {
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          itemCount: recipe.filterRecipe!.results[recipe.index]
-                              .extendedIngredients.length,
+                          itemCount:
+                              recipe.recipes.last.extendedIngredients.length,
                           itemBuilder: (context, index) {
                             return Card(
                               child: ListTile(
                                 leading: Checkbox(
-                                  value: recipe
-                                      .filterRecipe!
-                                      .results[recipe.index]
-                                      .ingredientDone[index],
+                                  value:
+                                      recipe.recipes.last.ingredientDone[index],
                                   onChanged: (value) {
                                     setState(() {
-                                      recipe.filterRecipe!.results[recipe.index]
+                                      recipe.recipes.last
                                           .ingredientDone[index] = value!;
                                     });
                                   },
                                 ),
                                 title: Html(
                                   data: recipe
-                                      .filterRecipe!
-                                      .results[recipe.index]
-                                      .extendedIngredients[index],
+                                      .recipes.last.extendedIngredients[index],
                                   style: {
                                     '#': Style(
                                       fontSize: const FontSize(14),
@@ -364,22 +356,19 @@ class _RecipeViewState extends State<RecipeView> {
                         child: ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: recipe
-                              .filterRecipe!.results[recipe.index].steps.length,
+                          itemCount: recipe.recipes.last.steps.length,
                           itemBuilder: (context, index) {
                             return Card(
                               child: ListTile(
                                 leading: Text(
-                                  recipe.filterRecipe!.results[recipe.index]
-                                      .steps[index].number
+                                  recipe.recipes.last.steps[index].number
                                       .toString(),
                                   style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                 ),
                                 title: Html(
-                                  data: recipe.filterRecipe!
-                                      .results[recipe.index].steps[index].step,
+                                  data: recipe.recipes.last.steps[index].step,
                                   style: {
                                     '#': Style(
                                       fontSize: const FontSize(14),

@@ -30,7 +30,7 @@ class RecipeProvider extends ChangeNotifier {
 
   Future fetchRecipe() async {
     final response = await http.get(Uri.parse(
-        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=15&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(20)}'));
+        '$apiUrl/recipes/complexSearch?apiKey=$apiKey&query=$query&type=$type&diet=$diet&addRecipeInformation=true&instructionsRequired=true&fillIngredients=true&number=15&minCalories=$minCalories&maxCalories=$maxCalories&maxReadyTime=$maxReadyTime&offset=${Random().nextInt(1)}'));
     if (response.statusCode == 200) {
       print('fetchRecipe');
 
@@ -105,10 +105,10 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   void setIsFavorite() {
-    if (recipes[index].isFavorite == false) {
-      recipes[index].isFavorite = true;
+    if (recipes.last.isFavorite == false) {
+      recipes.last.isFavorite = true;
     } else {
-      recipes[index].isFavorite = false;
+      recipes.last.isFavorite = false;
     }
     notifyListeners();
   }

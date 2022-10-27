@@ -127,18 +127,17 @@ class _ScrambleViewState extends State<ScrambleView> {
               onTap: () {
                 setState(() {
                   recipe.setIsFavorite();
-                  if (recipe.filterRecipe!.results[recipe.index].isFavorite ==
-                      true) {
+                  if (recipe.recipes.last.isFavorite == true) {
                     RecipeDatabase.instance.create(
                       RecipeDb(
-                        recipe.filterRecipe!.results[recipe.index].id,
-                        recipe.filterRecipe!.results[recipe.index].title,
-                        recipe.filterRecipe!.results[recipe.index].image,
+                        recipe.recipes.last.id,
+                        recipe.recipes.last.title,
+                        recipe.recipes.last.image,
                       ),
                     );
                   } else {
                     RecipeDatabase.instance.delete(
-                      recipe.filterRecipe!.results[recipe.index].id,
+                      recipe.recipes.last.id,
                     );
                   }
                 });
@@ -153,7 +152,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                   borderRadius: BorderRadius.circular(50),
                   boxShadow: [shadow],
                 ),
-                child: recipe.filterRecipe!.results[recipe.index].isFavorite
+                child: recipe.recipes.last.isFavorite
                     ? const Icon(
                         Icons.favorite,
                         color: Colors.white,
@@ -279,8 +278,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget recipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe == null ||
-            recipe.filterRecipe!.results.isEmpty) {
+        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
           return noRecipesFound();
         } else {
           return SizedBox(
@@ -318,8 +316,7 @@ class _ScrambleViewState extends State<ScrambleView> {
   Widget nextRecipeButton() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
-        if (recipe.filterRecipe == null ||
-            recipe.filterRecipe!.results.isEmpty) {
+        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
           return Container();
         } else {
           return GestureDetector(
