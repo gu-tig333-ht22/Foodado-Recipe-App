@@ -265,6 +265,7 @@ class _RecipeSavedViewState extends State<RecipeSavedView> {
                             return Card(
                               child: ListTile(
                                 leading: Checkbox(
+                                  activeColor: secondaryColor,
                                   value:
                                       recipe.savedRecipe!.ingredientDone[index],
                                   onChanged: (value) {

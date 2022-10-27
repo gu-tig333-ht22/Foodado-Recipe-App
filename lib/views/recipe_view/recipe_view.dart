@@ -19,7 +19,7 @@ class RecipeView extends StatefulWidget {
 class _RecipeViewState extends State<RecipeView> {
   late List<RecipeDb> recipeDb;
   bool isLoading = false;
-  bool summaryExpanded = true;
+  bool summaryExpanded = false;
   bool ingredientsExpanded = false;
   bool instructionsExpanded = false;
 
@@ -84,7 +84,7 @@ class _RecipeViewState extends State<RecipeView> {
                             RecipeDb(
                               recipe.recipes.last.id,
                               recipe.recipes.last.title,
-                              recipe.recipes.last.image,
+                              recipe.recipes.last.summary,
                             ),
                           );
                           customSnackbar(context, 'Recipe saved');

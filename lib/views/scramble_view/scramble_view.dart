@@ -111,8 +111,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             children: [
               GestureDetector(
                 onTap: () {
-                  customSnackbar(context, 'Undo swipe');
-                  swiperController.unswipe();
+                  swiperController.swipeLeft();
                 },
                 child: Container(
                   width: 60,
@@ -123,7 +122,7 @@ class _ScrambleViewState extends State<ScrambleView> {
                     boxShadow: [shadow],
                   ),
                   child: const Icon(
-                    Icons.replay,
+                    Icons.clear_rounded,
                     color: Colors.white,
                   ),
                 ),
