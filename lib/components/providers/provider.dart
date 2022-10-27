@@ -93,7 +93,7 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearRecipes() {
+  clearRecipes() {
     _filterRecipe = null;
     notifyListeners();
   }

@@ -75,15 +75,14 @@ class _SaveViewState extends State<SaveView> {
                           await RecipeDatabase.instance.deleteAll();
                           Navigator.of(context).pop();
                           refreshRecipes();
+                          customSnackbar(context, 'All recipes deleted');
                         },
                         child: const Text('Delete'),
                       ),
                     ],
                   ),
                 );
-                await RecipeDatabase.instance.deleteAll();
                 refreshRecipes();
-                customSnackbar(context, 'All recipes deleted');
               },
             ),
           ],

@@ -76,22 +76,26 @@ class _RecipeViewState extends State<RecipeView> {
               } else {
                 return IconButton(
                   onPressed: () {
-                    setState(() {
-                      recipe.setIsFavorite();
-                      if (recipe.recipes.last.isFavorite == true) {
-                        RecipeDatabase.instance.create(
-                          RecipeDb(
+                    setState(
+                      () {
+                        recipe.setIsFavorite();
+                        if (recipe.recipes.last.isFavorite == true) {
+                          RecipeDatabase.instance.create(
+                            RecipeDb(
+                              recipe.recipes.last.id,
+                              recipe.recipes.last.title,
+                              recipe.recipes.last.image,
+                            ),
+                          );
+                          customSnackbar(context, 'Recipe saved');
+                        } else {
+                          RecipeDatabase.instance.delete(
                             recipe.recipes.last.id,
-                            recipe.recipes.last.title,
-                            recipe.recipes.last.image,
-                          ),
-                        );
-                      } else {
-                        RecipeDatabase.instance.delete(
-                          recipe.recipes.last.id,
-                        );
-                      }
-                    });
+                          );
+                          customSnackbar(context, 'Recipe deleted');
+                        }
+                      },
+                    );
                   },
                   icon: recipe.recipes.last.isFavorite
                       ? const Icon(
@@ -120,7 +124,7 @@ class _RecipeViewState extends State<RecipeView> {
       body: isLoading
           ? loadingAnimation
           : SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -243,7 +247,7 @@ class _RecipeViewState extends State<RecipeView> {
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
           return ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minHeight: 0,
             ),
             child: Column(
@@ -282,13 +286,16 @@ class _RecipeViewState extends State<RecipeView> {
                             return Card(
                               child: ListTile(
                                 leading: Checkbox(
+                                  activeColor: secondaryColor,
                                   value:
                                       recipe.recipes.last.ingredientDone[index],
                                   onChanged: (value) {
-                                    setState(() {
-                                      recipe.recipes.last
-                                          .ingredientDone[index] = value!;
-                                    });
+                                    setState(
+                                      () {
+                                        recipe.recipes.last
+                                            .ingredientDone[index] = value!;
+                                      },
+                                    );
                                   },
                                 ),
                                 title: Html(
@@ -320,7 +327,7 @@ class _RecipeViewState extends State<RecipeView> {
       builder: (context, recipe, child) {
         if (recipe.filterRecipe != null) {
           return ConstrainedBox(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minHeight: 0,
             ),
             child: Column(
@@ -348,12 +355,12 @@ class _RecipeViewState extends State<RecipeView> {
                 instructionsExpanded
                     ? Container()
                     : ConstrainedBox(
-                        constraints: BoxConstraints(
+                        constraints: const BoxConstraints(
                           minHeight: 0,
                         ),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: recipe.recipes.last.steps.length,
                           itemBuilder: (context, index) {
                             return Card(

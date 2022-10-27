@@ -72,13 +72,7 @@ class _ScrambleViewState extends State<ScrambleView> {
             color: Colors.black,
           ),
           onPressed: () {
-            setState(() {
-              isLoading = true;
-            });
             Provider.of<RecipeProvider>(context, listen: false).clearRecipes();
-            setState(() {
-              isLoading = false;
-            });
             Navigator.of(context).pushNamed(filterViewRoute);
           },
         ),
@@ -118,6 +112,7 @@ class _ScrambleViewState extends State<ScrambleView> {
               GestureDetector(
                 onTap: () {
                   customSnackbar(context, 'Undo swipe');
+                  swiperController.unswipe();
                 },
                 child: Container(
                   width: 60,
@@ -153,8 +148,6 @@ class _ScrambleViewState extends State<ScrambleView> {
                       }
                     },
                   );
-
-                  // customSnackbar(context, 'Recipe saved');
                 },
                 child: Container(
                   width: 60,
