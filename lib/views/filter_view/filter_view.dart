@@ -171,7 +171,6 @@ class _FilterViewState extends State<FilterView> {
           prefixIcon: const Icon(Icons.search),
         ),
       ),
-      //tags for ingredients
     );
   }
 

@@ -315,8 +315,6 @@ class _RecipeViewState extends State<RecipeView> {
     );
   }
 
-//toggleExpanded
-
   Widget recipeInstructions() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {

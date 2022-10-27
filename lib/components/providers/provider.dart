@@ -93,6 +93,11 @@ class RecipeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearRecipes() {
+    _filterRecipe = null;
+    notifyListeners();
+  }
+
   nextRecipe() {
     if (recipes.length > 1) {
       recipes.removeLast();
