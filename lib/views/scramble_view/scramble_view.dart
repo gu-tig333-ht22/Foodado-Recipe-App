@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/db/recipe_database.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
+import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:provider/provider.dart';
 import '../../constants/constants.dart';
@@ -22,7 +23,6 @@ class _ScrambleViewState extends State<ScrambleView> {
   @override
   void initState() {
     super.initState();
-
     delay();
   }
 
@@ -170,116 +170,109 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-  Widget cardContainer() {
-    return Consumer<RecipeProvider>(
-      builder: (context, recipe, child) {
-        return Container(
-          width: 350,
-          height: 490,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [shadow],
+  Widget cardContainer(Recipe recipe) {
+    return Container(
+      width: 350,
+      height: 490,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [shadow],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 350,
+            height: 230,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(recipe.image),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
           ),
-          child: Column(
-            children: [
-              Container(
-                width: 350,
-                height: 230,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(recipe
-                            .filterRecipe?.results[recipe.index].image ??
-                        'https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png'),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 300,
+              height: 230,
+              decoration: const BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 300,
-                  height: 230,
-                  decoration: const BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    recipe.title,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        recipe.filterRecipe!.results[recipe.index].title,
+                  Html(
+                    data: recipe.summary,
+                    style: {
+                      '#': Style(
                         textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        fontSize: const FontSize(16),
+                        maxLines: 6,
+                        textOverflow: TextOverflow.ellipsis,
                       ),
-                      Html(
-                        data:
-                            recipe.filterRecipe!.results[recipe.index].summary,
-                        style: {
-                          '#': Style(
-                            textAlign: TextAlign.center,
-                            fontSize: const FontSize(16),
-                            maxLines: 6,
-                            textOverflow: TextOverflow.ellipsis,
-                          ),
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
                           children: [
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.access_time_rounded,
-                                  color: secondaryColor.withOpacity(0.4),
-                                ),
-                                Text(
-                                  '${recipe.filterRecipe!.results[recipe.index].readyInMinutes} min',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
+                            Icon(
+                              Icons.access_time_rounded,
+                              color: secondaryColor.withOpacity(0.4),
                             ),
-                            Column(
-                              children: [
-                                Icon(
-                                  Icons.people,
-                                  color: secondaryColor.withOpacity(0.4),
-                                ),
-                                Text(
-                                  '${recipe.filterRecipe!.results[recipe.index].servings} servings',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              '${recipe.readyInMinutes} min',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        Column(
+                          children: [
+                            Icon(
+                              Icons.people,
+                              color: secondaryColor.withOpacity(0.4),
+                            ),
+                            Text(
+                              '${recipe.servings} servings',
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -296,7 +289,6 @@ class _ScrambleViewState extends State<ScrambleView> {
             child: AppinioSwiper(
               controller: swiperController,
               key: UniqueKey(),
-              //maxAngle
               allowUnswipe: true,
               unswipe: (bool unswipe) {
                 if (unswipe) {
@@ -308,10 +300,11 @@ class _ScrambleViewState extends State<ScrambleView> {
               cards: [
                 for (var i = 0; i < recipe.recipes.length; i++)
                   GestureDetector(
-                      onTap: () => Navigator.of(context).pushNamed(
-                            recipeViewRoute,
-                          ),
-                      child: cardContainer()),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      recipeViewRoute,
+                    ),
+                    child: cardContainer(recipe.recipes[i]),
+                  ),
               ],
             ),
           );

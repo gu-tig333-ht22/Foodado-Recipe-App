@@ -144,7 +144,9 @@ class _RecipeViewState extends State<RecipeView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe?.results == null) {
-          return Center(child: Container());
+          return Center(
+            child: Container(),
+          );
         } else {
           return Container(
             width: 320,

@@ -65,8 +65,10 @@ class _SaveViewState extends State<SaveView> {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancel',
-                            style: TextStyle(color: secondaryColor)),
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(color: secondaryColor),
+                        ),
                       ),
                       TextButton(
                         onPressed: () async {
@@ -96,86 +98,89 @@ class _SaveViewState extends State<SaveView> {
           ),
         ),
         body: Center(
-            child: isLoading
-                ? loadingAnimation
-                : recipeDb.isEmpty
-                    ? const Text('No saved recipes')
-                    : buildRecipes()),
+          child: isLoading
+              ? loadingAnimation
+              : recipeDb.isEmpty
+                  ? const Text('No saved recipes')
+                  : buildRecipes(),
+        ),
       );
 
   Widget buildRecipes() {
-    return Consumer<RecipeProvider>(builder: (context, recipe, child) {
-      return GridView.count(
-        physics: const BouncingScrollPhysics(),
-        crossAxisCount: 2,
-        children: [
-          for (final recipeDb in recipeDb)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  recipe.setRecipeId(recipeDb.id.toString());
-                  recipe.getSavedRecipe();
-                  Navigator.of(context).pushNamed(recipeSavedViewRoute);
-                },
-                child: Container(
-                  width: 300,
-                  height: 230,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    boxShadow: [shadow],
-                  ),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 300,
-                        height: 140,
-                        decoration: BoxDecoration(
-                          image: //network
-                              DecorationImage(
-                            image: NetworkImage(recipeDb.image),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                        ),
+    return Consumer<RecipeProvider>(
+      builder: (context, recipe, child) {
+        return GridView.count(
+          physics: const BouncingScrollPhysics(),
+          crossAxisCount: 2,
+          children: [
+            for (final recipeDb in recipeDb)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    recipe.setRecipeId(recipeDb.id.toString());
+                    recipe.getSavedRecipe();
+                    Navigator.of(context).pushNamed(recipeSavedViewRoute);
+                  },
+                  child: Container(
+                    width: 300,
+                    height: 230,
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
+                      boxShadow: [shadow],
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 300,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            image: //network
+                                DecorationImage(
+                              image: NetworkImage(recipeDb.image),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          recipeDb.title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                        Expanded(
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            recipeDb.title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
-      );
-    });
+          ],
+        );
+      },
+    );
   }
 }
