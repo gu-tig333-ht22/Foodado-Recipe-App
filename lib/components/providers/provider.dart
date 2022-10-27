@@ -95,4 +95,13 @@ class RecipeProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void setIsFavorite() {
+    if (recipes[index].isFavorite == false) {
+      recipes[index].isFavorite = true;
+    } else {
+      recipes[index].isFavorite = false;
+    }
+    notifyListeners();
+  }
 }

@@ -73,36 +73,27 @@ class _RecipeViewState extends State<RecipeView> {
           Consumer<RecipeProvider>(
             builder: (context, recipe, child) {
               if (recipe.filterRecipe == null) {
-                return IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite_border,
-                    color: Colors.black,
-                  ),
-                );
+                return Container();
               } else {
                 return IconButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text('Recipe saved'),
-                          backgroundColor: Colors.grey,
-                          padding: EdgeInsets.all(10),
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.all(30),
-                          duration: Duration(seconds: 3)),
-                    );
                     setState(() {
-                      recipe.filterRecipe!.results[recipe.index].isFavorite =
-                          !recipe
-                              .filterRecipe!.results[recipe.index].isFavorite;
-                      RecipeDatabase.instance.create(
-                        RecipeDb(
+                      recipe.setIsFavorite();
+                      if (recipe
+                              .filterRecipe!.results[recipe.index].isFavorite ==
+                          true) {
+                        RecipeDatabase.instance.create(
+                          RecipeDb(
+                            recipe.filterRecipe!.results[recipe.index].id,
+                            recipe.filterRecipe!.results[recipe.index].title,
+                            recipe.filterRecipe!.results[recipe.index].image,
+                          ),
+                        );
+                      } else {
+                        RecipeDatabase.instance.delete(
                           recipe.filterRecipe!.results[recipe.index].id,
-                          recipe.filterRecipe!.results[recipe.index].title,
-                          recipe.filterRecipe!.results[recipe.index].image,
-                        ),
-                      );
+                        );
+                      }
                     });
                   },
                   icon: recipe.filterRecipe!.results[recipe.index].isFavorite
