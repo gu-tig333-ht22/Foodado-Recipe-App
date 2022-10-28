@@ -84,18 +84,20 @@ class _ScrambleViewState extends State<ScrambleView> {
 
   Widget buildBody() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          recipeCard(),
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: buttons(),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            recipeCard(),
+            Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: buttons(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -316,7 +318,6 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-//
 //next recipe button
   Widget nextRecipeButton() {
     return Consumer<RecipeProvider>(
