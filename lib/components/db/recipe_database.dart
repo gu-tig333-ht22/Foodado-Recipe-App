@@ -49,7 +49,10 @@ class RecipeDatabase {
     // final columns = '${RecipeFields.title}, ${RecipeFields.image}, ${RecipeFields.servings}, ${RecipeFields.readyInMinutes}, ${RecipeFields.summary}, ${RecipeFields.isFavorite}';
     // final values = '${json[RecipeFields.title]}, ${json[RecipeFields.image]}, ${json[RecipeFields.servings]}, ${json[RecipeFields.readyInMinutes]}, ${json[RecipeFields.summary]}, ${json[RecipeFields.isFavorite]}';
 
-    final id = await db.insert(tableRecipe, recipeDb.toJson());
+    final id = await db.insert(
+      tableRecipe,
+      recipeDb.toJson(),
+    );
     return recipeDb.copy(id: id);
   }
 

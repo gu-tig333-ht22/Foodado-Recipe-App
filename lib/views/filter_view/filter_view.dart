@@ -43,11 +43,13 @@ class _FilterViewState extends State<FilterView> {
 
   void _populateFilter() async {
     final filterSettings = await _preferencesService.getSettings();
-    setState(() {
-      maxCalories = filterSettings.maxCal;
-      minCalories = filterSettings.minCal;
-      maxReadyTime = filterSettings.maxReadyTime;
-    });
+    setState(
+      () {
+        maxCalories = filterSettings.maxCal;
+        minCalories = filterSettings.minCal;
+        maxReadyTime = filterSettings.maxReadyTime;
+      },
+    );
   }
 
   @override
@@ -249,20 +251,26 @@ class _FilterViewState extends State<FilterView> {
               ),
               onChanged: (values) {
                 if (minCalories + maxCalories < 200) {
-                  setState(() {
-                    minCalories = values.start;
-                    maxCalories = values.end + 100;
-                  });
+                  setState(
+                    () {
+                      minCalories = values.start;
+                      maxCalories = values.end + 100;
+                    },
+                  );
                 } else if (maxCalories - minCalories <= 100) {
-                  setState(() {
-                    minCalories = values.start - 100;
-                    maxCalories = values.end;
-                  });
+                  setState(
+                    () {
+                      minCalories = values.start - 100;
+                      maxCalories = values.end;
+                    },
+                  );
                 } else {
-                  setState(() {
-                    minCalories = values.start;
-                    maxCalories = values.end;
-                  });
+                  setState(
+                    () {
+                      minCalories = values.start;
+                      maxCalories = values.end;
+                    },
+                  );
                 }
               },
             ),
@@ -289,9 +297,11 @@ class _FilterViewState extends State<FilterView> {
           divisions: 9,
           label: '${maxReadyTime.round()} min',
           onChanged: (double value) {
-            setState(() {
-              maxReadyTime = value;
-            });
+            setState(
+              () {
+                maxReadyTime = value;
+              },
+            );
           },
         ),
       ],

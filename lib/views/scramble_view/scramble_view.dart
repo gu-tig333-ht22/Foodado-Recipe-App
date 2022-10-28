@@ -77,7 +77,6 @@ class _ScrambleViewState extends State<ScrambleView> {
           },
         ),
       ),
-      // bottomNavigationBar: bottomNavigationBar(),
       body: isLoading ? Center(child: loadingAnimation) : buildBody(),
     );
   }
@@ -88,7 +87,7 @@ class _ScrambleViewState extends State<ScrambleView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            recipeCard(),
+            swipeCard(),
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: Padding(
@@ -99,80 +98,6 @@ class _ScrambleViewState extends State<ScrambleView> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buttons() {
-    return Consumer<RecipeProvider>(
-      builder: (context, recipe, child) {
-        if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
-          return noRecipesFound();
-        } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  swiperController.swipeLeft();
-                },
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: [shadow],
-                  ),
-                  child: const Icon(
-                    Icons.clear_rounded,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(
-                    () {
-                      recipe.setIsFavorite();
-                      if (recipe.recipes.last.isFavorite == true) {
-                        RecipeDatabase.instance.create(
-                          RecipeDb(
-                            recipe.recipes.last.id,
-                            recipe.recipes.last.title,
-                            recipe.recipes.last.image,
-                          ),
-                        );
-                      } else {
-                        RecipeDatabase.instance.delete(
-                          recipe.recipes.last.id,
-                        );
-                      }
-                    },
-                  );
-                },
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: secondaryColor,
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: [shadow],
-                  ),
-                  child: recipe.recipes.last.isFavorite
-                      ? const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        )
-                      : const Icon(
-                          Icons.favorite_border,
-                          color: Colors.white,
-                        ),
-                ),
-              ),
-            ],
-          );
-        }
-      },
     );
   }
 
@@ -282,7 +207,7 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-  Widget recipeCard() {
+  Widget swipeCard() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
@@ -295,11 +220,6 @@ class _ScrambleViewState extends State<ScrambleView> {
               controller: swiperController,
               key: UniqueKey(),
               allowUnswipe: true,
-              unswipe: (bool unswipe) {
-                if (unswipe) {
-                  swiperController.unswipe();
-                }
-              },
               onSwipe: (int index, AppinioSwiperDirection direction) =>
                   recipe.nextRecipe(),
               cards: [
@@ -318,55 +238,77 @@ class _ScrambleViewState extends State<ScrambleView> {
     );
   }
 
-//next recipe button
-  Widget nextRecipeButton() {
+  Widget buttons() {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
-          return Container();
+          return noRecipesFound();
         } else {
-          return GestureDetector(
-            onTap: () {
-              swiperController.swipeLeft();
-            },
-            child: Container(
-              width: 300,
-              height: 50,
-              decoration: BoxDecoration(
-                color: secondaryColor,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [shadow],
-              ),
-              child: const Center(
-                child: Text(
-                  'Next recipe',
-                  style: TextStyle(
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  swiperController.swipeLeft();
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [shadow],
+                  ),
+                  child: const Icon(
+                    Icons.clear_rounded,
                     color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ),
+              GestureDetector(
+                onTap: () {
+                  setState(
+                    () {
+                      recipe.setIsFavorite();
+                      if (recipe.recipes.last.isFavorite == true) {
+                        RecipeDatabase.instance.create(
+                          RecipeDb(
+                            recipe.recipes.last.id,
+                            recipe.recipes.last.title,
+                            recipe.recipes.last.image,
+                          ),
+                        );
+                      } else {
+                        RecipeDatabase.instance.delete(
+                          recipe.recipes.last.id,
+                        );
+                      }
+                    },
+                  );
+                },
+                child: Container(
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: secondaryColor,
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [shadow],
+                  ),
+                  child: recipe.recipes.last.isFavorite
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.white,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                          color: Colors.white,
+                        ),
+                ),
+              ),
+            ],
           );
         }
       },
-    );
-  }
-
-  Widget bottomNavigationBar() {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark),
-          label: 'Saved',
-        ),
-      ],
-      selectedItemColor: secondaryColor,
     );
   }
 
