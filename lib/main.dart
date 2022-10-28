@@ -14,8 +14,10 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => RecipeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RecipeProvider()),
+      ],
       child: MaterialApp(
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,

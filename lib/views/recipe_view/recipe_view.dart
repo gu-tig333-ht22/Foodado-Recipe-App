@@ -84,7 +84,7 @@ class _RecipeViewState extends State<RecipeView> {
                             RecipeDb(
                               recipe.recipes.last.id,
                               recipe.recipes.last.title,
-                              recipe.recipes.last.summary,
+                              recipe.recipes.last.image,
                             ),
                           );
                           customSnackbar(context, 'Recipe saved');
