@@ -242,7 +242,7 @@ class _ScrambleViewState extends State<ScrambleView> {
     return Consumer<RecipeProvider>(
       builder: (context, recipe, child) {
         if (recipe.filterRecipe == null || recipe.recipes.isEmpty) {
-          return noRecipesFound();
+          return Container();
         } else {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
