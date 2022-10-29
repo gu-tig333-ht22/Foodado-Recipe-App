@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:grupp_5/components/models/steps_model.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';

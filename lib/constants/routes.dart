@@ -1,5 +1,3 @@
-import 'package:grupp_5/views/intro_view/intro_view.dart';
-
 const infoViewRoute = '/info_view';
 const scrambleViewRoute = '/scramble_view';
 const filterViewRoute = '/filter_view.dart';

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:grupp_5/components/models/api_service.dart';
 import 'package:grupp_5/components/models/filter_model.dart';
 import 'package:grupp_5/components/models/recipe_model.dart';
-
 import 'package:http/http.dart' as http;
 
 class RecipeProvider extends ChangeNotifier {

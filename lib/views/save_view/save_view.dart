@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grupp_5/components/db/recipe_database.dart';
 import 'package:grupp_5/components/models/recipe_db_model.dart';
-import 'package:grupp_5/components/models/recipe_model.dart';
 import 'package:grupp_5/components/providers/provider.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:provider/provider.dart';
-import '/constants/routes.dart';
+import 'package:grupp_5/constants/routes.dart';
 
 class SaveView extends StatefulWidget {
   const SaveView({Key? key}) : super(key: key);

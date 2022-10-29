@@ -1,7 +1,7 @@
 //import path
+import 'package:grupp_5/components/models/recipe_db_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../models/recipe_db_model.dart';
 
 //https://www.youtube.com/watch?v=UpKrhZ0Hppk
 
