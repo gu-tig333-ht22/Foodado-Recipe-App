@@ -31,14 +31,14 @@ Navigate to lib/api_service.dart and enter your apikey from the [spoonacular](ht
 String apiKey = "YOUR_API_KEY";
 ```
 
-### Libraries & Tools Used
+### Packages & Tools Used
 
-* [SQFlite](https://github.com/dart-league/validators) (Storing recipes locally)
-* [Provider](https://github.com/rrousselGit/provider) (State Management)
-* [Path Provider](https://github.com/xxtea/xxtea-dart)
-* [Http](https://github.com/tekartik/sembast.dart)
-* [Introduction Screen](https://github.com/flutterchina/dio)
-* [Flutter_Html](https://github.com/zubairehman/Flogs)
-* [Lottie](https://github.com/AndreHaueisen/flushbar)
-* [Appinio Swiper](https://github.com/dart-lang/json_serializable)
-* [Google Fonts](https://github.com/fluttercommunity/get_it)
+* [SQFlite](https://pub.dev/packages/sqflite) (Storing recipes locally)
+* [Provider](https://pub.dev/packages/provider) (State Management)
+* [Path Provider](https://pub.dev/packages/path_provider)
+* [Http](https://pub.dev/packages/http)
+* [Introduction Screen](https://pub.dev/packages/introduction_screen)
+* [Flutter_Html](https://pub.dev/packages/flutter_html)
+* [Lottie](https://pub.dev/packages/lottie)
+* [Appinio Swiper](https://pub.dev/packages/appinio_swiper)
+* [Google Fonts](https://pub.dev/packages/google_fonts)
