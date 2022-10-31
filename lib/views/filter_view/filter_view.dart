@@ -183,8 +183,8 @@ class _FilterViewState extends State<FilterView> {
       'Gluten Free',
       'Lacto-Vegetarian',
       'Ovo-Vegetarian',
-      'Pescetarian'
-          'Paleo',
+      'Pescetarian',
+      'Paleo',
       'Whole30'
     ];
     return Consumer<RecipeProvider>(
@@ -303,68 +303,6 @@ class _FilterViewState extends State<FilterView> {
               },
             );
           },
-        ),
-      ],
-    );
-  }
-
-  Widget costFilter() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        OutlinedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          onPressed: () {
-            //change color when clicked
-          },
-          child: const Text(
-            '\$',
-            style: TextStyle(color: secondaryColor),
-          ),
-        ),
-        OutlinedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          onPressed: () {
-            //change color when clicked
-          },
-          child: const Text(
-            '\$\$',
-            style: TextStyle(color: secondaryColor),
-          ),
-        ),
-        OutlinedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(color: Colors.black),
-              ),
-            ),
-          ),
-          onPressed: () {
-            //change color when clicked
-          },
-          child: const Text(
-            '\$\$\$',
-            style: TextStyle(color: secondaryColor),
-          ),
         ),
       ],
     );
