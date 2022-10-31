@@ -19,6 +19,8 @@ class _FilterViewState extends State<FilterView> {
   double maxReadyTime = 15;
   double minCalories = 0;
   double maxCalories = 800;
+  String diet = '';
+  String type = '';
   bool isLoading = false;
 
   @override
@@ -34,9 +36,23 @@ class _FilterViewState extends State<FilterView> {
     setState(() => isLoading = false);
   }
 
+  void clearSettings() {
+    setState(() {
+      maxReadyTime = 15;
+      minCalories = 0;
+      maxCalories = 800;
+      diet = '';
+      type = '';
+    });
+  }
+
   void _saveSettings() {
     final newSettings = FilterSettings(
-        maxCal: maxCalories, minCal: minCalories, maxReadyTime: maxReadyTime);
+        maxCal: maxCalories,
+        minCal: minCalories,
+        maxReadyTime: maxReadyTime,
+        selectedDiet: diet,
+        selectedType: type);
 
     _preferencesService.saveSettings(newSettings);
   }
@@ -48,6 +64,8 @@ class _FilterViewState extends State<FilterView> {
         maxCalories = filterSettings.maxCal;
         minCalories = filterSettings.minCal;
         maxReadyTime = filterSettings.maxReadyTime;
+        diet = filterSettings.selectedDiet;
+        type = filterSettings.selectedType;
       },
     );
   }
@@ -77,6 +95,7 @@ class _FilterViewState extends State<FilterView> {
             onPressed: () {
               Provider.of<RecipeProvider>(context, listen: false)
                   .clearFilters();
+              clearSettings();
             },
           ),
         ],
@@ -134,14 +153,15 @@ class _FilterViewState extends State<FilterView> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      recipe.setRecipeType(recipeType[index]);
+                      type = recipeType[index];
+                      recipe.setRecipeType(type);
                     },
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.transparent,
-                      foregroundColor: recipe.type == recipeType[index]
+                      foregroundColor: type == recipeType[index]
                           ? Colors.white
                           : Colors.black,
-                      backgroundColor: recipe.type == recipeType[index]
+                      backgroundColor: type == recipeType[index]
                           ? secondaryColor
                           : Colors.white,
                       shape: RoundedRectangleBorder(
@@ -177,7 +197,7 @@ class _FilterViewState extends State<FilterView> {
   }
 
   Widget dietaryRestrictionsFilter() {
-    List<String> diet = [
+    List<String> dietList = [
       'Vegetarian',
       'Ketogenic',
       'Gluten Free',
@@ -197,26 +217,26 @@ class _FilterViewState extends State<FilterView> {
                 alignment: WrapAlignment.center,
                 clipBehavior: Clip.antiAlias,
                 children: [
-                  for (var i = 0; i < diet.length; i++)
+                  for (var i = 0; i < dietList.length; i++)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          recipe.setDiet(diet[i]);
+                          diet = dietList[i];
+                          recipe.setDiet(diet);
                         },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.transparent,
-                          foregroundColor: recipe.diet == diet[i]
-                              ? Colors.white
-                              : Colors.black,
-                          backgroundColor: recipe.diet == diet[i]
+                          foregroundColor:
+                              diet == dietList[i] ? Colors.white : Colors.black,
+                          backgroundColor: diet == dietList[i]
                               ? secondaryColor
                               : Colors.grey[200],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                         ),
-                        child: Text(diet[i]),
+                        child: Text(dietList[i]),
                       ),
                     ),
                 ],

@@ -19,10 +19,14 @@ class FilterSettings {
   final double maxCal;
   final double minCal;
   final double maxReadyTime;
+  final String selectedDiet;
+  final String selectedType;
 
   FilterSettings({
     required this.maxCal,
     required this.minCal,
     required this.maxReadyTime,
+    required this.selectedDiet,
+    required this.selectedType,
   });
 }
