@@ -214,12 +214,11 @@ class _ScrambleViewState extends State<ScrambleView> {
           return noRecipesFound();
         } else {
           return SizedBox(
-            height: MediaQuery.of(context).size.height * 0.65,
+            height: MediaQuery.of(context).size.height * 0.60,
             width: MediaQuery.of(context).size.width * 0.9,
             child: AppinioSwiper(
               controller: swiperController,
               key: UniqueKey(),
-              allowUnswipe: true,
               onSwipe: (int index, AppinioSwiperDirection direction) =>
                   recipe.nextRecipe(),
               cards: [

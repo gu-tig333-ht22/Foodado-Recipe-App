@@ -11,19 +11,14 @@ import 'views/scramble_view/scramble_view.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => RecipeProvider()),
-      ],
+    ChangeNotifierProvider(
+      create: (context) => RecipeProvider(),
       child: MaterialApp(
         theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
           textTheme: GoogleFonts.montserratTextTheme(),
-          scaffoldBackgroundColor: Colors.white,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         debugShowCheckedModeBanner: false,
         home: const IntroView(),

@@ -37,7 +37,7 @@ dependencies:
   path_provider:
   sqflite:  
   introduction_screen: ^3.0.1
-  lottie: ^1.4.3
+  lottie: 
   animated_text_kit: 
   shared_preferences: ^2.0.15
   appinio_swiper:

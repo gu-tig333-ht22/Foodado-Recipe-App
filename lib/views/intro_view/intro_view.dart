@@ -1,4 +1,3 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:grupp_5/constants/constants.dart';
 import 'package:grupp_5/constants/routes.dart';
 import 'package:introduction_screen/introduction_screen.dart';
