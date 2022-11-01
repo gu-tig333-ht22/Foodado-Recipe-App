@@ -16,7 +16,7 @@ The paradox of choice in our everyday life can cause stress and anxiety. Are you
 Download or clone this repo by using the link below:
 
 ```
-https://github.com/gu-tig333-ht22/Grupp-5.git
+https://github.com/gu-tig333-ht22/Foodado-Recipe-App.git
 ```
 
 **Step 2:**
